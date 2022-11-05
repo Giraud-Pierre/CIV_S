@@ -39,12 +39,6 @@ public class SettingsMenuController : MonoBehaviour
         audioMixer.SetFloat("volume", volume);
     }
 
-    // Exit the setting window.
-    public void CloseSettingsWindow()
-    {
-        gameObject.SetActive(false);
-    }
-
     // Gets all available resolutions and selects current one.
     private void PutResolutionValue()
     {
