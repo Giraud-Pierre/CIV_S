@@ -1,9 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Rendering;
 using UnityEngine;
 
 public class CameraControlle : MonoBehaviour
 {
+    private Vector3 cameraUp; 
+    [SerializeField] private Transform cameraTransform;
+    private Vector2 input;
+    private float cameraSpeed = 5;
+
+    private Vector3 cameraRight;
     // Start is called before the first frame update
     void Start()
     {
@@ -17,6 +24,14 @@ public class CameraControlle : MonoBehaviour
     {
         //Code to click and drag camera 
         // WASD 
+   
+        Vector3 translate = new Vector3(
+            Input.GetAxis("Horizontal"),
+            0,
+            Input.GetAxis("Vertical")
+            );
+        this.transform.Translate(translate * cameraSpeed * Time.deltaTime, Space.World);
+
         // ZOOM in and out
         CheckIfCameraMoved();
     }

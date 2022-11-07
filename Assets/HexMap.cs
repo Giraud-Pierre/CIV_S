@@ -17,13 +17,30 @@ public class HexMap : MonoBehaviour
 
     [SerializeField] Mesh MeshWater;
     [SerializeField] Mesh MeshFlat;
-    [SerializeField] Mesh MeshWill;
+    [SerializeField] Mesh MeshHill;
     [SerializeField] Mesh MeshMountain;
+
+    [SerializeField] GameObject ForestPrefab;
+    [SerializeField] GameObject JunglePrefab;
 
     [SerializeField] Material MatOcean;
     [SerializeField] Material MatPlains;
     [SerializeField] Material MatMountains;
     [SerializeField] Material MatGrassLands;
+    [SerializeField] Material MatDesert;
+
+    protected float HeightMountain = 0.85f;
+    protected float HeightHill = 0.6f;
+    protected float HeightFlat = 0.0f;
+    public bool allowWrapEastWest = true;
+    public bool allowWrapNorthSouth = false;
+
+    protected float MoistureJungle = 0.66f;
+    protected float MoistureForest = 0.33f;
+    protected float MoistureGrasslands = 0f;
+    protected float MoisturePlains = -0.5f;
+
+
     public int numberRows = 30;
     public int numberColumns = 60; 
     private GameObject hexGO;
@@ -38,15 +55,20 @@ public class HexMap : MonoBehaviour
             Debug.Log("Hexes array not yet extentiated !");
             return null;
         }
-        if (x < 0)
-        {
-            x += numberRows;
-        }
 
-        if (y < 0)
+        if(allowWrapEastWest)
+        {
+            x = x % numberColumns;
+            if (x < 0)
+            {
+                x += numberColumns;
+            }
+        }
+        
+        /*if (y < 0)
         {
             y += numberColumns;
-        }
+        }*/
         try
         {
             return this.hexes[x, y];
@@ -68,9 +90,10 @@ public class HexMap : MonoBehaviour
             for (int row =0; row<numberRows; row++ )
             {
                 //Instantiate a Hex
-                Hex h = new Hex(column, row);
+                Hex h = new Hex(this, column, row);
                 Vector3 pos = h.PositionFromCamera(Camera.main.transform.position, numberRows, numberColumns);
-                h.Elevation = -1;
+                h.Elevation = -0.5f;
+                h.Moisture = 0f;
                 hexes[column, row] = h;
 
                 
@@ -102,23 +125,77 @@ public class HexMap : MonoBehaviour
         {
             for (int row = 0; row < numberRows; row++)
             {
-                Debug.Log("Column :" + column);
-                Debug.Log("Row :" + row);
+                //Debug.Log("Column :" + column);
+                //Debug.Log("Row :" + row);
                 Hex h = hexes[column, row];
                 GameObject hexGO = hexToGameObjectMap[h];
                 MeshRenderer mr = hexGO.GetComponentInChildren<MeshRenderer>();
-                if(h.Elevation >= 0)
+                MeshFilter mf = hexGO.GetComponentInChildren<MeshFilter>();
+
+                if(h.Elevation >= HeightFlat)
                 {
-                    mr.material = MatGrassLands;
+                    if (h.Moisture >= MoistureJungle)
+                    {
+                        mr.material = MatGrassLands;
+                        Vector3 p = hexGO.transform.position;
+                        if(h.Elevation >= HeightHill)
+                        {
+                            p.y += 0.25f;
+                        }
+                        //TODO : Spawn Jungle
+                        GameObject.Instantiate(JunglePrefab, p, Quaternion.identity, hexGO.transform);
+                    }
+
+
+                    else if (h.Moisture >= MoistureForest)
+                    {
+                        mr.material = MatGrassLands;
+                        Vector3 p = hexGO.transform.position;
+                        if (h.Elevation >= HeightHill)
+                        {
+                            p.y += 0.25f;
+                        }
+                        GameObject.Instantiate(ForestPrefab, p, Quaternion.identity, hexGO.transform);
+                    }
+
+                    else if (h.Moisture >= MoistureGrasslands)
+                    {
+                        mr.material = MatGrassLands;
+                    }
+
+                    else if (h.Moisture >= MoisturePlains)
+                    {
+                        mr.material = MatPlains;
+
+                    }
+
+                    else
+                    {
+                        mr.material = MatDesert;
+                    }
+                }
+
+                if (h.Elevation >= HeightMountain)
+                {
+                    mr.material = MatMountains;
+                    mf.mesh = MeshMountain;
+                }
+
+                else if (h.Elevation >= HeightHill)
+                {
+                    mf.mesh = MeshHill;
+                }
+
+                else if (h.Elevation >= HeightFlat)
+                {
+                    mf.mesh = MeshWater;
                 }
 
                 else
                 {
                     mr.material = MatOcean;
+                    mf.mesh = MeshWater;
                 }
-
-                MeshFilter mf = hexGO.GetComponentInChildren<MeshFilter>();
-                mf.mesh = MeshWater;
             }
         }
     }

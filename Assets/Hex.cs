@@ -21,17 +21,18 @@ public class Hex
     public float Moisture;
 
     float radius = 1f;
-    public bool allowWrapEastWest = true;
-    public bool allowWrapNorthSouth = false;
+    private HexMap hexMap;
+    
 
 
     static readonly float WIDTH_MULTIPLIER = Mathf.Sqrt(3) / 2;
 
-    public Hex(int q, int r)
+    public Hex(HexMap hexMap, int q, int r)
     {
         this.Q = q;
         this.R = r;
         this.S = -(q+r);
+        this.hexMap = hexMap;
     }
 
     /// <summary>
@@ -54,7 +55,7 @@ public class Hex
         float mapWidth = numberColumns * HexHorizontalSpacing();
 
         Vector3 position = Position();
-        if(allowWrapEastWest)
+        if(hexMap.allowWrapEastWest)
         {
             float howManyWidthsFromCamera = (position.x - cameraPosition.x) / mapWidth;
 
@@ -77,7 +78,7 @@ public class Hex
             position.x -= howManyWidthToFix * mapWidth;
         }
 
-        if(allowWrapNorthSouth)
+        if(hexMap.allowWrapNorthSouth)
         {
             float howManyWidthsFromCamera = (position.z - cameraPosition.z) / mapHeight;
 
@@ -142,9 +143,14 @@ public class Hex
 
     public static float Distance(Hex a, Hex b)
     {
+        int dQ = Mathf.Abs(a.Q - b.Q);
+        if(dQ > a.hexMap.numberRows/2)
+        {
+            dQ = a.hexMap.numberColumns - dQ;
+        }
         return
             Mathf.Max(
-            Mathf.Abs(a.Q - b.Q),
+            dQ,
             Mathf.Abs(a.R - b.R),
             Mathf.Abs(a.S - b.S)
             );

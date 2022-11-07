@@ -9,12 +9,13 @@ public class HexMap_Continent : HexMap
         //First call the base version to make all the hexes we need
         base.GenerateMap();
 
-        int numContinents = 2;
-        int continentSpacing = 20;
+        int numContinents = 3;
+        int continentSpacing = numberColumns / numContinents;
         for(int c = 0; c < numContinents; c++)
         {
             //Make some kind of raised area
             int numSplats = Random.Range(4, 8);
+            Random.InitState(0);
             for (int i = 0; i < numSplats; i++)
             {
                 int range = Random.Range(5, 8);
@@ -30,32 +31,50 @@ public class HexMap_Continent : HexMap
         //elevateArea(24, 5, 6);
 
         //Add lumpiness Perlin NOise?
-        float noiseResolution = 0.1f;
+        float noiseResolution = 0.01f;
         Vector2 noiseOffset = new Vector2(Random.Range(0f,1f), Random.Range(0f, 1f));
-        float noiseScale = 2f;
+        float noiseScale = 1.5f;
         for (int column = 0; column < numberColumns; column++)
         {
             for (int row = 0; row < numberRows; row++)
             {
                 Hex h = getHexeAt(column, row);
-                float n = Mathf.PerlinNoise(((float)column / numberColumns / noiseResolution) + noiseOffset.x, 
-                    ((float)row / numberRows / noiseResolution) + noiseOffset.y) 
+                float n = Mathf.PerlinNoise(((float)column / Mathf.Max(numberColumns, numberRows) / noiseResolution) + noiseOffset.x, 
+                    ((float)row / Mathf.Max(numberColumns, numberRows) / noiseResolution) + noiseOffset.y) 
                     - 0.5f;
                 h.Elevation += n * noiseScale;
             }
 
         }
 
-                //Set mesh to mounter/hill/flat/water based on height
+        //Set mesh to mounter/hill/flat/water based on height
 
-                //Simulate rainfall/moisture (probably just Perlin it for now) and set plain/granssslands + forest
+        //Simulate rainfall/moisture (probably just Perlin it for now) and set plain/granssslands + forest
 
-                //Now make sure all the hex visuals are updated
-                UpdateHexVisuals();
+        noiseResolution = 0.05f;
+        noiseOffset = new Vector2(Random.Range(0f, 1f), Random.Range(0f, 1f));
+        noiseScale = 2f;
+        for (int column = 0; column < numberColumns; column++)
+        {
+            for (int row = 0; row < numberRows; row++)
+            {
+                Hex h = getHexeAt(column, row);
+                float n = Mathf.PerlinNoise(((float)column / Mathf.Max(numberColumns, numberRows) / noiseResolution) + noiseOffset.x,
+                    ((float)row / Mathf.Max(numberColumns, numberRows) / noiseResolution) + noiseOffset.y)
+                    - 0.5f;
+                h.Moisture = n * noiseScale;
+            }
+
+        }
+
+
+
+        //Now make sure all the hex visuals are updated
+        UpdateHexVisuals();
 
     }
 
-    private void elevateArea(int q, int r, int range, float centerHeight = 0.5f)
+    private void elevateArea(int q, int r, int range, float centerHeight = 0.8f)
     {
         Hex centerHex = getHexeAt(q, r);
 
@@ -68,7 +87,7 @@ public class HexMap_Continent : HexMap
             {
                 h.Elevation = 0;
             }*/
-            h.Elevation = centerHeight * Mathf.Lerp(1f, 0f, Hex.Distance(centerHex, h)/range);
+            h.Elevation = centerHeight * Mathf.Lerp(1f, 0.25f, Mathf.Pow(Hex.Distance(centerHex, h)/range,2f));
         }
     }
 }
