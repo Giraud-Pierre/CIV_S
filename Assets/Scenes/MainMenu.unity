@@ -342,7 +342,7 @@ MonoBehaviour:
   m_RenderShadows: 1
   m_RequiresDepthTextureOption: 2
   m_RequiresOpaqueTextureOption: 2
-  m_CameraType: 1
+  m_CameraType: 0
   m_Cameras: []
   m_RendererIndex: -1
   m_VolumeLayerMask:
@@ -1257,27 +1257,27 @@ PrefabInstance:
     - target: {fileID: 7342045915239918426, guid: 33538afa11d02ac4caf5d9c231b6e77e,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 7342045915239918426, guid: 33538afa11d02ac4caf5d9c231b6e77e,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7342045916081854203, guid: 33538afa11d02ac4caf5d9c231b6e77e,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 7342045916081854203, guid: 33538afa11d02ac4caf5d9c231b6e77e,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7342045916081854203, guid: 33538afa11d02ac4caf5d9c231b6e77e,
         type: 3}
       propertyPath: m_AnchorMin.x
-      value: 0
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 7342045916329899964, guid: 33538afa11d02ac4caf5d9c231b6e77e,
         type: 3}
