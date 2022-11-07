@@ -8,7 +8,7 @@ public class CameraControlle : MonoBehaviour
     private Vector3 cameraUp; 
     [SerializeField] private Transform cameraTransform;
     private Vector2 input;
-    private float cameraSpeed = 5;
+    private float cameraSpeed = 10;
 
     private Vector3 cameraRight;
     // Start is called before the first frame update

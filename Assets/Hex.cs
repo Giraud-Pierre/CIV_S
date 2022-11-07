@@ -1,4 +1,6 @@
-﻿using System.Runtime.InteropServices.WindowsRuntime;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 using UnityEngine.Assertions.Must;
@@ -23,7 +25,7 @@ public class Hex
     float radius = 1f;
     private HexMap hexMap;
     
-
+    HashSet<Unit> units;
 
     static readonly float WIDTH_MULTIPLIER = Mathf.Sqrt(3) / 2;
 
@@ -154,5 +156,29 @@ public class Hex
             Mathf.Abs(a.R - b.R),
             Mathf.Abs(a.S - b.S)
             );
+    }
+
+    public void AddUnit(Unit unit)
+    {
+        if(units == null)
+        {
+            units = new HashSet<Unit>();
+
+        }
+        units.Add(unit);
+    }
+
+    public void RemoveUnit(Unit unit)
+    {
+        if(units != null)
+        {
+            units.Remove(unit);
+        }
+        
+    }
+
+    public Unit[] getUnits()
+    {
+        return units.ToArray();
     }
 }

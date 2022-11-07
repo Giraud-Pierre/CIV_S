@@ -13,7 +13,6 @@ public class HexMap : MonoBehaviour
     }
 
     [SerializeField] GameObject hexTile;
-    [SerializeField] Material[] HexMaterials;
 
     [SerializeField] Mesh MeshWater;
     [SerializeField] Mesh MeshFlat;
@@ -28,6 +27,8 @@ public class HexMap : MonoBehaviour
     [SerializeField] Material MatMountains;
     [SerializeField] Material MatGrassLands;
     [SerializeField] Material MatDesert;
+
+    public GameObject UnitDwarfPrefab;
 
     protected float HeightMountain = 0.85f;
     protected float HeightHill = 0.6f;
@@ -44,8 +45,12 @@ public class HexMap : MonoBehaviour
     public int numberRows = 30;
     public int numberColumns = 60; 
     private GameObject hexGO;
+
     private Hex[,] hexes;
     private Dictionary<Hex, GameObject> hexToGameObjectMap;
+
+    private HashSet<Unit> units;
+    private Dictionary<Unit, GameObject> unitToGameObjectMap;
 
     public Hex getHexeAt(int x, int y)
     {
@@ -214,6 +219,20 @@ public class HexMap : MonoBehaviour
         return results.ToArray();
     }
 
-    
+    public void SpawnUnitAt(Unit unit, GameObject prefab, int q, int r)
+    {
+        if(units == null)
+        {
+            units = new HashSet<Unit>();
+            unitToGameObjectMap = new Dictionary<Unit, GameObject>();
+        }
+
+
+
+        GameObject myHex = hexToGameObjectMap[getHexeAt(q, r)];
+        GameObject unitGO = Instantiate(prefab, myHex.transform.position, Quaternion.identity, myHex.transform);
+        units.Add(unit);
+        unitToGameObjectMap[unit] = unitGO;
+    }
 
 }

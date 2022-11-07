@@ -464,7 +464,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hexTile: {fileID: 1904931013106162695, guid: 5775311797cc42d478404acff2408f7b, type: 3}
-  HexMaterials: []
   MeshWater: {fileID: 4300000, guid: e4f4e2ebd7661f74aa2a54440b0fe279, type: 3}
   MeshFlat: {fileID: 4300000, guid: e4f4e2ebd7661f74aa2a54440b0fe279, type: 3}
   MeshHill: {fileID: 4300000, guid: 91f4311fd10b4fd4aaeb00b581fd24e8, type: 3}
@@ -478,6 +477,8 @@ MonoBehaviour:
   MatMountains: {fileID: 2100000, guid: ad6589cc7f33874498095d4f0f5100dc, type: 2}
   MatGrassLands: {fileID: 2100000, guid: 94b503c3adf49d446aa39379e4abd1e1, type: 2}
   MatDesert: {fileID: 2100000, guid: 7743e3cc3dc6b6445a9b5bf65875b6c4, type: 2}
+  UnitDwarfPrefab: {fileID: 6970339664708074965, guid: 849feb53e5d05f64697cc89ab15e4ee4,
+    type: 3}
   allowWrapEastWest: 1
   allowWrapNorthSouth: 0
   numberRows: 30
