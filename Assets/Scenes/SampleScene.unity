@@ -135,6 +135,7 @@ GameObject:
   - component: {fileID: 330585545}
   - component: {fileID: 330585544}
   - component: {fileID: 330585547}
+  - component: {fileID: 330585548}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -200,14 +201,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 10, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!114 &330585547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -241,6 +242,18 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
+--- !u!114 &330585548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330585543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5109c2356812ff428009dea68d8253d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -414,27 +427,14 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 989302909}
-  - component: {fileID: 989302908}
+  - component: {fileID: 989302910}
   m_Layer: 0
   m_Name: HexMap
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
---- !u!114 &989302908
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 989302907}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e8adb6addb4b0e42a70d28d2df7d367, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hexTile: {fileID: 1904931013106162695, guid: 5775311797cc42d478404acff2408f7b, type: 3}
 --- !u!4 &989302909
 Transform:
   m_ObjectHideFlags: 0
@@ -450,3 +450,27 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &989302910
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 989302907}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96fc6904895731045a21f2398574e862, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hexTile: {fileID: 1904931013106162695, guid: 5775311797cc42d478404acff2408f7b, type: 3}
+  HexMaterials: []
+  MeshWater: {fileID: 4300000, guid: e4f4e2ebd7661f74aa2a54440b0fe279, type: 3}
+  MeshFlat: {fileID: 4300000, guid: e4f4e2ebd7661f74aa2a54440b0fe279, type: 3}
+  MeshWill: {fileID: 4300000, guid: e4f4e2ebd7661f74aa2a54440b0fe279, type: 3}
+  MeshMountain: {fileID: 4300000, guid: e4f4e2ebd7661f74aa2a54440b0fe279, type: 3}
+  MatOcean: {fileID: 2100000, guid: 1ed23e3db3df2e44a89898e4a8175a11, type: 2}
+  MatPlains: {fileID: 2100000, guid: ede02835786947d43995729a63831ad1, type: 2}
+  MatMountains: {fileID: 2100000, guid: ad6589cc7f33874498095d4f0f5100dc, type: 2}
+  MatGrassLands: {fileID: 2100000, guid: 94b503c3adf49d446aa39379e4abd1e1, type: 2}
+  numberRows: 30
+  numberColumns: 60
