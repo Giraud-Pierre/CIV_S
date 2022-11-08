@@ -3,8 +3,8 @@ using UnityEngine.SceneManagement;
 
 public class MainMenuController : MonoBehaviour
 {
-    [SerializeField] string levelToLoad;
-    [SerializeField] GameObject settingsWindow;
+    [SerializeField] private string levelToLoad;
+    [SerializeField] private GameObject settingsWindow;
 
     public void StartGame()
     {
