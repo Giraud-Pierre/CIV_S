@@ -25,7 +25,7 @@ public class InfoElementController : MonoBehaviour
         }
         else
         {
-            loseText.text = number.ToString();
+            loseText.text = Mathf.Abs(number).ToString();
             getLayout.SetActive(false);
             loseLayout.SetActive(true);
             gameObject.SetActive(true);
