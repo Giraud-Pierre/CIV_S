@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -58,7 +57,7 @@ public class GameMenuController : MonoBehaviour
 
     public void GetTutorial(List<string> Text)
     {
-        // TODO: Add junction with TutorialController
+        // TODO(Optional): Add junction with TutorialController
     }
 
 

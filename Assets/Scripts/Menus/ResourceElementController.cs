@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class ResourceElementController : MonoBehaviour
@@ -11,5 +9,6 @@ public class ResourceElementController : MonoBehaviour
     public void UpdateElement()
     {
         // TODO: Add junction with where is store the number of resource of each typeOfResource
+        Debug.LogError("Missing Feature: UpdateElement on ResourceElementController");
     }
 }
