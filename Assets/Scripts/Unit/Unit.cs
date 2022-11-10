@@ -120,9 +120,11 @@ public class Unit
                 }
                 //So now we know for a fact that we are starting the move into difficult terrain on a fresh turn
 
-        }
+            }
         
         //Return the total tun cost of turnsToDate + turns for this move
+        }
+        return 0.2f;
     }
 
 }
