@@ -22,8 +22,11 @@ public class Hex
     public float Elevation;
     public float Moisture;
 
+    //TODO : Need some kind of property to track hex type (plains, grasslands, etc...)
+    //TODO : Beed property to track hex detail (forest, mine, farm, etc...)
+
     float radius = 1f;
-    private HexMap hexMap;
+    public readonly HexMap hexMap;
     
     HashSet<Unit> units;
 
@@ -49,6 +52,11 @@ public class Hex
         );
 
         //return new Vector3(HexHorizontalSpacing() * (this.Q + this.R/2f), 0, HexVerticalSpacing() * this.R);
+    }
+
+    public Vector3 PositionFromCamera()
+    {
+        return hexMap.GetHexPosition(this);
     }
 
     public Vector3 PositionFromCamera(Vector3 cameraPosition, float numberRows, float numberColumns)
@@ -127,22 +135,6 @@ public class Hex
         return HexWidth();
     }
 
-    /*public Vector3 PositionFromCamera(Vector3 cameraPosition, float numRows, float numColumns)
-    {
-        float mapHeight = numRows * HexVerticalSpacing();
-        float mapWidth = numColumns * HexHorizontalSpacing();
-        
-        Vector3 position = Position();
-        float howManyWidthFromCamera = (position.x - cameraPosition.x) / mapWidth;
-        //We want howManyWidthFromCamera to be between -0.5 to 0.5
-        if(Mathf.Abs(howManyWidthFromCamera) <= 0.5f)
-        {
-            return position;
-        }
-
-        int howManyWidthToFix = (int)howManyWidthFromCamera;
-    }*/
-
     public static float Distance(Hex a, Hex b)
     {
         int dQ = Mathf.Abs(a.Q - b.Q);
@@ -180,5 +172,11 @@ public class Hex
     public Unit[] getUnits()
     {
         return units.ToArray();
+    }
+
+    public int BaseMovementCost()
+    {
+        //TODO : Factor in terrain type & features
+        return 1;
     }
 }

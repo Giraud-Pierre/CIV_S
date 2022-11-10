@@ -12,6 +12,21 @@ public class HexMap : MonoBehaviour
         GenerateMap();
     }
 
+    void Update()
+    {
+        //TESTING : Press spacebar to advance to next turn
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            if(units != null)
+            {
+                foreach(Unit unit in units)
+                {
+                    unit.DoTurn();
+                }
+            }
+        }
+    }
+
     [SerializeField] GameObject hexTile;
 
     [SerializeField] Mesh MeshWater;
@@ -86,6 +101,16 @@ public class HexMap : MonoBehaviour
         
     }
 
+    public Vector3 GetHexPosition(int q, int r)
+    {
+        Hex h = getHexeAt(q, r);
+        return GetHexPosition(h);
+    }
+
+    public Vector3 GetHexPosition(Hex hex)
+    {
+        return hex.PositionFromCamera(Camera.main.transform.position, numberRows, numberColumns);
+    }
     virtual public void GenerateMap()
     {
         hexes = new Hex[numberColumns, numberRows];
@@ -228,9 +253,12 @@ public class HexMap : MonoBehaviour
         }
 
 
+        Hex myHex = getHexeAt(q, r);
+        GameObject myHexGO = hexToGameObjectMap[myHex];
+        unit.SetHex(myHex);
+        GameObject unitGO = Instantiate(prefab, myHexGO.transform.position, Quaternion.identity, myHexGO.transform);
+        unit.OnUnitMoved += unitGO.GetComponent<UnitView>().OnUnitMoved;
 
-        GameObject myHex = hexToGameObjectMap[getHexeAt(q, r)];
-        GameObject unitGO = Instantiate(prefab, myHex.transform.position, Quaternion.identity, myHex.transform);
         units.Add(unit);
         unitToGameObjectMap[unit] = unitGO;
     }
