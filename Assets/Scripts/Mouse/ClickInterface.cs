@@ -5,5 +5,6 @@ using UnityEngine;
 public interface IClick
 {
     public void OnLeftClickAction();
+    public void OnLeftClickOnOtherAction();
     public void OnRightClickAction(GameObject gameobject);
 }

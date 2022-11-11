@@ -21,6 +21,11 @@ public class HexComponent : MonoBehaviour,IClick
         //*****************TODO: sélectionne l'hexagone (surbrillance, UI, ...)
     }
 
+    public void OnLeftClickOnOtherAction()
+    {
+
+    }
+
     public void OnRightClickAction(GameObject gameobject)
     {
         //Do nothing, peut-être désélectionner l'hexagone ?

@@ -14,6 +14,7 @@ public class UnitView : MonoBehaviour,IClick
     [SerializeField] private AnimatorController walking;
     [SerializeField] private AnimatorController mining;
     [SerializeField] private GameObject sledgeHammer;
+    [SerializeField] private GameObject selectedCylinder;
     private bool isMining = false;
     private bool isMoving = false;
 
@@ -27,6 +28,8 @@ public class UnitView : MonoBehaviour,IClick
         newPosition = this.transform.position;
         animator.runtimeAnimatorController = idle;
         sledgeHammer.SetActive(false);
+        selectedCylinder.SetActive(false);
+        Debug.Log("setactive");
     }
 
     public void OnUnitMoved(Hex oldHex, Hex nexHex)
@@ -61,6 +64,19 @@ public class UnitView : MonoBehaviour,IClick
     public void OnLeftClickAction()
     {
         //*************TODO: sélectionne le personnage (Change UI, surbrillance, surbrillance des hexagone de sa liste hexpath)
+        selectedCylinder.SetActive(true);
+        if(unit.hexPath != null && unit.hexPath.Count != 0)
+        {
+            foreach(Hex hex in unit.hexPath)
+            {
+                
+            }
+        }
+    }
+
+    public void OnLeftClickOnOtherAction()
+    {
+
     }
 
     public void OnRightClickAction(GameObject gameobject)

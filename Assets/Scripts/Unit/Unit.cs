@@ -9,7 +9,7 @@ public class Unit
     public int strength = 8;
     public int movement = 2;
     public int movementRemaining = 2;
-    Queue<Hex> hexPath;
+    public Queue<Hex> hexPath;
 
     //TODO : THis should probably be move to some kind of central option/config file
     const bool MOVEMENT_RULES_LIKE_CIV6 = false;
