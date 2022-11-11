@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HexComponent : MonoBehaviour
+public class HexComponent : MonoBehaviour,IClick
 {
     // Start is called before the first frame update
     public Hex hex;
@@ -14,5 +14,15 @@ public class HexComponent : MonoBehaviour
             hexMap.numberRows,
             hexMap.numberColumns
         );
+    }
+
+    public void OnLeftClickAction()
+    {
+        //*****************TODO: sélectionne l'hexagone (surbrillance, UI, ...)
+    }
+
+    public void OnRightClickAction(GameObject gameobject)
+    {
+        //Do nothing, peut-être désélectionner l'hexagone ?
     }
 }
