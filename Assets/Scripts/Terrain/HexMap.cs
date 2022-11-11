@@ -141,6 +141,10 @@ public class HexMap : MonoBehaviour
                 hexComponenent.hexMap = this;
                 hexToGameObjectMap[h] = hexGO;
 
+                //********Debug pour afficher les colonnes et lignes des cases
+                //hexComponenent.SetRowCol(row, column);
+                //********************
+
                 hexGO.GetComponentInChildren<TextMesh>().text = string.Format("{0},{1}", column, row);
                 MeshRenderer mr = hexGO.GetComponentInChildren<MeshRenderer>();
                 mr.material = MatOcean;

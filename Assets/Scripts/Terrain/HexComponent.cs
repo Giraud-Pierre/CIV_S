@@ -4,6 +4,16 @@ using UnityEngine;
 
 public class HexComponent : MonoBehaviour,IClick
 {
+    //**********Affiché les lignes et colonnes des calses pour débeuguer ************
+    /*[SerializeField] private int row;
+    [SerializeField] private int col;
+    public void SetRowCol(int newRow, int newCol)
+    {
+        row = newRow;
+        col = newCol;
+    }*/
+    //************************
+
     [SerializeField] GameObject selectedHexagon;
 
     public Hex hex;

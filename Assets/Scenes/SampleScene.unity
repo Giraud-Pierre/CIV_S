@@ -523,6 +523,7 @@ MonoBehaviour:
   MatMountains: {fileID: 2100000, guid: ad6589cc7f33874498095d4f0f5100dc, type: 2}
   MatGrassLands: {fileID: 2100000, guid: 94b503c3adf49d446aa39379e4abd1e1, type: 2}
   MatDesert: {fileID: 2100000, guid: 7743e3cc3dc6b6445a9b5bf65875b6c4, type: 2}
+  mouseController: {fileID: 676941980}
   UnitDwarfPrefab: {fileID: 171706, guid: 1993ef37b5f480b4a92115ca0117fdce, type: 3}
   allowWrapEastWest: 1
   allowWrapNorthSouth: 0
