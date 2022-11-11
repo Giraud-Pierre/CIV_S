@@ -100,6 +100,10 @@ public class HexMap : MonoBehaviour
         }
         
     }
+    public GameObject GetHexeGameobjectFromDictionnary(Hex hex)
+    {
+        return hexToGameObjectMap.ContainsKey(hex) ? hexToGameObjectMap[hex] : null;
+    }
 
     public Vector3 GetHexPosition(int q, int r)
     {
@@ -129,8 +133,9 @@ public class HexMap : MonoBehaviour
                 
 
                 hexGO = (GameObject)Instantiate(hexTile, pos, Quaternion.identity, this.transform);
-                hexGO.GetComponent<HexComponent>().hex = h;
-                hexGO.GetComponent<HexComponent>().hexMap = this;
+                HexComponent hexComponenent = hexGO.GetComponent<HexComponent>();
+                hexComponenent.hex = h;
+                hexComponenent.hexMap = this;
                 hexToGameObjectMap[h] = hexGO;
 
                 hexGO.GetComponentInChildren<TextMesh>().text = string.Format("{0},{1}", column, row);
@@ -256,8 +261,15 @@ public class HexMap : MonoBehaviour
         Hex myHex = getHexeAt(q, r);
         GameObject myHexGO = hexToGameObjectMap[myHex];
         unit.SetHex(myHex);
+        Hex[] hexPath = new Hex[0];
+        unit.SetHexPath(hexPath);
         GameObject unitGO = Instantiate(prefab, myHexGO.transform.position, Quaternion.identity, myHexGO.transform);
-        unit.OnUnitMoved += unitGO.GetComponent<UnitView>().OnUnitMoved;
+
+        UnitView unitView = unitGO.GetComponent<UnitView>();
+        unit.OnUnitMoved += unitView.OnUnitMoved;
+        unitView.unit = unit;
+        unitView.hexMap = this;
+        unitView.hex = myHex;
 
         units.Add(unit);
         unitToGameObjectMap[unit] = unitGO;
