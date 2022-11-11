@@ -29,7 +29,6 @@ public class UnitView : MonoBehaviour,IClick
         animator.runtimeAnimatorController = idle;
         sledgeHammer.SetActive(false);
         selectedCylinder.SetActive(false);
-        Debug.Log("setactive");
     }
 
     public void OnUnitMoved(Hex oldHex, Hex nexHex)
@@ -69,14 +68,21 @@ public class UnitView : MonoBehaviour,IClick
         {
             foreach(Hex hex in unit.hexPath)
             {
-                
+                hexMap.GetHexeGameobjectFromDictionnary(hex).GetComponent<HexComponent>().HighlightHexagon();
             }
         }
     }
 
     public void OnLeftClickOnOtherAction()
     {
-
+        selectedCylinder.SetActive(false);
+        if (unit.hexPath != null && unit.hexPath.Count != 0)
+        {
+            foreach (Hex hex in unit.hexPath)
+            {
+                hexMap.GetHexeGameobjectFromDictionnary(hex).GetComponent<HexComponent>().UnHighlightHexagon();
+            }
+        }
     }
 
     public void OnRightClickAction(GameObject gameobject)
@@ -84,7 +90,9 @@ public class UnitView : MonoBehaviour,IClick
         if(gameobject.tag == "Hexagon")
         {
             //*************TODO: vérifier si la case est adjacente ou s'il va falloir calculer un chemin (et si la case est disponible (!= eau ou ennemi))
-            unit.AddToHexPath(gameobject.GetComponent<HexComponent>().hex);
+            HexComponent hexComponent = gameobject.GetComponent<HexComponent>();
+            unit.AddToHexPath(hexComponent.hex);
+            hexComponent.HighlightHexagon();
         }
         //*****************TODO: else if(gameobject.tag == "Ennemy") { DoAttack() }
     }

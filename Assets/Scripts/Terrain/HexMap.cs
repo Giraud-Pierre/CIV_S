@@ -17,7 +17,8 @@ public class HexMap : MonoBehaviour
         //TESTING : Press spacebar to advance to next turn
         if(Input.GetKeyDown(KeyCode.Space))
         {
-            if(units != null)
+            mouseController.GetComponent<MouseController>().UnselectAtEndTurn();
+            if (units != null)
             {
                 foreach(Unit unit in units)
                 {
@@ -42,6 +43,8 @@ public class HexMap : MonoBehaviour
     [SerializeField] Material MatMountains;
     [SerializeField] Material MatGrassLands;
     [SerializeField] Material MatDesert;
+
+    [SerializeField] GameObject mouseController;
 
     public GameObject UnitDwarfPrefab;
 

@@ -121,16 +121,24 @@ public class MouseController : MonoBehaviour
             {
                 if(selectedGameObject == null)
                 {
-                    selectedGameObject.GetComponent<IClick>().OnLeftClickOnOtherAction();
                     selectedGameObject = hit.collider.gameObject;
                     selectedGameObject.GetComponent<IClick>().OnLeftClickAction();
                 }
                 else
                 {
+                    selectedGameObject.GetComponent<IClick>().OnLeftClickOnOtherAction();
                     selectedGameObject = null;
-                    //***************TODO : déselectionne le gameobject
                 }
             }
+        }
+    }
+
+    public void UnselectAtEndTurn()
+    {
+        if(selectedGameObject != null)
+        {
+            selectedGameObject.GetComponent<IClick>().OnLeftClickOnOtherAction();
+            selectedGameObject = null;
         }
     }
 }
