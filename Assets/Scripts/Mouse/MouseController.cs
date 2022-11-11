@@ -129,7 +129,6 @@ public class MouseController : MonoBehaviour
                     selectedGameObject = null;
                     //***************TODO : déselectionne le gameobject
                 }
-                Debug.Log(selectedGameObject);
             }
         }
     }

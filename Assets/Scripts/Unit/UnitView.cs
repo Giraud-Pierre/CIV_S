@@ -69,7 +69,6 @@ public class UnitView : MonoBehaviour,IClick
         {
             //*************TODO: vérifier si la case est adjacente ou s'il va falloir calculer un chemin (et si la case est disponible (!= eau ou ennemi))
             unit.AddToHexPath(gameobject.GetComponent<HexComponent>().hex);
-            Debug.Log("Path added");
         }
         //*****************TODO: else if(gameobject.tag == "Ennemy") { DoAttack() }
     }
@@ -79,7 +78,7 @@ public class UnitView : MonoBehaviour,IClick
         if (isMoving)
         {
             this.transform.position = Vector3.SmoothDamp(this.transform.position, newPosition, ref currentVelocity, smoothTime);
-            if(this.transform.position == newPosition)
+            if(Vector3.Distance(this.transform.position, newPosition) <= 0.1f)
             {
                 StopMoving();
             }

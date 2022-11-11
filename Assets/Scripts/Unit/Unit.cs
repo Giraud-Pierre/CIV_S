@@ -50,15 +50,15 @@ public class Unit
     public void DoTurn()
     {
         //Do queued move ?
-        if(hexPath != null ||hexPath.Count ==0)
+        if(hexPath == null || hexPath.Count ==0)
         {
             return;
         }
         else
         {
-            while(movementRemaining > 0)
+            while(movementRemaining > 0 && hexPath.Count != 0)
             {
-                //Grab the first hex from our queu
+                //Grab the first hex from our queue
                 Hex newHex = hexPath.Dequeue();
                 movementRemaining -= MovementCostToEnterHex(newHex);
 
