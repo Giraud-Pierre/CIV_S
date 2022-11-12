@@ -9,6 +9,8 @@ public class BuildMenuController : MonoBehaviour
 
     enum TypeOfResource {Food, Stone, Wood};
 
+    [SerializeField] private BuildingPokedex buildingsInfo = default;
+
     [SerializeField] private GameObject InfoRessourcesLayout = default;
     [SerializeField] private GameObject cityCenterButton = default;
     [SerializeField] private GameObject farmButton = default;
@@ -77,26 +79,26 @@ public class BuildMenuController : MonoBehaviour
 
     private void SetButtonAsSelected()
     {
-        // TODO: Add junction with SciptableObject with action info
+        // TODO: (Optional) Improve the way to get information from ScriptableObject buildingInfo
 
         switch (selectedButton)
         {
             case 0:
                 break;
             case 1:
-                InfoRessourcesLayout.GetComponent<InfoRessourcesViewer>().ShowInfo(new List<int>{0,0,100});
+                InfoRessourcesLayout.GetComponent<InfoRessourcesViewer>().ShowNegativeInfo(buildingsInfo.buildings[0].cost);
                 cityCenterButton.GetComponent<BuildButtonController>().SetSelectedState();
                 break;
             case 2:
-                InfoRessourcesLayout.GetComponent<InfoRessourcesViewer>().ShowInfo(new List<int>{200,0,0});
+                InfoRessourcesLayout.GetComponent<InfoRessourcesViewer>().ShowNegativeInfo(buildingsInfo.buildings[1].cost);
                 farmButton.GetComponent<BuildButtonController>().SetSelectedState();
                 break;
             case 3:
-                InfoRessourcesLayout.GetComponent<InfoRessourcesViewer>().ShowInfo(new List<int>{-300,300,0});
+                InfoRessourcesLayout.GetComponent<InfoRessourcesViewer>().ShowNegativeInfo(buildingsInfo.buildings[2].cost);
                 lumberJackhuttButton.GetComponent<BuildButtonController>().SetSelectedState();
                 break;
             case 4:
-                InfoRessourcesLayout.GetComponent<InfoRessourcesViewer>().ShowInfo(new List<int>{0,-400,400});
+                InfoRessourcesLayout.GetComponent<InfoRessourcesViewer>().ShowNegativeInfo(buildingsInfo.buildings[3].cost);
                 mineButton.GetComponent<BuildButtonController>().SetSelectedState();
                 break;
             // case 5:
