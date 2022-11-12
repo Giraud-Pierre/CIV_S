@@ -69,8 +69,11 @@ public class HexMap_Continent : HexMap
 
 
 
-        //Now make sure all the hex visuals are updated
+        //Met-à-jour les Visuels (voir HexMap.cs)
         UpdateHexVisuals();
+
+        GeneratePathfindingGraph(); //Génère le graphe des voisins pour le pathfinding (voir HexMap.cs)
+
         Unit unit = new Unit();
         SpawnUnitAt(unit, UnitDwarfPrefab, 35, 16);
     }

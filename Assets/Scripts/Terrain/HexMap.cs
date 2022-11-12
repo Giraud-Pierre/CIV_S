@@ -168,7 +168,6 @@ public class HexMap : MonoBehaviour
             }
             
         }
-        GeneratePathfindingGraph();
         UpdateHexVisuals();
 
         //StaticBatchingUtility.Combine(this.gameObject);
@@ -292,7 +291,7 @@ public class HexMap : MonoBehaviour
         }
     }
 
-    private void GeneratePathfindingGraph()
+    public void GeneratePathfindingGraph()
     {
         pathfindingGraph = new Node[numberColumns, numberRows];
 
@@ -314,7 +313,10 @@ public class HexMap : MonoBehaviour
                 Hex[] neighbours = getHexesWithinRangeOf(newHex, 1);
                 foreach (Hex hex in neighbours)
                 {
-                    pathfindingGraph[column, row].neighbours.Add(pathfindingGraph[hex.Q, hex.R]);
+                    if (hex.iswalkable) 
+                    {
+                        pathfindingGraph[column, row].neighbours.Add(pathfindingGraph[hex.Q, hex.R]);
+                    }
                 }
             }
         }
@@ -337,8 +339,7 @@ public class HexMap : MonoBehaviour
         Hex myHex = hexes[q, r];
         GameObject myHexGO = hexToGameObjectMap[myHex];
         unit.SetHex(myHex);
-        Hex[] hexPath = new Hex[0];
-        unit.SetHexPath(hexPath);
+        unit.SetHexPath(new Hex[0]);
         GameObject unitGO = Instantiate(prefab, myHexGO.transform.position, Quaternion.identity, myHexGO.transform);
 
         UnitView unitView = unitGO.GetComponent<UnitView>();

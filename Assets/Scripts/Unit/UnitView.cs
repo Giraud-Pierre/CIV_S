@@ -4,6 +4,7 @@ using UnityEditor.Animations;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using System.Linq;
+using System.IO;
 
 public class UnitView : MonoBehaviour,IClick
 {
@@ -92,39 +93,71 @@ public class UnitView : MonoBehaviour,IClick
         if(gameobject.tag == "Hexagon")
         {
             HexComponent targetHexComponent = gameobject.GetComponent<HexComponent>();
-            if (Hex.Distance(hex,targetHexComponent.hex) <= 1)
+
+            //La référence va être soit la case de l'unité, soit la dernière case dans sa liste de déplacements
+            Hex sourceHex = (unit.hexPath.Count == 0)? hex : unit.hexPath.Last(); 
+
+            if (Hex.Distance(sourceHex, targetHexComponent.hex) <= 1) //Si on clic droit sur une case à 1 case de distance, on l'ajoute à la liste
             {
-                unit.AddToHexPath(targetHexComponent.hex);
-                targetHexComponent.HighlightHexagon();
-            }
-            else
-            {
-                //Pathfinding
-                List<HexMap.Node> path = DijkstraPathfinding(hexMap.GetPathFindingGraph(), hex, targetHexComponent.hex);
-                foreach(HexMap.Node node in path)
+                if (targetHexComponent.hex.iswalkable)
                 {
-                    unit.AddToHexPath(node.hex);
-                    hexMap.GetHexeGameobjectFromDictionnary(node.hex).GetComponent<HexComponent>().HighlightHexagon();
+                    unit.AddToHexPath(targetHexComponent.hex);
+                    targetHexComponent.HighlightHexagon();
                 }
-                
+                else
+                {
+                    Debug.Log("Destination non joignable");
+                }
             }
-            //*************TODO: vérifier si la case est adjacente ou s'il va falloir calculer un chemin (et si la case est disponible (!= eau ou ennemi))
+            else //Sinon on trouve la liste de cases qui va permettre de la rejoindre le plus vite possible à partir de la source ("sourceHex")
+            {
+                //Renvoie le liste de case permettant de rejoindre la cible le plus vite possible.
+                List<HexMap.Node> path = DijkstraPathfinding(hexMap.GetPathFindingGraph(), sourceHex, targetHexComponent.hex);
+
+                if(path == null) //Si on ne peut pas rejoindre la case (parce qu'il y a de l'eau ou des montagnes qui l'enclavent)
+                {
+                    Debug.Log("Destionation non joignable");
+                }
+                else //Sinon on l'ajoute au chemin à parcourir et l'affiche.
+                { 
+                    foreach (HexMap.Node node in path)
+                    {
+                        unit.AddToHexPath(node.hex);
+                        hexMap.GetHexeGameobjectFromDictionnary(node.hex).GetComponent<HexComponent>().HighlightHexagon();
+                    }
+                }
+            }
+            //TODO éventuellement tenir compte des ennemis.
             
+        }
+        else if(gameobject == gameObject) //Si clic droit sur l'unité --> reset la liste de déplacements de l'unité
+        {
+            foreach (Hex hex in unit.hexPath)
+            {
+                hexMap.GetHexeGameobjectFromDictionnary(hex).GetComponent<HexComponent>().UnHighlightHexagon();
+            }
+            unit.SetHexPath(new Hex[0]);
         }
         //*****************TODO: else if(gameobject.tag == "Ennemy") { DoAttack() }
     }
 
     private List<HexMap.Node> DijkstraPathfinding(HexMap.Node[,] pathFindingGraph, Hex unitHex, Hex targetHex)
     {
-        HexMap.Node source = pathFindingGraph[unitHex.Q, unitHex.R];
-        HexMap.Node target = pathFindingGraph[targetHex.Q,targetHex.R];
+        /*Renvoie une liste des noeuds à parcourrir pour arriver à la destination le plus vite possible à partir du
+        pathfindingGraph (array de listes chainées décrivant les voisins de chaque noeuds), l'hexagone sur lequel est
+        l'unité et l'hexagone ciblé.*/
 
-        Dictionary<HexMap.Node, float> distance = new Dictionary<HexMap.Node, float>();
-        Dictionary<HexMap.Node, HexMap.Node> previousNodes = new Dictionary<HexMap.Node, HexMap.Node>();
+        HexMap.Node source = pathFindingGraph[unitHex.Q, unitHex.R]; //Noeud de l'hexagone de l'unité
+        HexMap.Node target = pathFindingGraph[targetHex.Q,targetHex.R]; //Noeud de l'hexagone de la case souhaitée
 
-        List<HexMap.Node> unvisitedNodesQueue = new List<HexMap.Node>();
+        Dictionary<HexMap.Node, float> distance = new Dictionary<HexMap.Node, float>(); //Distance de chaque noeud par rapport au noeud source
 
-        //Creates the dictionnaries and set the list of unvisited nodes
+        //Noeud Précédent pour chaque noeud pour retourner au noeud source le plus vite possible
+        Dictionary<HexMap.Node, HexMap.Node> previousNodes = new Dictionary<HexMap.Node, HexMap.Node>(); 
+
+        List<HexMap.Node> unvisitedNodesQueue = new List<HexMap.Node>(); //Liste des noeuds qui n'ont pas été examinés encore
+
+        //Initialise les dictionnaires et remplit la liste des unvisited nodes
         distance[source] = 0;
         previousNodes[source] = null;
         foreach (HexMap.Node v in pathFindingGraph)
@@ -141,7 +174,7 @@ public class UnitView : MonoBehaviour,IClick
         while (unvisitedNodesQueue.Count > 0)
         {
 
-            //Le noeud u va être le unvisited node avec la distance la plus faible.
+            //Le noeud u va être le unvisited node avec la distance la plus faible (le premier va être la source).
             HexMap.Node u = null;
 
             foreach(HexMap.Node nextU in unvisitedNodesQueue)
@@ -154,18 +187,20 @@ public class UnitView : MonoBehaviour,IClick
             
             if(u == target)
             {
-                break; //sort de la boucle While
+                break; //sort de la boucle While car on a trouvé la target
             }
 
-            unvisitedNodesQueue.Remove(u);
+            unvisitedNodesQueue.Remove(u); //On remove le noeud u considéré de la liste des noeuds non évalués
 
-            foreach (HexMap.Node v in u.neighbours)
+            foreach (HexMap.Node v in u.neighbours) 
             {
-                float alt = distance[u] + u.Distance(v);
+                //On calcule sa distance relative au noeud source ou le coût en déplacement pour s'y déplacer
+                //float alt = distance[u] + u.Distance(v); 
+                float alt = distance[u] + v.hex.BaseMovementCost();
                 if (alt < distance[v])
                 {
                     distance[v] = alt;
-                    previousNodes[v] = u;
+                    previousNodes[v] = u; //On lui attribue son noeud précédent
                 }
             }
         }
@@ -177,14 +212,20 @@ public class UnitView : MonoBehaviour,IClick
         }
         else
         {
-            List<HexMap.Node> path = new List<HexMap.Node>();
+            //On a trouvé le chemin le plus court.
+            List<HexMap.Node> path = new List<HexMap.Node>(); //Liste qui va recueillir la liste des noeuds de la target jusqu'à la source
             HexMap.Node current = target;
             while (current != null)
             {
                 path.Add(current);
                 current = previousNodes[current];
             }
-            path.Reverse();
+            path.Reverse(); //On inverse la liste pour partir de la source vers la target
+            if (path[0] == source)
+            {
+                //On enlève la source si elle est présente car l'unité étant déjà dessus, elle ne doit pas se déplacer sur l'hexagone correspondant
+                path.RemoveAt(0); 
+            }
             return path;
         }
     }
