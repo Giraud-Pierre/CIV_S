@@ -5,7 +5,7 @@ public class GameMenuController : MonoBehaviour
 {
     [SerializeField] private GameObject resourcesLayout;
     [SerializeField] private GameObject defaultBottomBar;
-    [SerializeField] private GameObject actionMenuOnEmptySpace;
+    // [SerializeField] private GameObject actionMenuOnEmptySpace;
     [SerializeField] private GameObject actionMenuOnBuildSpace;
     [SerializeField] private GameObject actionMenuOnCityCenter;
     [SerializeField] private GameObject buildMenu;
@@ -35,7 +35,7 @@ public class GameMenuController : MonoBehaviour
     {
         defaultBottomBar.SetActive(true);
         actionMenuOnBuildSpace.SetActive(false);
-        actionMenuOnEmptySpace.SetActive(false);
+        // actionMenuOnEmptySpace.SetActive(false);
         actionMenuOnCityCenter.SetActive(false);
         buildMenu.SetActive(false);
     }
@@ -47,7 +47,7 @@ public class GameMenuController : MonoBehaviour
 
         if (emptySpace)
         {
-            GetActionMenuOnEmptySpace();
+            GetBuildMenu();
         }
         else
         {
@@ -66,7 +66,7 @@ public class GameMenuController : MonoBehaviour
     {
         defaultBottomBar.SetActive(false);
         actionMenuOnBuildSpace.SetActive(false);
-        actionMenuOnEmptySpace.SetActive(false);
+        // actionMenuOnEmptySpace.SetActive(false);
         actionMenuOnCityCenter.SetActive(false);
         buildMenu.SetActive(true);
     }
@@ -77,20 +77,20 @@ public class GameMenuController : MonoBehaviour
     }
 
 
-    private void GetActionMenuOnEmptySpace()
-    {
-        defaultBottomBar.SetActive(false);
-        actionMenuOnBuildSpace.SetActive(false);
-        actionMenuOnEmptySpace.SetActive(true);
-        actionMenuOnCityCenter.SetActive(false);
-        buildMenu.SetActive(false);
-    }
+    // private void GetActionMenuOnEmptySpace()
+    // {
+    //     defaultBottomBar.SetActive(false);
+    //     actionMenuOnBuildSpace.SetActive(false);
+    //     actionMenuOnEmptySpace.SetActive(true);
+    //     actionMenuOnCityCenter.SetActive(false);
+    //     buildMenu.SetActive(false);
+    // }
 
     private void GetActionMenuOnBuildSpace()
     {
         defaultBottomBar.SetActive(false);
         actionMenuOnBuildSpace.SetActive(true);
-        actionMenuOnEmptySpace.SetActive(false);
+        // actionMenuOnEmptySpace.SetActive(false);
         actionMenuOnCityCenter.SetActive(false);
         buildMenu.SetActive(false);
     }
@@ -99,7 +99,7 @@ public class GameMenuController : MonoBehaviour
     {
         defaultBottomBar.SetActive(false);
         actionMenuOnBuildSpace.SetActive(false);
-        actionMenuOnEmptySpace.SetActive(false);
+        // actionMenuOnEmptySpace.SetActive(false);
         actionMenuOnCityCenter.SetActive(true);
         buildMenu.SetActive(false);
     }
