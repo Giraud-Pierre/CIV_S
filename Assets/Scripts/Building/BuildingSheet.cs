@@ -7,4 +7,5 @@ public class BuildingSheet : ScriptableObject
 {
     public new string name;
     public List<int> cost = new List<int>(3);
+    public int quantityRessourceEachTurn;
 }

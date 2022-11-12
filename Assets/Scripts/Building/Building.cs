@@ -10,32 +10,35 @@ public class Building
     public int type;
 
     //Contenu dans BuildingPokedex.buildings[buildingType] avec dans l'ordre nourriture, bois, pierre.
-    public List<int> cost = new List<int>(3); 
+    public List<int> cost = new List<int>(3);
 
+    public int quantityRessourceEachTurn;
     public Hex hex; //Case du bâtiment
     public List<Unit> queue = new List<Unit>(); //Liste des unités pour le centre ville
 
+    //Constructeur
     public Building(int buildingType, BuildingPokedex pokedex, Hex newHex)
     {
         this.type = buildingType;
         this.name = pokedex.buildings[type].name;
         this.cost = pokedex.buildings[type].cost;
+        quantityRessourceEachTurn = pokedex.buildings[type].quantityRessourceEachTurn;
         hex = newHex;
     }
-
-    public void DoTurn()
+    
+    public void DoTurn(HexMap hexmap)
     {
-        switch (type)
+        if(type != 0) //Si ce n'est pas un centre ville, alors c'est un bâtiment de ressource.
         {
-            case 0:
-                //doturn for citycenter
-                break;
-            case 1:
-
-                break;
-                
-                
-
+            hexmap.AddRessource(type - 1, quantityRessourceEachTurn);
+        }
+        else
+        {
+            if(queue != null && queue.Count > 0)
+            {
+                hexmap.SpawnUnitAt(queue[0], hexmap.worker, hex.Q, hex.R);
+                queue.RemoveAt(0);
+            }
         }
     }
 }

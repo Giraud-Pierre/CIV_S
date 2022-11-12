@@ -10,6 +10,12 @@ public class HexMap : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //Ressources de base
+        ressources = new List<int>();
+        ressources.Add(100);
+        ressources.Add(200);
+        ressources.Add(200);
+
         GenerateMap();
     }
 
@@ -31,7 +37,7 @@ public class HexMap : MonoBehaviour
             {
                 foreach(Building building in buildings)
                 {
-                    building.DoTurn();
+                    building.DoTurn(this);
                 }
             }
         }
@@ -57,7 +63,7 @@ public class HexMap : MonoBehaviour
 
     [SerializeField] GameObject mouseController;
 
-    public GameObject UnitDwarfPrefab;
+    public GameObject worker;
 
     protected float HeightMountain = 0.85f;
     protected float HeightHill = 0.6f;
@@ -75,6 +81,8 @@ public class HexMap : MonoBehaviour
     public int numberColumns = 60; 
     private GameObject hexGO;
 
+
+    //***************Dictionnaires et Données du jeu******************
     private Hex[,] hexes;
     private Dictionary<Hex, GameObject> hexToGameObjectMap;
 
@@ -85,6 +93,9 @@ public class HexMap : MonoBehaviour
     private Dictionary<Building, GameObject> buildingToGameObjectMap;
 
     private Node[,] pathfindingGraph;
+
+    private List<int> ressources;
+    //****************************************************************
 
     public Hex getHexeAt(int x, int y)
     {
@@ -340,21 +351,37 @@ public class HexMap : MonoBehaviour
             unitToGameObjectMap = new Dictionary<Unit, GameObject>();
         }
 
+        if (ressources[0] > 50) //Coût de l'unité.
+        {
+            Hex myHex = hexes[q, r];
+            GameObject myHexGO = hexToGameObjectMap[myHex];
+            unit.SetHex(myHex);
+            unit.SetHexPath(new Hex[0]);
+            GameObject unitGO = Instantiate(prefab, myHexGO.transform.position, Quaternion.identity, myHexGO.transform);
 
-        Hex myHex = hexes[q, r];
-        GameObject myHexGO = hexToGameObjectMap[myHex];
-        unit.SetHex(myHex);
-        unit.SetHexPath(new Hex[0]);
-        GameObject unitGO = Instantiate(prefab, myHexGO.transform.position, Quaternion.identity, myHexGO.transform);
+            UnitView unitView = unitGO.GetComponent<UnitView>();
+            unit.OnUnitMoved += unitView.OnUnitMoved;
+            unitView.unit = unit;
+            unitView.hexMap = this;
+            unitView.hex = myHex;
 
-        UnitView unitView = unitGO.GetComponent<UnitView>();
-        unit.OnUnitMoved += unitView.OnUnitMoved;
-        unitView.unit = unit;
-        unitView.hexMap = this;
-        unitView.hex = myHex;
+            units.Add(unit);
+            unitToGameObjectMap[unit] = unitGO;
 
-        units.Add(unit);
-        unitToGameObjectMap[unit] = unitGO;
+            ressources[0] -= 50;
+        }
+
+        
+    }
+
+    public void AddRessource(int ressourceType, int quantity)
+    {
+        ressources[ressourceType] += quantity;
+    }
+
+    public List<int> GetRessource()
+    {
+        return ressources;
     }
 
 }
