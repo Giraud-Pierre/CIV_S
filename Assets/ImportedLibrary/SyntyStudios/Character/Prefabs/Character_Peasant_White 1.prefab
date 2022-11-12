@@ -736,7 +736,7 @@ GameObject:
   - component: {fileID: 408822}
   - component: {fileID: 9551078}
   m_Layer: 0
-  m_Name: Character_Peasant_White
+  m_Name: Character_Peasant_White 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
