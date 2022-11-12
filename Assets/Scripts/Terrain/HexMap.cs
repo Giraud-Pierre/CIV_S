@@ -18,6 +18,7 @@ public class HexMap : MonoBehaviour
         //TESTING : Press spacebar to advance to next turn
         if(Input.GetKeyDown(KeyCode.Space))
         {
+
             mouseController.GetComponent<MouseController>().UnselectAtEndTurn();
             if (units != null)
             {
@@ -251,7 +252,7 @@ public class HexMap : MonoBehaviour
         }
     }
 
-    public  Hex[] getHexesWithinRangeOf(Hex centerHex, int range)
+    public Hex[] getHexesWithinRangeOf(Hex centerHex, int range)
     {
         List<Hex> results = new List<Hex>();
         for(int dx = -range; dx <= range; dx++)
