@@ -23,6 +23,11 @@ public class Hex
     public float Moisture;
     public bool iswalkable = false;
 
+    //typeOfField : 0 => Water ; 1 => Plain/Grassland ; 2 => Desert ; 3 => Mountain ; 4 => Forest
+    private uint typeOfField = 0;
+
+    private Building buildingInHex;
+
     //TODO : Need some kind of property to track hex type (plains, grasslands, etc...)
     //TODO : Beed property to track hex detail (forest, mine, farm, etc...)
 
@@ -179,5 +184,21 @@ public class Hex
     {
         //TODO : Factor in terrain type & features
         return 1;
+    }
+
+    public uint GetTypeOfField()
+    {
+        return this.typeOfField;
+    }
+
+    public void SetTypeOfField(uint newField)
+    {
+        this.typeOfField = newField;
+    }
+
+    public bool CanBuildFarm()
+    {
+        
+        return false;
     }
 }

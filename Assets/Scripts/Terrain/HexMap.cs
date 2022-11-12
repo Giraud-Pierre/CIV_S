@@ -192,20 +192,7 @@ public class HexMap : MonoBehaviour
                 if(h.Elevation >= HeightFlat)
                 {
                     h.iswalkable = true;
-                    if (h.Moisture >= MoistureJungle)
-                    {
-                        mr.material = MatGrassLands;
-                        Vector3 p = hexGO.transform.position;
-                        if(h.Elevation >= HeightHill)
-                        {
-                            p.y += 0.25f;
-                        }
-                        //TODO : Spawn Jungle
-                        GameObject.Instantiate(JunglePrefab, p, Quaternion.identity, hexGO.transform);
-                    }
-
-
-                    else if (h.Moisture >= MoistureForest)
+                    if (h.Moisture >= MoistureForest && h.Elevation < HeightMountain)
                     {
                         mr.material = MatGrassLands;
                         Vector3 p = hexGO.transform.position;
@@ -214,21 +201,25 @@ public class HexMap : MonoBehaviour
                             p.y += 0.25f;
                         }
                         GameObject.Instantiate(ForestPrefab, p, Quaternion.identity, hexGO.transform);
+                        h.SetTypeOfField(4);
                     }
 
                     else if (h.Moisture >= MoistureGrasslands)
                     {
                         mr.material = MatGrassLands;
+                        h.SetTypeOfField(1);
                     }
 
                     else if (h.Moisture >= MoisturePlains)
                     {
                         mr.material = MatPlains;
+                        h.SetTypeOfField(1);
 
                     }
 
                     else
                     {
+                        h.SetTypeOfField(2);
                         mr.material = MatDesert;
                     }
                 }
@@ -238,6 +229,7 @@ public class HexMap : MonoBehaviour
                     h.iswalkable = false;
                     mr.material = MatMountains;
                     mf.mesh = MeshMountain;
+                    h.SetTypeOfField(3);
                 }
 
                 else if (h.Elevation >= HeightHill)
