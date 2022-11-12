@@ -518,6 +518,10 @@ MonoBehaviour:
     type: 3}
   JunglePrefab: {fileID: 6390376800194388126, guid: df4ebab48972454459bcbfd88f65294f,
     type: 3}
+  Farm: {fileID: 133066, guid: 425a2375bbeaffd4aa8aefea2454c645, type: 3}
+  TownCenter: {fileID: 177110, guid: 8bfac7dc41cb68e449b87cad92be77d9, type: 3}
+  Mine: {fileID: 191812, guid: c5a23c567c1d68f4389bb0e4e6d6ec99, type: 3}
+  LamberCamp: {fileID: 187846, guid: d1e13909567fcd341bfe40fd2f12368e, type: 3}
   MatOcean: {fileID: 2100000, guid: 1290af6d5dfe45f42a2aaee99f262dbe, type: 2}
   MatPlains: {fileID: 2100000, guid: ede02835786947d43995729a63831ad1, type: 2}
   MatMountains: {fileID: 2100000, guid: 67e527211e3f76d4890a6abda2f5fe26, type: 2}

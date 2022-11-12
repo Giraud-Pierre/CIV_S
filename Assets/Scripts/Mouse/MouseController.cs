@@ -134,9 +134,11 @@ public class MouseController : MonoBehaviour
 
                         HexMap_Continent hexMapContinent = GameObject.Find("HexMap").GetComponent<HexMap_Continent>();
                         Hex hex = hexMapContinent.GetHexFromDictionnary(selectedGameObject);
-                        if(hex.GetBuilding() != null)
+                        if(hex.GetBuilding() == null)
                         {
-
+                            GameObject building = Instantiate(hexMapContinent.GetMineGO(), selectedGameObject.transform);
+                            
+                            Debug.Log("test");
                         }
                         else
                         {

@@ -40,6 +40,12 @@ public class HexMap : MonoBehaviour
     [SerializeField] GameObject ForestPrefab;
     [SerializeField] GameObject JunglePrefab;
 
+    [SerializeField] GameObject Farm;
+    [SerializeField] GameObject TownCenter;
+    [SerializeField] GameObject Mine;
+    [SerializeField] GameObject LumberCamp;
+
+
     [SerializeField] Material MatOcean;
     [SerializeField] Material MatPlains;
     [SerializeField] Material MatMountains;
@@ -75,6 +81,26 @@ public class HexMap : MonoBehaviour
     private Dictionary<Unit, GameObject> unitToGameObjectMap;
 
     private Node[,] pathfindingGraph;
+
+    public GameObject GetFarmGO()
+    {
+        return Farm;
+    }
+
+    public GameObject GetMineGO()
+    {
+        return Mine;
+    }
+
+    public GameObject GetTownCenterGO()
+    {
+        return TownCenter;
+    }
+
+    public GameObject GetLumberCampGO()
+    {
+        return LumberCamp;
+    }
 
     public Hex getHexeAt(int x, int y)
     {

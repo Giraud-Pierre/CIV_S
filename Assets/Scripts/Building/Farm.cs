@@ -1,18 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class Farm : MonoBehaviour
+public class Farm : Building
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] GameObject farmGO;
+    public Farm(string name, int cost):base(name, cost)
     {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        this.typeOfBuilding = 1;
     }
 }
