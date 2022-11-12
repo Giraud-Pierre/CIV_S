@@ -14,12 +14,13 @@ MonoImporter:
       type: 3}
   - JunglePrefab: {fileID: 6390376800194388126, guid: df4ebab48972454459bcbfd88f65294f,
       type: 3}
-  - MatOcean: {fileID: 2100000, guid: 1ed23e3db3df2e44a89898e4a8175a11, type: 2}
+  - MatOcean: {instanceID: 0}
   - MatPlains: {fileID: 2100000, guid: ede02835786947d43995729a63831ad1, type: 2}
-  - MatMountains: {fileID: 2100000, guid: ad6589cc7f33874498095d4f0f5100dc, type: 2}
+  - MatMountains: {instanceID: 0}
   - MatGrassLands: {fileID: 2100000, guid: 94b503c3adf49d446aa39379e4abd1e1, type: 2}
-  - MatDesert: {fileID: 2100000, guid: 7743e3cc3dc6b6445a9b5bf65875b6c4, type: 2}
-  - UnitDwarfPrefab: {instanceID: 0}
+  - MatDesert: {instanceID: 0}
+  - mouseController: {instanceID: 0}
+  - UnitDwarfPrefab: {fileID: 171706, guid: 1993ef37b5f480b4a92115ca0117fdce, type: 3}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
