@@ -87,6 +87,8 @@ public class HexMap : MonoBehaviour
     private HashSet<Unit> units;
     private Dictionary<Unit, GameObject> unitToGameObjectMap;
 
+    private Dictionary<GameObject, Unit> gameObjectToUnitMap;
+
     private HashSet<Building> buildings;
     private Dictionary<Building, GameObject> buildingToGameObjectMap;
 
@@ -168,6 +170,11 @@ public class HexMap : MonoBehaviour
     public Hex GetHexFromDictionnary(GameObject gameObject)
     {
         return gameObjectToHexMap.ContainsKey(gameObject) ? gameObjectToHexMap[gameObject] : null;
+    }
+
+    public Unit GetUnitFromDictionnary(GameObject gameObject)
+    {
+        return gameObjectToUnitMap.ContainsKey(gameObject) ? gameObjectToUnitMap[gameObject] : null;
     }
 
     public Vector3 GetHexPosition(int q, int r)
@@ -371,6 +378,7 @@ public class HexMap : MonoBehaviour
         {
             units = new HashSet<Unit>();
             unitToGameObjectMap = new Dictionary<Unit, GameObject>();
+            gameObjectToUnitMap = new Dictionary<GameObject, Unit>();
         }
 
 
@@ -388,6 +396,7 @@ public class HexMap : MonoBehaviour
 
         units.Add(unit);
         unitToGameObjectMap[unit] = unitGO;
+        gameObjectToUnitMap[unitGO] = unit;
     }
 
 }

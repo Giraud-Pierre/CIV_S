@@ -15,6 +15,10 @@ public class Unit
     const bool MOVEMENT_RULES_LIKE_CIV6 = false;
     public Hex hex { get; protected set; }
 
+    public Hex getHex()
+    {
+        return hex;
+    }
 
     public delegate void  UnitMovedDelegate(Hex oldHex, Hex newHex);
 

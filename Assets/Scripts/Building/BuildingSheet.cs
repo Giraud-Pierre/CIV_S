@@ -6,5 +6,6 @@ using UnityEngine;
 public class BuildingSheet : ScriptableObject
 {
     public new string name;
-    public List<int> cost = new List<int>(3);
+    public int[] cost = new int[3];
+    public int turnsToBuild;
 }
