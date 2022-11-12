@@ -3096,7 +3096,6 @@ MonoBehaviour:
   allTutorials: {fileID: 11400000, guid: ed7e1c212e1e67f4184ecf9e0bd1cf73, type: 2}
   titleArea: {fileID: 720757943}
   textArea: {fileID: 1242046655}
-  currentTutorialIndex: 0
 --- !u!1 &1168421398
 GameObject:
   m_ObjectHideFlags: 0
