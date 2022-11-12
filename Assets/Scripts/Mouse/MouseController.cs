@@ -123,6 +123,31 @@ public class MouseController : MonoBehaviour
                 {
                     selectedGameObject = hit.collider.gameObject;
                     selectedGameObject.GetComponent<IClick>().OnLeftClickAction();
+                    
+                    //If selected object is a tile
+                    if (selectedGameObject.GetComponent<HexComponent>() != null)
+                    {
+                        //TODO: Display interface for construction if tile empty
+                        // details of the tile (name, costOfMovement ...)
+                        // if there is a building, show what it does
+                        // if it's the town center : display a button to add an unit in production and the list of production
+
+                        HexMap_Continent hexMapContinent = GameObject.Find("HexMap").GetComponent<HexMap_Continent>();
+                        Hex hex = hexMapContinent.GetHexFromDictionnary(selectedGameObject);
+                        if(hex.GetBuilding() != null)
+                        {
+
+                        }
+                        else
+                        {
+
+                        }
+                    }
+
+                    //If selected object is an unit
+                    else if (selectedGameObject.GetComponent<UnitView>() != null)
+                    {
+                    }
                 }
                 else
                 {

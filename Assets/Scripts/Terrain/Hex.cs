@@ -261,4 +261,14 @@ public class Hex
         return false;
     }
 
+    public void addBuilding(Building building)
+    {
+        buildingInHex = building;
+    }
+
+    public Building GetBuilding()
+    {
+        return buildingInHex;
+    }
+
 }

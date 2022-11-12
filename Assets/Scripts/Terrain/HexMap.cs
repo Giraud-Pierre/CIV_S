@@ -69,6 +69,8 @@ public class HexMap : MonoBehaviour
     private Hex[,] hexes;
     private Dictionary<Hex, GameObject> hexToGameObjectMap;
 
+    private Dictionary<GameObject, Hex> gameObjectToHexMap;
+
     private HashSet<Unit> units;
     private Dictionary<Unit, GameObject> unitToGameObjectMap;
 
@@ -127,6 +129,11 @@ public class HexMap : MonoBehaviour
         return hexToGameObjectMap.ContainsKey(hex) ? hexToGameObjectMap[hex] : null;
     }
 
+    public Hex GetHexFromDictionnary(GameObject gameObject)
+    {
+        return gameObjectToHexMap.ContainsKey(gameObject) ? gameObjectToHexMap[gameObject] : null;
+    }
+
     public Vector3 GetHexPosition(int q, int r)
     {
         Hex h = hexes[q, r];
@@ -141,6 +148,7 @@ public class HexMap : MonoBehaviour
     {
         hexes = new Hex[numberColumns, numberRows];
         hexToGameObjectMap = new Dictionary<Hex, GameObject>();
+        gameObjectToHexMap = new Dictionary<GameObject, Hex>();
         for (int column = 0; column< numberColumns;column++)
         {
             for (int row =0; row<numberRows; row++ )
@@ -159,6 +167,7 @@ public class HexMap : MonoBehaviour
                 hexComponenent.hex = h;
                 hexComponenent.hexMap = this;
                 hexToGameObjectMap[h] = hexGO;
+                gameObjectToHexMap[hexGO] = h;
 
                 hexGO.GetComponentInChildren<TextMesh>().text = string.Format("{0},{1}", column, row);
                 MeshRenderer mr = hexGO.GetComponentInChildren<MeshRenderer>();
