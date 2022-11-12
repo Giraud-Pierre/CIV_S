@@ -27,6 +27,13 @@ public class HexMap : MonoBehaviour
                     unit.DoTurn();
                 }
             }
+            if(buildings != null)
+            {
+                foreach(Building building in buildings)
+                {
+                    building.DoTurn();
+                }
+            }
         }
     }
 
@@ -79,6 +86,9 @@ public class HexMap : MonoBehaviour
 
     private HashSet<Unit> units;
     private Dictionary<Unit, GameObject> unitToGameObjectMap;
+
+    private HashSet<Building> buildings;
+    private Dictionary<Building, GameObject> buildingToGameObjectMap;
 
     private Node[,] pathfindingGraph;
 
