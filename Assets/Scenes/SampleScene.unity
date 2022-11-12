@@ -526,7 +526,7 @@ MonoBehaviour:
   buildingPokedex: {fileID: 11400000, guid: bce5ca87f75de8b47b57e0e0af022f90, type: 2}
   unitPokedex: {fileID: 11400000, guid: 8f255f0825c390749bdecc9844eb10f1, type: 2}
   mouseController: {fileID: 676941980}
-  worker: {fileID: 0}
+  worker: {fileID: 171706, guid: 1993ef37b5f480b4a92115ca0117fdce, type: 3}
   allowWrapEastWest: 1
   allowWrapNorthSouth: 0
   numberRows: 30
