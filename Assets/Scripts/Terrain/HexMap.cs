@@ -6,6 +6,13 @@ public class HexMap : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //Ressources de base
+        ressources = new List<int>();
+        ressources.Add(100);
+        ressources.Add(200);
+        ressources.Add(200);
+
+        Debug.Log("BeforeGenerateMap");
         GenerateMap();
     }
 
@@ -21,6 +28,13 @@ public class HexMap : MonoBehaviour
                 foreach(Unit unit in units)
                 {
                     unit.DoTurn();
+                }
+            }
+            if(buildings != null)
+            {
+                foreach(Building building in buildings)
+                {
+                    building.DoTurn(this);
                 }
             }
         }
@@ -42,9 +56,12 @@ public class HexMap : MonoBehaviour
     [SerializeField] Material MatGrassLands;
     [SerializeField] Material MatDesert;
 
+    [SerializeField] BuildingPokedex buildingPokedex;
+    [SerializeField] UnitPokedex unitPokedex;
+
     [SerializeField] GameObject mouseController;
 
-    public GameObject UnitDwarfPrefab;
+    public GameObject worker;
 
     protected float HeightMountain = 0.85f;
     protected float HeightHill = 0.6f;
@@ -62,13 +79,21 @@ public class HexMap : MonoBehaviour
     public int numberColumns = 60; 
     private GameObject hexGO;
 
+
+    //***************Dictionnaires et Données du jeu******************
     private Hex[,] hexes;
     private Dictionary<Hex, GameObject> hexToGameObjectMap;
 
     private HashSet<Unit> units;
     private Dictionary<Unit, GameObject> unitToGameObjectMap;
 
+    private HashSet<Building> buildings;
+    private Dictionary<Building, GameObject> buildingToGameObjectMap;
+
     private Node[,] pathfindingGraph;
+
+    private List<int> ressources;
+    //****************************************************************
 
     public Hex getHexeAt(int x, int y)
     {
@@ -316,29 +341,53 @@ public class HexMap : MonoBehaviour
         return pathfindingGraph;
     }
 
-    public void SpawnUnitAt(Unit unit, GameObject prefab, int q, int r)
+    public void SpawnUnitAt(int unitType, GameObject prefab, int q, int r)
     {
         if(units == null)
         {
             units = new HashSet<Unit>();
             unitToGameObjectMap = new Dictionary<Unit, GameObject>();
         }
+        Debug.Log("CheckRessource");
+        if (
+                ressources[0] > unitPokedex.units[unitType].Cost[0] && 
+                ressources[1] > unitPokedex.units[unitType].Cost[1] &&
+                ressources[2] > unitPokedex.units[unitType].Cost[2]) //Coût de l'unité.
+        {
+            Hex myHex = hexes[q, r];
+            GameObject myHexGO = hexToGameObjectMap[myHex];
 
+            Debug.Log("BeforeUnit");
+            Unit unit = new Unit(unitPokedex, unitType, myHex);
+            Debug.Log("AfterUnit");
 
-        Hex myHex = hexes[q, r];
-        GameObject myHexGO = hexToGameObjectMap[myHex];
-        unit.SetHex(myHex);
-        unit.SetHexPath(new Hex[0]);
-        GameObject unitGO = Instantiate(prefab, myHexGO.transform.position, Quaternion.identity, myHexGO.transform);
+            GameObject unitGO = Instantiate(prefab, myHexGO.transform.position, Quaternion.identity, myHexGO.transform);
 
-        UnitView unitView = unitGO.GetComponent<UnitView>();
-        unit.OnUnitMoved += unitView.OnUnitMoved;
-        unitView.unit = unit;
-        unitView.hexMap = this;
-        unitView.hex = myHex;
+            UnitView unitView = unitGO.GetComponent<UnitView>();
+            unit.OnUnitMoved += unitView.OnUnitMoved;
+            unitView.unit = unit;
+            unitView.hexMap = this;
+            unitView.hex = myHex;
 
-        units.Add(unit);
-        unitToGameObjectMap[unit] = unitGO;
+            units.Add(unit);
+            unitToGameObjectMap[unit] = unitGO;
+
+            ressources[0] -= unitPokedex.units[unitType].Cost[0];
+            ressources[1] -= unitPokedex.units[unitType].Cost[1];
+            ressources[2] -= unitPokedex.units[unitType].Cost[2];
+        }
+
+        
+    }
+
+    public void AddRessource(int ressourceType, int quantity)
+    {
+        ressources[ressourceType] += quantity;
+    }
+
+    public List<int> GetRessource()
+    {
+        return ressources;
     }
 
 }

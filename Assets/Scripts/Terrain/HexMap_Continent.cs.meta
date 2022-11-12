@@ -19,8 +19,10 @@ MonoImporter:
   - MatMountains: {instanceID: 0}
   - MatGrassLands: {fileID: 2100000, guid: 94b503c3adf49d446aa39379e4abd1e1, type: 2}
   - MatDesert: {instanceID: 0}
+  - buildingPokedex: {fileID: 11400000, guid: bce5ca87f75de8b47b57e0e0af022f90, type: 2}
+  - unitPokedex: {fileID: 11400000, guid: 8f255f0825c390749bdecc9844eb10f1, type: 2}
   - mouseController: {instanceID: 0}
-  - UnitDwarfPrefab: {fileID: 171706, guid: 1993ef37b5f480b4a92115ca0117fdce, type: 3}
+  - worker: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

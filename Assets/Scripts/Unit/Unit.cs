@@ -4,21 +4,38 @@ using UnityEngine;
 
 public class Unit
 {
-    public string name = "Dwarf";
-    public int hitPoint = 100;
-    public int strength = 8;
-    public int movement = 2;
-    public int movementRemaining = 2;
+    //Charactéristiques de l'unité
+    public string name;
+    public int unitType; //0 pour un ouvrier, 1 pour un chasseur
+    public int hitPoint;
+    public int strength;
+    public int movement;
+    public int movementRemaining;
+    public List<int> cost;
+    public Hex hex { get; protected set; }
     public Queue<Hex> hexPath;
+
+    //Fonction déléguée pour le mouvement
+    public delegate void UnitMovedDelegate(Hex oldHex, Hex newHex);
+    public event UnitMovedDelegate OnUnitMoved;
 
     //TODO : THis should probably be move to some kind of central option/config file
     const bool MOVEMENT_RULES_LIKE_CIV6 = false;
-    public Hex hex { get; protected set; }
+    
+    //Constructeur
+    public Unit(UnitPokedex pokedex,int newUnitType, Hex newhex)
+    {
+        unitType = newUnitType;
+        name = pokedex.units[unitType].name;
+        hitPoint = 100;
+        strength = pokedex.units[unitType].strength;
+        movement = pokedex.units[unitType].movement;
+        movementRemaining = movement;
+        cost = pokedex.units[unitType].Cost;
+        hex = newhex;
+        SetHexPath(new Hex[0]);
+    }
 
-
-    public delegate void  UnitMovedDelegate(Hex oldHex, Hex newHex);
-
-    public event UnitMovedDelegate OnUnitMoved;
 
     public void SetHexPath(Hex[] hexPath)
     {

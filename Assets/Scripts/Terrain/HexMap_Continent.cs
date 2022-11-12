@@ -74,8 +74,7 @@ public class HexMap_Continent : HexMap
 
         GeneratePathfindingGraph(); //Génère le graphe des voisins pour le pathfinding (voir HexMap.cs)
 
-        Unit unit = new Unit();
-        SpawnUnitAt(unit, UnitDwarfPrefab, 35, 16);
+        SpawnUnitAt(0, worker, 35, 16);
     }
 
     private void elevateArea(int q, int r, int range, float centerHeight = 0.8f)
