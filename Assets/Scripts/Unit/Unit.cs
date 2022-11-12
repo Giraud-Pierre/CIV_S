@@ -4,25 +4,47 @@ using UnityEngine;
 
 public class Unit
 {
-    public string name = "Dwarf";
-    public int hitPoint = 100;
-    public int strength = 8;
-    public int movement = 2;
-    public int movementRemaining = 2;
-    Queue<Hex> hexPath;
+    //Charactéristiques de l'unité
+    public string name;
+    public int unitType; //0 pour un ouvrier, 1 pour un chasseur
+    public int hitPoint;
+    public int strength;
+    public int movement;
+    public int movementRemaining;
+    public List<int> cost;
+    public Hex hex { get; protected set; }
+    public Queue<Hex> hexPath;
+
+    //Fonction déléguée pour le mouvement
+    public delegate void UnitMovedDelegate(Hex oldHex, Hex newHex);
+    public event UnitMovedDelegate OnUnitMoved;
 
     //TODO : THis should probably be move to some kind of central option/config file
     const bool MOVEMENT_RULES_LIKE_CIV6 = false;
-    public Hex hex { get; protected set; }
+    
+    //Constructeur
+    public Unit(UnitPokedex pokedex,int newUnitType, Hex newhex)
+    {
+        unitType = newUnitType;
+        name = pokedex.units[unitType].name;
+        hitPoint = 100;
+        strength = pokedex.units[unitType].strength;
+        movement = pokedex.units[unitType].movement;
+        movementRemaining = movement;
+        cost = pokedex.units[unitType].Cost;
+        hex = newhex;
+        SetHexPath(new Hex[0]);
+    }
 
-
-    public delegate void  UnitMovedDelegate(Hex oldHex, Hex newHex);
-
-    public event UnitMovedDelegate OnUnitMoved;
 
     public void SetHexPath(Hex[] hexPath)
     {
         this.hexPath = new Queue<Hex>(hexPath);
+    }
+
+    public void AddToHexPath(Hex hexpath)
+    {
+        this.hexPath.Enqueue(hexpath);
     }
 
     public void SetHex(Hex newHex)
@@ -45,16 +67,32 @@ public class Unit
     public void DoTurn()
     {
         //Do queued move ?
-        if(hexPath != null ||hexPath.Count ==0)
+        if(hexPath == null || hexPath.Count ==0)
         {
             return;
         }
+        else
+        {
+            while(movementRemaining > 0 && hexPath.Count != 0)
+            {
+                //Grab the first hex from our queue
+                Hex newHex = hexPath.Dequeue();
+                movementRemaining -= MovementCostToEnterHex(newHex);
 
-        //Grab the first hex from our queu
-        Hex newHex = hexPath.Dequeue();
-
-        //Move to the new Hex
-        SetHex(newHex);
+                if(movementRemaining >= 0)
+                {
+                    //Move to the new Hex
+                    SetHex(newHex);
+                }
+                else
+                {
+                    //If remaining movement insufficent, do not move and requeue the movement for next turn
+                    hexPath.Enqueue(newHex);
+                }
+            }
+            movementRemaining = movement;
+        }
+        
 
     }
 
@@ -68,7 +106,7 @@ public class Unit
     public float AggregateTurnToEnterHex(Hex hex, float turnsToDate)
     {
         //The issue at hand is that if you are trying to enter a tile
-        // with a movement cost greater than yoiur current remaining movement
+        // with a movement cost greater than your current remaining movement
         // points, this will either result in a cheaper-than expected
         // turn cost (Civ5) or a more-expensive-than expected turn cost (Civ6)
         float baseTurnstoEnterHex = MovementCostToEnterHex(hex) / movement; // Example : entering a forest is "1" turn

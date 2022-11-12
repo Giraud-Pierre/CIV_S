@@ -3,7 +3,26 @@ guid: 6e8adb6addb4b0e42a70d28d2df7d367
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - hexTile: {fileID: 1904931013106162695, guid: 5775311797cc42d478404acff2408f7b,
+      type: 3}
+  - MeshWater: {fileID: 4300000, guid: e4f4e2ebd7661f74aa2a54440b0fe279, type: 3}
+  - MeshFlat: {fileID: 4300000, guid: e4f4e2ebd7661f74aa2a54440b0fe279, type: 3}
+  - MeshHill: {fileID: 4300000, guid: 91f4311fd10b4fd4aaeb00b581fd24e8, type: 3}
+  - MeshMountain: {fileID: 4300000, guid: 406398c8c03649e45883ffe9e4b93e02, type: 3}
+  - ForestPrefab: {fileID: 6390376800194388126, guid: df4ebab48972454459bcbfd88f65294f,
+      type: 3}
+  - JunglePrefab: {fileID: 6390376800194388126, guid: df4ebab48972454459bcbfd88f65294f,
+      type: 3}
+  - MatOcean: {instanceID: 0}
+  - MatPlains: {fileID: 2100000, guid: ede02835786947d43995729a63831ad1, type: 2}
+  - MatMountains: {instanceID: 0}
+  - MatGrassLands: {fileID: 2100000, guid: 94b503c3adf49d446aa39379e4abd1e1, type: 2}
+  - MatDesert: {instanceID: 0}
+  - buildingPokedex: {fileID: 11400000, guid: bce5ca87f75de8b47b57e0e0af022f90, type: 2}
+  - unitPokedex: {fileID: 11400000, guid: 8f255f0825c390749bdecc9844eb10f1, type: 2}
+  - mouseController: {instanceID: 0}
+  - worker: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

@@ -1,9 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
-using UnityEngine.Assertions.Must;
 /// <summary>
 /// The Hex class defines the grid position, world space position, size,
 /// neighbours, etc ... of a Hex Tile. However, it does NOT interact with
@@ -21,6 +18,12 @@ public class Hex
     //Data for map generation and maybe in-game effects
     public float Elevation;
     public float Moisture;
+    public bool iswalkable = false;
+
+    //typeOfField : 0 => Water ; 1 => Plain/Grassland ; 2 => Desert ; 3 => Mountain ; 4 => Forest
+    private uint typeOfField = 0;
+
+    private Building buildingInHex = null;
 
     //TODO : Need some kind of property to track hex type (plains, grasslands, etc...)
     //TODO : Beed property to track hex detail (forest, mine, farm, etc...)
@@ -179,4 +182,80 @@ public class Hex
         //TODO : Factor in terrain type & features
         return 1;
     }
+
+    public uint GetTypeOfField()
+    {
+        return this.typeOfField;
+    }
+
+    public void SetTypeOfField(uint newField)
+    {
+        this.typeOfField = newField;
+    }
+
+    public bool CanBuildFarm()
+    {
+        if(buildingInHex != null)
+        {
+            return false;
+        }
+        else if(typeOfField == 1) // Plain/Grassland
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }  
+    }
+
+    public bool CanBuildMine(Hex[] neighbours)
+    {
+        if (buildingInHex != null)
+        {
+            return false;
+        }
+        else if (typeOfField == 1 || typeOfField == 2) // Plain or desert
+        {
+            foreach (Hex neighbour in neighbours)
+            {
+                if(neighbour.typeOfField == 3) // Mountain
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public bool CanBuildLumberCamp()
+    {
+        if (buildingInHex != null)
+        {
+            return false;
+        }
+        else if (typeOfField == 4) // Forest
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public bool CanBuildHouse()
+    {
+        if (buildingInHex != null)
+        {
+            return false;
+        }
+        else if (typeOfField == 1) // Forest
+        {
+            return true;
+        }
+
+        return false;
+    }
+
 }

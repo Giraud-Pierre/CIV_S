@@ -69,10 +69,12 @@ public class HexMap_Continent : HexMap
 
 
 
-        //Now make sure all the hex visuals are updated
+        //Met-à-jour les Visuels (voir HexMap.cs)
         UpdateHexVisuals();
-        Unit unit = new Unit();
-        SpawnUnitAt(unit, UnitDwarfPrefab, 35, 16);
+
+        GeneratePathfindingGraph(); //Génère le graphe des voisins pour le pathfinding (voir HexMap.cs)
+
+        SpawnUnitAt(0, worker, 35, 16);
     }
 
     private void elevateArea(int q, int r, int range, float centerHeight = 0.8f)

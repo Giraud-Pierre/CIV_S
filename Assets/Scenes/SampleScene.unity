@@ -399,6 +399,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f194b6a997832b449740911ec59a97c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cursor: {fileID: 2800000, guid: 41e2f2500202792459ee472b8e7236f0, type: 3}
+  cursorClicked: {fileID: 2800000, guid: e474253b2ab218e4eb5f70e5ad15c1fa, type: 3}
 --- !u!4 &676941982
 Transform:
   m_ObjectHideFlags: 0
@@ -516,13 +518,15 @@ MonoBehaviour:
     type: 3}
   JunglePrefab: {fileID: 6390376800194388126, guid: df4ebab48972454459bcbfd88f65294f,
     type: 3}
-  MatOcean: {fileID: 2100000, guid: 1ed23e3db3df2e44a89898e4a8175a11, type: 2}
+  MatOcean: {fileID: 2100000, guid: 1290af6d5dfe45f42a2aaee99f262dbe, type: 2}
   MatPlains: {fileID: 2100000, guid: ede02835786947d43995729a63831ad1, type: 2}
-  MatMountains: {fileID: 2100000, guid: ad6589cc7f33874498095d4f0f5100dc, type: 2}
+  MatMountains: {fileID: 2100000, guid: 67e527211e3f76d4890a6abda2f5fe26, type: 2}
   MatGrassLands: {fileID: 2100000, guid: 94b503c3adf49d446aa39379e4abd1e1, type: 2}
-  MatDesert: {fileID: 2100000, guid: 7743e3cc3dc6b6445a9b5bf65875b6c4, type: 2}
-  UnitDwarfPrefab: {fileID: 6970339664708074965, guid: 849feb53e5d05f64697cc89ab15e4ee4,
-    type: 3}
+  MatDesert: {fileID: 2100000, guid: d118f8f1499f3244fa306668405f0749, type: 2}
+  buildingPokedex: {fileID: 11400000, guid: bce5ca87f75de8b47b57e0e0af022f90, type: 2}
+  unitPokedex: {fileID: 11400000, guid: 8f255f0825c390749bdecc9844eb10f1, type: 2}
+  mouseController: {fileID: 676941980}
+  worker: {fileID: 171706, guid: 1993ef37b5f480b4a92115ca0117fdce, type: 3}
   allowWrapEastWest: 1
   allowWrapNorthSouth: 0
   numberRows: 30

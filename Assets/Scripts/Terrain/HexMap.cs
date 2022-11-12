@@ -1,7 +1,4 @@
-using JetBrains.Annotations;
-using System.Collections;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public class HexMap : MonoBehaviour
@@ -9,6 +6,12 @@ public class HexMap : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //Ressources de base
+        ressources = new List<int>();
+        ressources.Add(100);
+        ressources.Add(200);
+        ressources.Add(200);
+
         GenerateMap();
     }
 
@@ -17,11 +20,20 @@ public class HexMap : MonoBehaviour
         //TESTING : Press spacebar to advance to next turn
         if(Input.GetKeyDown(KeyCode.Space))
         {
-            if(units != null)
+
+            mouseController.GetComponent<MouseController>().UnselectAtEndTurn();
+            if (units != null)
             {
                 foreach(Unit unit in units)
                 {
                     unit.DoTurn();
+                }
+            }
+            if(buildings != null)
+            {
+                foreach(Building building in buildings)
+                {
+                    building.DoTurn(this);
                 }
             }
         }
@@ -43,7 +55,12 @@ public class HexMap : MonoBehaviour
     [SerializeField] Material MatGrassLands;
     [SerializeField] Material MatDesert;
 
-    public GameObject UnitDwarfPrefab;
+    [SerializeField] BuildingPokedex buildingPokedex;
+    [SerializeField] UnitPokedex unitPokedex;
+
+    [SerializeField] GameObject mouseController;
+
+    public GameObject worker;
 
     protected float HeightMountain = 0.85f;
     protected float HeightHill = 0.6f;
@@ -61,11 +78,21 @@ public class HexMap : MonoBehaviour
     public int numberColumns = 60; 
     private GameObject hexGO;
 
+
+    //***************Dictionnaires et Données du jeu******************
     private Hex[,] hexes;
     private Dictionary<Hex, GameObject> hexToGameObjectMap;
 
     private HashSet<Unit> units;
     private Dictionary<Unit, GameObject> unitToGameObjectMap;
+
+    private HashSet<Building> buildings;
+    private Dictionary<Building, GameObject> buildingToGameObjectMap;
+
+    private Node[,] pathfindingGraph;
+
+    private List<int> ressources;
+    //****************************************************************
 
     public Hex getHexeAt(int x, int y)
     {
@@ -84,11 +111,26 @@ public class HexMap : MonoBehaviour
                 x += numberColumns;
             }
         }
-        
-        /*if (y < 0)
+        else if( x < 0 || x >= numberColumns)
         {
-            y += numberColumns;
-        }*/
+            Debug.LogError("GetHexAt: " + x + "," + y);
+            return null;
+        }
+
+        if (allowWrapNorthSouth)
+        {
+            y = y % numberRows;
+            if (y < 0)
+            {
+                y += numberRows;
+            }
+        }
+        else if (y < 0 || y >= numberRows)
+        {
+            //Debug.LogError("GetHexAt: " + x + "," + y);
+            return null;
+        }
+
         try
         {
             return this.hexes[x, y];
@@ -100,10 +142,14 @@ public class HexMap : MonoBehaviour
         }
         
     }
+    public GameObject GetHexeGameobjectFromDictionnary(Hex hex)
+    {
+        return hexToGameObjectMap.ContainsKey(hex) ? hexToGameObjectMap[hex] : null;
+    }
 
     public Vector3 GetHexPosition(int q, int r)
     {
-        Hex h = getHexeAt(q, r);
+        Hex h = hexes[q, r];
         return GetHexPosition(h);
     }
 
@@ -129,8 +175,9 @@ public class HexMap : MonoBehaviour
                 
 
                 hexGO = (GameObject)Instantiate(hexTile, pos, Quaternion.identity, this.transform);
-                hexGO.GetComponent<HexComponent>().hex = h;
-                hexGO.GetComponent<HexComponent>().hexMap = this;
+                HexComponent hexComponenent = hexGO.GetComponent<HexComponent>();
+                hexComponenent.hex = h;
+                hexComponenent.hexMap = this;
                 hexToGameObjectMap[h] = hexGO;
 
                 hexGO.GetComponentInChildren<TextMesh>().text = string.Format("{0},{1}", column, row);
@@ -164,20 +211,8 @@ public class HexMap : MonoBehaviour
 
                 if(h.Elevation >= HeightFlat)
                 {
-                    if (h.Moisture >= MoistureJungle)
-                    {
-                        mr.material = MatGrassLands;
-                        Vector3 p = hexGO.transform.position;
-                        if(h.Elevation >= HeightHill)
-                        {
-                            p.y += 0.25f;
-                        }
-                        //TODO : Spawn Jungle
-                        GameObject.Instantiate(JunglePrefab, p, Quaternion.identity, hexGO.transform);
-                    }
-
-
-                    else if (h.Moisture >= MoistureForest)
+                    h.iswalkable = true;
+                    if (h.Moisture >= MoistureForest && h.Elevation < HeightMountain)
                     {
                         mr.material = MatGrassLands;
                         Vector3 p = hexGO.transform.position;
@@ -186,29 +221,35 @@ public class HexMap : MonoBehaviour
                             p.y += 0.25f;
                         }
                         GameObject.Instantiate(ForestPrefab, p, Quaternion.identity, hexGO.transform);
+                        h.SetTypeOfField(4);
                     }
 
                     else if (h.Moisture >= MoistureGrasslands)
                     {
                         mr.material = MatGrassLands;
+                        h.SetTypeOfField(1);
                     }
 
                     else if (h.Moisture >= MoisturePlains)
                     {
                         mr.material = MatPlains;
+                        h.SetTypeOfField(1);
 
                     }
 
                     else
                     {
+                        h.SetTypeOfField(2);
                         mr.material = MatDesert;
                     }
                 }
 
                 if (h.Elevation >= HeightMountain)
                 {
+                    h.iswalkable = false;
                     mr.material = MatMountains;
                     mf.mesh = MeshMountain;
+                    h.SetTypeOfField(3);
                 }
 
                 else if (h.Elevation >= HeightHill)
@@ -230,21 +271,76 @@ public class HexMap : MonoBehaviour
         }
     }
 
-    public  Hex[] getHexesWithinRangeOf(Hex centerHex, int range)
+    public Hex[] getHexesWithinRangeOf(Hex centerHex, int range)
     {
         List<Hex> results = new List<Hex>();
-        for(int dx = -range; dx < range-1; dx++)
+        for(int dx = -range; dx <= range; dx++)
         {
-            for(int dy = Mathf.Max(-range+1, -dx-range); dy < Mathf.Min(range, -dx+range-1); dy++)
+            for(int dy = Mathf.Max(-range, -dx-range); dy <= Mathf.Min(range, -dx+range); dy++)
             {
-                results.Add(getHexeAt(centerHex.Q +dx, centerHex.R +dy));
+                Hex neighbour = getHexeAt(centerHex.Q + dx, centerHex.R + dy);
+                if (neighbour != null && neighbour != centerHex)
+                {
+                    results.Add(neighbour);
+                }
+                
             }
         }
 
         return results.ToArray();
     }
 
-    public void SpawnUnitAt(Unit unit, GameObject prefab, int q, int r)
+    public class Node{
+        public List<Node> neighbours;
+        public Hex hex;
+
+        public Node()
+        {
+            neighbours = new List<Node>();
+        }
+        public float Distance(Node n)
+        {
+            return Hex.Distance(hex,n.hex);
+        }
+    }
+
+    public void GeneratePathfindingGraph()
+    {
+        pathfindingGraph = new Node[numberColumns, numberRows];
+
+        for (int column = 0; column < numberColumns; column++)
+        {
+            for (int row = 0; row < numberRows; row++)
+            {
+                pathfindingGraph[column, row] = new Node();
+            }
+        }
+
+        for (int column = 0; column < numberColumns; column++)
+        {
+            for (int row =0; row < numberRows; row++)
+            {
+                Hex newHex = hexes[column, row];
+                pathfindingGraph[column, row].hex = newHex;
+
+                Hex[] neighbours = getHexesWithinRangeOf(newHex, 1);
+                foreach (Hex hex in neighbours)
+                {
+                    if (hex.iswalkable) 
+                    {
+                        pathfindingGraph[column, row].neighbours.Add(pathfindingGraph[hex.Q, hex.R]);
+                    }
+                }
+            }
+        }
+    }
+
+    public Node[,] GetPathFindingGraph()
+    {
+        return pathfindingGraph;
+    }
+
+    public void SpawnUnitAt(int unitType, GameObject prefab, int q, int r)
     {
         if(units == null)
         {
@@ -252,15 +348,43 @@ public class HexMap : MonoBehaviour
             unitToGameObjectMap = new Dictionary<Unit, GameObject>();
         }
 
+        if (
+                ressources[0] > unitPokedex.units[unitType].Cost[0] && 
+                ressources[1] > unitPokedex.units[unitType].Cost[1] &&
+                ressources[2] > unitPokedex.units[unitType].Cost[2]) //Coût de l'unité.
+        {
+            Hex myHex = hexes[q, r];
+            GameObject myHexGO = hexToGameObjectMap[myHex];
 
-        Hex myHex = getHexeAt(q, r);
-        GameObject myHexGO = hexToGameObjectMap[myHex];
-        unit.SetHex(myHex);
-        GameObject unitGO = Instantiate(prefab, myHexGO.transform.position, Quaternion.identity, myHexGO.transform);
-        unit.OnUnitMoved += unitGO.GetComponent<UnitView>().OnUnitMoved;
+            Unit unit = new Unit(unitPokedex, unitType, myHex);
 
-        units.Add(unit);
-        unitToGameObjectMap[unit] = unitGO;
+            GameObject unitGO = Instantiate(prefab, myHexGO.transform.position, Quaternion.identity, myHexGO.transform);
+
+            UnitView unitView = unitGO.GetComponent<UnitView>();
+            unit.OnUnitMoved += unitView.OnUnitMoved;
+            unitView.unit = unit;
+            unitView.hexMap = this;
+            unitView.hex = myHex;
+
+            units.Add(unit);
+            unitToGameObjectMap[unit] = unitGO;
+
+            ressources[0] -= unitPokedex.units[unitType].Cost[0];
+            ressources[1] -= unitPokedex.units[unitType].Cost[1];
+            ressources[2] -= unitPokedex.units[unitType].Cost[2];
+        }
+
+        
+    }
+
+    public void AddRessource(int ressourceType, int quantity)
+    {
+        ressources[ressourceType] += quantity;
+    }
+
+    public List<int> GetRessource()
+    {
+        return ressources;
     }
 
 }
