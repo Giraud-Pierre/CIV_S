@@ -53,6 +53,8 @@ public class HexMap : MonoBehaviour
     [SerializeField] Material MatGrassLands;
     [SerializeField] Material MatDesert;
 
+    [SerializeField] BuildingPokedex buildingPokedex;
+
     [SerializeField] GameObject mouseController;
 
     public GameObject UnitDwarfPrefab;

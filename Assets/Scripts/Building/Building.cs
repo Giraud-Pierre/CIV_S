@@ -30,6 +30,11 @@ public class Building
             case 0:
                 //doturn for citycenter
                 break;
+            case 1:
+
+                break;
+                
+                
 
         }
     }
