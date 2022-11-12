@@ -1941,7 +1941,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 7342045916081854203}
   m_Direction: 0
   m_MinValue: -80
-  m_MaxValue: 20
+  m_MaxValue: 0
   m_WholeNumbers: 0
   m_Value: 0
   m_OnValueChanged:
@@ -2265,6 +2265,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   resolutionDropdown: {fileID: 7342045915096167391}
   fullScreenTogggle: {fileID: 7342045916081796489}
+  volumeSlider: {fileID: 7342045916175243550}
   audioMixer: {fileID: 24100000, guid: 50a3da7a9c12cde4c942737f1acd0f0c, type: 2}
 --- !u!1 &7342045916392622872
 GameObject:

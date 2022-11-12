@@ -8,6 +8,7 @@ public class SettingsMenuController : MonoBehaviour
 {
     [SerializeField] private TMP_Dropdown resolutionDropdown;
     [SerializeField] private Toggle fullScreenTogggle;
+    [SerializeField] private Slider volumeSlider;
     [SerializeField] private AudioMixer audioMixer = default;
 
     private Resolution[] resolutions;
@@ -17,6 +18,7 @@ public class SettingsMenuController : MonoBehaviour
     {
         PutResolutionValue();
         ChangeFullScreenValue();
+        ChangeVolume();
     }
 
     // Change the resolution of the game window.
@@ -36,7 +38,7 @@ public class SettingsMenuController : MonoBehaviour
     // Change the main volume of the game.
     public void SetVolume(float volume)
     {
-        audioMixer.SetFloat("volume", volume);
+        audioMixer.SetFloat("mainVolume", volume);
     }
 
     // Gets all available resolutions and selects current one.
@@ -69,5 +71,13 @@ public class SettingsMenuController : MonoBehaviour
     private void ChangeFullScreenValue()
     {
         fullScreenTogggle.isOn =  Screen.fullScreen;
+    }
+
+    // Gets the main volume value and displays it on the UI
+    private void ChangeVolume()
+    {
+        float volume;
+        audioMixer.GetFloat("mainVolume", out volume);
+        volumeSlider.value = volume;
     }
 }
