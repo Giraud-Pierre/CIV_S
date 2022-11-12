@@ -21,6 +21,11 @@ public class GameMenuController : MonoBehaviour
         Debug.LogError("Missing Action : Button not assign");
     }
 
+    private void Start()
+    {
+        GetTutorial("bienvenue");
+    }
+
     public void UpdateRessources()
     {
         resourcesLayout.GetComponent<ResourcesLayoutController>().UpdateRessourcesLayout();
@@ -66,9 +71,9 @@ public class GameMenuController : MonoBehaviour
         buildMenu.SetActive(true);
     }
 
-    public void GetTutorial(List<string> Text)
+    public void GetTutorial(string titleOftheTutorial)
     {
-        // TODO(Optional): Add junction with TutorialController
+        tutorialMenu.GetComponent<TutorialController>().NewTutorial(titleOftheTutorial);
     }
 
 

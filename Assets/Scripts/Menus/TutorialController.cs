@@ -1,33 +1,59 @@
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class TutorialController : MonoBehaviour
 {
+    [SerializeField] private TutorialsList allTutorials = default;
+    [SerializeField] private GameObject titleArea = default;
     [SerializeField] private GameObject textArea = default;
 
-    private List<string> Text;
+    private List<string> currentTutorialText;
+    private int currentTutorialIndex;
 
-    public void NewTutorial(List<string> newText)
+    public void NewTutorial(string titleOftutorial)
     {
-        Text = newText;
-        // TODO: Add text in the textArea
+        currentTutorialText = GetTextOfTutorial(titleOftutorial);
+        currentTutorialIndex = 0;
+
+        titleArea.GetComponent<TextMeshProUGUI>().text = titleOftutorial;
+        textArea.GetComponent<TextMeshProUGUI>().text  = currentTutorialText[0];
         gameObject.SetActive(true);
     }
 
     public void nextDialogue()
     {
-        // TODO: Add Feature : nextDialogue
-        Debug.LogError("Missing Action : nextDialogue not implements");
+        if (currentTutorialIndex + 1 < currentTutorialText.Count)
+        {
+            currentTutorialIndex += 1;
+            textArea.GetComponent<TextMeshProUGUI>().text  = currentTutorialText[currentTutorialIndex];
+        }
     }
 
     public void previousDialogue()
     {
-        // TODO: Add Feature : previousDialogue
-        Debug.LogError("Missing Action : previousDialogue not implements");
+        if (currentTutorialIndex - 1 >= 0)
+        {
+            currentTutorialIndex -= 1;
+            textArea.GetComponent<TextMeshProUGUI>().text  = currentTutorialText[currentTutorialIndex];
+        }
     }
 
     public void CloseTutorial()
     {
         gameObject.SetActive(false);
+    }
+
+    private List<string> GetTextOfTutorial(string title)
+    {
+        foreach (TutorialSheet tutorial in allTutorials.tutorialList)
+        {
+            if (title == tutorial.title)
+            {
+                return tutorial.tutorialText;
+            }
+        }
+
+        return new List<string>{"No tutorial found for " + title};
     }
 }
