@@ -16,6 +16,7 @@ public class HexMap : MonoBehaviour
         ressources.Add(200);
         ressources.Add(200);
 
+        Debug.Log("BeforeGenerateMap");
         GenerateMap();
     }
 
@@ -60,6 +61,7 @@ public class HexMap : MonoBehaviour
     [SerializeField] Material MatDesert;
 
     [SerializeField] BuildingPokedex buildingPokedex;
+    [SerializeField] UnitPokedex unitPokedex;
 
     [SerializeField] GameObject mouseController;
 
@@ -343,20 +345,26 @@ public class HexMap : MonoBehaviour
         return pathfindingGraph;
     }
 
-    public void SpawnUnitAt(Unit unit, GameObject prefab, int q, int r)
+    public void SpawnUnitAt(int unitType, GameObject prefab, int q, int r)
     {
         if(units == null)
         {
             units = new HashSet<Unit>();
             unitToGameObjectMap = new Dictionary<Unit, GameObject>();
         }
-
-        if (ressources[0] > 50) //Coût de l'unité.
+        Debug.Log("CheckRessource");
+        if (
+                ressources[0] > unitPokedex.units[unitType].Cost[0] && 
+                ressources[1] > unitPokedex.units[unitType].Cost[1] &&
+                ressources[2] > unitPokedex.units[unitType].Cost[2]) //Coût de l'unité.
         {
             Hex myHex = hexes[q, r];
             GameObject myHexGO = hexToGameObjectMap[myHex];
-            unit.SetHex(myHex);
-            unit.SetHexPath(new Hex[0]);
+
+            Debug.Log("BeforeUnit");
+            Unit unit = new Unit(unitPokedex, unitType, myHex);
+            Debug.Log("AfterUnit");
+
             GameObject unitGO = Instantiate(prefab, myHexGO.transform.position, Quaternion.identity, myHexGO.transform);
 
             UnitView unitView = unitGO.GetComponent<UnitView>();
@@ -368,7 +376,9 @@ public class HexMap : MonoBehaviour
             units.Add(unit);
             unitToGameObjectMap[unit] = unitGO;
 
-            ressources[0] -= 50;
+            ressources[0] -= unitPokedex.units[unitType].Cost[0];
+            ressources[1] -= unitPokedex.units[unitType].Cost[1];
+            ressources[2] -= unitPokedex.units[unitType].Cost[2];
         }
 
         

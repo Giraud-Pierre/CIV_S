@@ -36,7 +36,7 @@ public class Building
         {
             if(queue != null && queue.Count > 0)
             {
-                hexmap.SpawnUnitAt(queue[0], hexmap.worker, hex.Q, hex.R);
+                hexmap.SpawnUnitAt(queue[0].unitType, hexmap.worker, hex.Q, hex.R);
                 queue.RemoveAt(0);
             }
         }
