@@ -1,9 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
-using UnityEngine.Assertions.Must;
 /// <summary>
 /// The Hex class defines the grid position, world space position, size,
 /// neighbours, etc ... of a Hex Tile. However, it does NOT interact with

@@ -1,10 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.Animations;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using System.Linq;
-using System.IO;
 
 public class UnitView : MonoBehaviour,IClick
 {
@@ -13,9 +9,9 @@ public class UnitView : MonoBehaviour,IClick
     public Hex hex;
 
     private Animator animator; //Où changer l'animation
-    [SerializeField] private AnimatorController idle;
-    [SerializeField] private AnimatorController walking;
-    [SerializeField] private AnimatorController mining;
+    [SerializeField] private RuntimeAnimatorController idle;
+    [SerializeField] private RuntimeAnimatorController walking;
+    [SerializeField] private RuntimeAnimatorController mining;
     [SerializeField] private GameObject sledgeHammer;
     [SerializeField] private GameObject selectedCylinder;
     private bool isMining = false;

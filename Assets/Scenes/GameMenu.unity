@@ -2374,7 +2374,7 @@ GameObject:
   - component: {fileID: 720757946}
   - component: {fileID: 720757945}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: Title Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3093,7 +3093,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dacb8e139b5c50d4b8eb982ab419d6a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  allTutorials: {fileID: 11400000, guid: ed7e1c212e1e67f4184ecf9e0bd1cf73, type: 2}
+  titleArea: {fileID: 720757943}
   textArea: {fileID: 1242046655}
+  currentTutorialIndex: 0
 --- !u!1 &1168421398
 GameObject:
   m_ObjectHideFlags: 0
