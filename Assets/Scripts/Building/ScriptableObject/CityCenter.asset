@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3d6b97f8ed3e3442a82b5a5688d3f73, type: 3}
   m_Name: CityCenter
   m_EditorClassIdentifier: 
-  name: 
-  cost: 
+  name: Ville
+  cost: 000000006400000064000000
   quantityRessourceEachTurn: 0

@@ -523,8 +523,10 @@ MonoBehaviour:
   MatMountains: {fileID: 2100000, guid: 67e527211e3f76d4890a6abda2f5fe26, type: 2}
   MatGrassLands: {fileID: 2100000, guid: 94b503c3adf49d446aa39379e4abd1e1, type: 2}
   MatDesert: {fileID: 2100000, guid: d118f8f1499f3244fa306668405f0749, type: 2}
+  buildingPokedex: {fileID: 11400000, guid: bce5ca87f75de8b47b57e0e0af022f90, type: 2}
+  unitPokedex: {fileID: 11400000, guid: 8f255f0825c390749bdecc9844eb10f1, type: 2}
   mouseController: {fileID: 676941980}
-  UnitDwarfPrefab: {fileID: 171706, guid: 1993ef37b5f480b4a92115ca0117fdce, type: 3}
+  worker: {fileID: 0}
   allowWrapEastWest: 1
   allowWrapNorthSouth: 0
   numberRows: 30

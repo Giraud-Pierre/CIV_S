@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9560b80c0ef3a7d4b8f26126013c37a7, type: 3}
   m_Name: Hunter
   m_EditorClassIdentifier: 
-  name: 
-  strength: 0
-  movement: 0
-  Cost: 
+  name: Chasseur
+  strength: 15
+  movement: 3
+  Cost: 640000006400000000000000

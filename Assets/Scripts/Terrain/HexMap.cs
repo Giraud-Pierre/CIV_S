@@ -12,7 +12,6 @@ public class HexMap : MonoBehaviour
         ressources.Add(200);
         ressources.Add(200);
 
-        Debug.Log("BeforeGenerateMap");
         GenerateMap();
     }
 
@@ -128,7 +127,7 @@ public class HexMap : MonoBehaviour
         }
         else if (y < 0 || y >= numberRows)
         {
-            Debug.LogError("GetHexAt: " + x + "," + y);
+            //Debug.LogError("GetHexAt: " + x + "," + y);
             return null;
         }
 
@@ -348,7 +347,7 @@ public class HexMap : MonoBehaviour
             units = new HashSet<Unit>();
             unitToGameObjectMap = new Dictionary<Unit, GameObject>();
         }
-        Debug.Log("CheckRessource");
+
         if (
                 ressources[0] > unitPokedex.units[unitType].Cost[0] && 
                 ressources[1] > unitPokedex.units[unitType].Cost[1] &&
@@ -357,9 +356,7 @@ public class HexMap : MonoBehaviour
             Hex myHex = hexes[q, r];
             GameObject myHexGO = hexToGameObjectMap[myHex];
 
-            Debug.Log("BeforeUnit");
             Unit unit = new Unit(unitPokedex, unitType, myHex);
-            Debug.Log("AfterUnit");
 
             GameObject unitGO = Instantiate(prefab, myHexGO.transform.position, Quaternion.identity, myHexGO.transform);
 

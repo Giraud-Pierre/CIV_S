@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3d6b97f8ed3e3442a82b5a5688d3f73, type: 3}
   m_Name: Farm
   m_EditorClassIdentifier: 
-  name: 
-  cost: 
-  quantityRessourceEachTurn: 0
+  name: Ferme
+  cost: 000000001900000000000000
+  quantityRessourceEachTurn: 10
