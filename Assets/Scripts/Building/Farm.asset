@@ -14,3 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   name: 
   cost: 000000003200000032000000
+  turnsToBuild: 2
+  quantityRessourceEachTurn: 20

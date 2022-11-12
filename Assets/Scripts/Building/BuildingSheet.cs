@@ -8,4 +8,5 @@ public class BuildingSheet : ScriptableObject
     public new string name;
     public int[] cost = new int[3];
     public int turnsToBuild;
+    public int quantityRessourceEachTurn;
 }

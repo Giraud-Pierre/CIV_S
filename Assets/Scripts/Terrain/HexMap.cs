@@ -51,7 +51,11 @@ public class HexMap : MonoBehaviour
     [SerializeField] Mesh MeshMountain;
 
     [SerializeField] GameObject ForestPrefab;
-    [SerializeField] GameObject JunglePrefab;
+
+    [SerializeField] GameObject TownCenter;
+    [SerializeField] GameObject Mine;
+    [SerializeField] GameObject LumberCamp;
+    [SerializeField] GameObject Farm;
 
     [SerializeField] Material MatOcean;
     [SerializeField] Material MatPlains;
@@ -85,17 +89,43 @@ public class HexMap : MonoBehaviour
     //***************Dictionnaires et Données du jeu******************
     private Hex[,] hexes;
     private Dictionary<Hex, GameObject> hexToGameObjectMap;
+    private Dictionary<GameObject, Hex> gameObjectToHexMap;
 
     private HashSet<Unit> units;
     private Dictionary<Unit, GameObject> unitToGameObjectMap;
+    private Dictionary<GameObject, Unit> gameObjectToUnitMap;
 
     private HashSet<Building> buildings;
     private Dictionary<Building, GameObject> buildingToGameObjectMap;
+
+
+    
 
     private Node[,] pathfindingGraph;
 
     private List<int> ressources;
     //****************************************************************
+
+
+    public GameObject GetFarmGO()
+    {
+        return Farm;
+    }
+
+    public GameObject GetMineGO()
+    {
+        return Mine;
+    }
+
+    public GameObject GetTownCenterGO()
+    {
+        return TownCenter;
+    }
+
+    public GameObject GetLumberCampGO()
+    {
+        return LumberCamp;
+    }
 
     public Hex getHexeAt(int x, int y)
     {
@@ -148,6 +178,18 @@ public class HexMap : MonoBehaviour
     public GameObject GetHexeGameobjectFromDictionnary(Hex hex)
     {
         return hexToGameObjectMap.ContainsKey(hex) ? hexToGameObjectMap[hex] : null;
+    }
+
+    
+
+    public Hex GetHexFromDictionnary(GameObject gameObject)
+    {
+        return gameObjectToHexMap.ContainsKey(gameObject) ? gameObjectToHexMap[gameObject] : null;
+    }
+
+    public Unit GetUnitFromDictionnary(GameObject gameObject)
+    {
+        return gameObjectToUnitMap.ContainsKey(gameObject) ? gameObjectToUnitMap[gameObject] : null;
     }
 
     public Vector3 GetHexPosition(int q, int r)
@@ -367,6 +409,7 @@ public class HexMap : MonoBehaviour
 
             units.Add(unit);
             unitToGameObjectMap[unit] = unitGO;
+            gameObjectToUnitMap[unitGO] = unit;
 
             ressources[0] -= 50;
         }
