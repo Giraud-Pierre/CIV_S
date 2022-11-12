@@ -5,45 +5,140 @@ using UnityEngine;
 public class MouseController : MonoBehaviour
 {
 
-    delegate void UpdateFunc();
-    UpdateFunc Update_CurrentFunc;
+    [SerializeField] Texture2D cursor;
+    [SerializeField] Texture2D cursorClicked;
+
+    private Camera mainCamera;
+    private CursorControls controls;
+    private GameObject selectedGameObject = null;
+
+    delegate void RightClickAction();
+    RightClickAction CurrenRightClickAction;
 
     Vector3 lastMousePosition; //From Input.mousePosition
+    float cameraSpeed = 10f;
+
+    private void Awake()
+    {
+        controls = new CursorControls();
+        ChangeCursor(cursor);
+        Cursor.lockState = CursorLockMode.Confined;
+        mainCamera = Camera.main;
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        Update_CurrentFunc = Update_DetectModeStart;
+        controls.Mouse.leftClick.performed += _ => LeftClick();     //Lors de l'appui sur le clic gauche
+        controls.Mouse.rightClick.started += _ => StartRightClick(); //Lors de l'appui sur le clic droit
+        controls.Mouse.rightClick.performed += _ => EndRightClick(); //Lors du relachement du clic gauche
+
+        CurrenRightClickAction = DoNothing;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyUp(KeyCode.Escape))
+        CurrenRightClickAction();
+    }
+
+    private void OnEnable()
+    {
+        controls.Enable();
+    }
+    private void OnDisable()
+    {
+        controls.Disable();
+    }
+
+    void MoveCamera()
+    {
+        Vector3 movement = lastMousePosition - Input.mousePosition;
+        if (movement != Vector3.zero)
         {
-            CancelUpdateFunc();
+            movement.z = movement.y;
+            movement.y = 0;
+            //Left button is being held down and the mouse move, that's the camera drag !
+            mainCamera.transform.Translate(movement*cameraSpeed*Time.deltaTime, Space.World);
         }
-        Update_CurrentFunc();
         lastMousePosition = Input.mousePosition;
     }
 
-    void CancelUpdateFunc()
+    private void StartRightClick()
     {
-        Update_CurrentFunc = Update_DetectModeStart;
+        ChangeCursor(cursorClicked);
+        if (selectedGameObject == null)
+        {
+            lastMousePosition = Input.mousePosition;
+            CurrenRightClickAction = MoveCamera;
+        }
     }
 
-    void Update_DetectModeStart()
+    private void EndRightClick()
     {
-        if(Input.GetMouseButtonDown(0))
+        ChangeCursor(cursor);
+        if (selectedGameObject == null)
         {
-            //Left mouse button just went down.
-            //
+            CurrenRightClickAction = DoNothing;
         }
-
-        else if(Input.GetMouseButton(0) && Input.mousePosition != lastMousePosition)
+        else
         {
-            //Left button is being held down and the mouse move, that's the camera drag !
+            Ray ray = mainCamera.ScreenPointToRay(controls.Mouse.Position.ReadValue<Vector2>());
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit))
+            {
+                if (hit.collider != null)
+                {
+                    selectedGameObject.GetComponent<IClick>().OnRightClickAction(hit.collider.gameObject);
+                }
+            }
         }
+    }
 
+    private void ChangeCursor(Texture2D cursorType)
+    {
+        Cursor.SetCursor(cursorType, Vector2.zero, CursorMode.Auto);
+    }
+
+    private void DoNothing()
+    {
+
+    }
+
+    private void LeftClick()
+    {
+        ChangeCursor(cursor);
+        DetectObject();
+    }
+
+    private void DetectObject()
+    {
+        Ray ray = mainCamera.ScreenPointToRay(controls.Mouse.Position.ReadValue<Vector2>());
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit))
+        {
+            if (hit.collider != null)
+            {
+                if(selectedGameObject == null)
+                {
+                    selectedGameObject = hit.collider.gameObject;
+                    selectedGameObject.GetComponent<IClick>().OnLeftClickAction();
+                }
+                else
+                {
+                    selectedGameObject.GetComponent<IClick>().OnLeftClickOnOtherAction();
+                    selectedGameObject = null;
+                }
+            }
+        }
+    }
+
+    public void UnselectAtEndTurn()
+    {
+        if(selectedGameObject != null)
+        {
+            selectedGameObject.GetComponent<IClick>().OnLeftClickOnOtherAction();
+            selectedGameObject = null;
+        }
     }
 }

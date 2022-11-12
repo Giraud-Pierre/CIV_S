@@ -9,7 +9,7 @@ public class Unit
     public int strength = 8;
     public int movement = 2;
     public int movementRemaining = 2;
-    Queue<Hex> hexPath;
+    public Queue<Hex> hexPath;
 
     //TODO : THis should probably be move to some kind of central option/config file
     const bool MOVEMENT_RULES_LIKE_CIV6 = false;
@@ -23,6 +23,11 @@ public class Unit
     public void SetHexPath(Hex[] hexPath)
     {
         this.hexPath = new Queue<Hex>(hexPath);
+    }
+
+    public void AddToHexPath(Hex hexpath)
+    {
+        this.hexPath.Enqueue(hexpath);
     }
 
     public void SetHex(Hex newHex)
@@ -45,16 +50,32 @@ public class Unit
     public void DoTurn()
     {
         //Do queued move ?
-        if(hexPath != null ||hexPath.Count ==0)
+        if(hexPath == null || hexPath.Count ==0)
         {
             return;
         }
+        else
+        {
+            while(movementRemaining > 0 && hexPath.Count != 0)
+            {
+                //Grab the first hex from our queue
+                Hex newHex = hexPath.Dequeue();
+                movementRemaining -= MovementCostToEnterHex(newHex);
 
-        //Grab the first hex from our queu
-        Hex newHex = hexPath.Dequeue();
-
-        //Move to the new Hex
-        SetHex(newHex);
+                if(movementRemaining >= 0)
+                {
+                    //Move to the new Hex
+                    SetHex(newHex);
+                }
+                else
+                {
+                    //If remaining movement insufficent, do not move and requeue the movement for next turn
+                    hexPath.Enqueue(newHex);
+                }
+            }
+            movementRemaining = movement;
+        }
+        
 
     }
 
@@ -68,7 +89,7 @@ public class Unit
     public float AggregateTurnToEnterHex(Hex hex, float turnsToDate)
     {
         //The issue at hand is that if you are trying to enter a tile
-        // with a movement cost greater than yoiur current remaining movement
+        // with a movement cost greater than your current remaining movement
         // points, this will either result in a cheaper-than expected
         // turn cost (Civ5) or a more-expensive-than expected turn cost (Civ6)
         float baseTurnstoEnterHex = MovementCostToEnterHex(hex) / movement; // Example : entering a forest is "1" turn

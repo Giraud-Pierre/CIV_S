@@ -3,7 +3,12 @@ guid: e54d6e5a7c0c46044bd0ad79604793d9
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - hexMap: {instanceID: 0}
+  - idle: {fileID: 9100000, guid: 5a37b47140d199342be1f96fca46f4c7, type: 2}
+  - walking: {fileID: 9100000, guid: 00bedb13e2f0b494ba0ff14676247d6a, type: 2}
+  - mining: {fileID: 9100000, guid: 6fa870184cb93e349bfd1dda1dee3a5b, type: 2}
+  - sledgeHammer: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
