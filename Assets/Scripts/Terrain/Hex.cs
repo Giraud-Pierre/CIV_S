@@ -21,6 +21,7 @@ public class Hex
     //Data for map generation and maybe in-game effects
     public float Elevation;
     public float Moisture;
+    public bool iswalkable = false;
 
     //TODO : Need some kind of property to track hex type (plains, grasslands, etc...)
     //TODO : Beed property to track hex detail (forest, mine, farm, etc...)

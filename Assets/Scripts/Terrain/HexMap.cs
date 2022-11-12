@@ -2,6 +2,7 @@ using JetBrains.Annotations;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class HexMap : MonoBehaviour
@@ -70,6 +71,8 @@ public class HexMap : MonoBehaviour
     private HashSet<Unit> units;
     private Dictionary<Unit, GameObject> unitToGameObjectMap;
 
+    private Node[,] pathfindingGraph;
+
     public Hex getHexeAt(int x, int y)
     {
         if(hexes == null)
@@ -87,11 +90,26 @@ public class HexMap : MonoBehaviour
                 x += numberColumns;
             }
         }
-        
-        /*if (y < 0)
+        else if( x < 0 || x >= numberColumns)
         {
-            y += numberColumns;
-        }*/
+            Debug.LogError("GetHexAt: " + x + "," + y);
+            return null;
+        }
+
+        if (allowWrapNorthSouth)
+        {
+            y = y % numberRows;
+            if (y < 0)
+            {
+                y += numberRows;
+            }
+        }
+        else if (y < 0 || y >= numberRows)
+        {
+            Debug.LogError("GetHexAt: " + x + "," + y);
+            return null;
+        }
+
         try
         {
             return this.hexes[x, y];
@@ -110,7 +128,7 @@ public class HexMap : MonoBehaviour
 
     public Vector3 GetHexPosition(int q, int r)
     {
-        Hex h = getHexeAt(q, r);
+        Hex h = hexes[q, r];
         return GetHexPosition(h);
     }
 
@@ -141,10 +159,6 @@ public class HexMap : MonoBehaviour
                 hexComponenent.hexMap = this;
                 hexToGameObjectMap[h] = hexGO;
 
-                //********Debug pour afficher les colonnes et lignes des cases
-                //hexComponenent.SetRowCol(row, column);
-                //********************
-
                 hexGO.GetComponentInChildren<TextMesh>().text = string.Format("{0},{1}", column, row);
                 MeshRenderer mr = hexGO.GetComponentInChildren<MeshRenderer>();
                 mr.material = MatOcean;
@@ -154,6 +168,7 @@ public class HexMap : MonoBehaviour
             }
             
         }
+        GeneratePathfindingGraph();
         UpdateHexVisuals();
 
         //StaticBatchingUtility.Combine(this.gameObject);
@@ -176,6 +191,7 @@ public class HexMap : MonoBehaviour
 
                 if(h.Elevation >= HeightFlat)
                 {
+                    h.iswalkable = true;
                     if (h.Moisture >= MoistureJungle)
                     {
                         mr.material = MatGrassLands;
@@ -219,6 +235,7 @@ public class HexMap : MonoBehaviour
 
                 if (h.Elevation >= HeightMountain)
                 {
+                    h.iswalkable = false;
                     mr.material = MatMountains;
                     mf.mesh = MeshMountain;
                 }
@@ -245,15 +262,67 @@ public class HexMap : MonoBehaviour
     public  Hex[] getHexesWithinRangeOf(Hex centerHex, int range)
     {
         List<Hex> results = new List<Hex>();
-        for(int dx = -range; dx < range-1; dx++)
+        for(int dx = -range; dx <= range; dx++)
         {
-            for(int dy = Mathf.Max(-range+1, -dx-range); dy < Mathf.Min(range, -dx+range-1); dy++)
+            for(int dy = Mathf.Max(-range, -dx-range); dy <= Mathf.Min(range, -dx+range); dy++)
             {
-                results.Add(getHexeAt(centerHex.Q +dx, centerHex.R +dy));
+                Hex neighbour = getHexeAt(centerHex.Q + dx, centerHex.R + dy);
+                if (neighbour != null && neighbour != centerHex)
+                {
+                    results.Add(neighbour);
+                }
+                
             }
         }
 
         return results.ToArray();
+    }
+
+    public class Node{
+        public List<Node> neighbours;
+        public Hex hex;
+
+        public Node()
+        {
+            neighbours = new List<Node>();
+        }
+        public float Distance(Node n)
+        {
+            return Hex.Distance(hex,n.hex);
+        }
+    }
+
+    private void GeneratePathfindingGraph()
+    {
+        pathfindingGraph = new Node[numberColumns, numberRows];
+
+        for (int column = 0; column < numberColumns; column++)
+        {
+            for (int row = 0; row < numberRows; row++)
+            {
+                pathfindingGraph[column, row] = new Node();
+            }
+        }
+
+        for (int column = 0; column < numberColumns; column++)
+        {
+            for (int row =0; row < numberRows; row++)
+            {
+                Hex newHex = hexes[column, row];
+                pathfindingGraph[column, row].hex = newHex;
+
+                Hex[] neighbours = getHexesWithinRangeOf(newHex, 1);
+                foreach (Hex hex in neighbours)
+                {
+                    pathfindingGraph[column, row].neighbours.Add(pathfindingGraph[hex.Q, hex.R]);
+                }
+            }
+        }
+    }
+
+    public Node[,] GetPathFindingGraph()
+    {
+        return pathfindingGraph;
     }
 
     public void SpawnUnitAt(Unit unit, GameObject prefab, int q, int r)
@@ -265,7 +334,7 @@ public class HexMap : MonoBehaviour
         }
 
 
-        Hex myHex = getHexeAt(q, r);
+        Hex myHex = hexes[q, r];
         GameObject myHexGO = hexToGameObjectMap[myHex];
         unit.SetHex(myHex);
         Hex[] hexPath = new Hex[0];

@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Animations;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using System.Linq;
 
 public class UnitView : MonoBehaviour,IClick
 {
@@ -89,12 +91,102 @@ public class UnitView : MonoBehaviour,IClick
     {
         if(gameobject.tag == "Hexagon")
         {
+            HexComponent targetHexComponent = gameobject.GetComponent<HexComponent>();
+            if (Hex.Distance(hex,targetHexComponent.hex) <= 1)
+            {
+                unit.AddToHexPath(targetHexComponent.hex);
+                targetHexComponent.HighlightHexagon();
+            }
+            else
+            {
+                //Pathfinding
+                List<HexMap.Node> path = DijkstraPathfinding(hexMap.GetPathFindingGraph(), hex, targetHexComponent.hex);
+                foreach(HexMap.Node node in path)
+                {
+                    unit.AddToHexPath(node.hex);
+                    hexMap.GetHexeGameobjectFromDictionnary(node.hex).GetComponent<HexComponent>().HighlightHexagon();
+                }
+                
+            }
             //*************TODO: vérifier si la case est adjacente ou s'il va falloir calculer un chemin (et si la case est disponible (!= eau ou ennemi))
-            HexComponent hexComponent = gameobject.GetComponent<HexComponent>();
-            unit.AddToHexPath(hexComponent.hex);
-            hexComponent.HighlightHexagon();
+            
         }
         //*****************TODO: else if(gameobject.tag == "Ennemy") { DoAttack() }
+    }
+
+    private List<HexMap.Node> DijkstraPathfinding(HexMap.Node[,] pathFindingGraph, Hex unitHex, Hex targetHex)
+    {
+        HexMap.Node source = pathFindingGraph[unitHex.Q, unitHex.R];
+        HexMap.Node target = pathFindingGraph[targetHex.Q,targetHex.R];
+
+        Dictionary<HexMap.Node, float> distance = new Dictionary<HexMap.Node, float>();
+        Dictionary<HexMap.Node, HexMap.Node> previousNodes = new Dictionary<HexMap.Node, HexMap.Node>();
+
+        List<HexMap.Node> unvisitedNodesQueue = new List<HexMap.Node>();
+
+        //Creates the dictionnaries and set the list of unvisited nodes
+        distance[source] = 0;
+        previousNodes[source] = null;
+        foreach (HexMap.Node v in pathFindingGraph)
+        {
+            if (v != source)
+            {
+                distance[v] = Mathf.Infinity;
+                previousNodes[v] = null;
+            }
+            unvisitedNodesQueue.Add(v);
+        }
+
+
+        while (unvisitedNodesQueue.Count > 0)
+        {
+
+            //Le noeud u va être le unvisited node avec la distance la plus faible.
+            HexMap.Node u = null;
+
+            foreach(HexMap.Node nextU in unvisitedNodesQueue)
+            {
+                if(u == null || distance[nextU] < distance[u])
+                {
+                    u = nextU;
+                }
+            }
+            
+            if(u == target)
+            {
+                break; //sort de la boucle While
+            }
+
+            unvisitedNodesQueue.Remove(u);
+
+            foreach (HexMap.Node v in u.neighbours)
+            {
+                float alt = distance[u] + u.Distance(v);
+                if (alt < distance[v])
+                {
+                    distance[v] = alt;
+                    previousNodes[v] = u;
+                }
+            }
+        }
+        //Soit on a trouvé le chemin le plus court, soit il n'y a pas de chemin
+        if (previousNodes[target] == null)
+        {
+            //pas de route
+            return null;
+        }
+        else
+        {
+            List<HexMap.Node> path = new List<HexMap.Node>();
+            HexMap.Node current = target;
+            while (current != null)
+            {
+                path.Add(current);
+                current = previousNodes[current];
+            }
+            path.Reverse();
+            return path;
+        }
     }
 
     void Update()
