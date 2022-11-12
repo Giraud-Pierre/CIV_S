@@ -5,16 +5,18 @@ public class BuildMenuController : MonoBehaviour
 {
     // Unable to use an enumeration as an argument for a button's OnClick function.
     // Here is the match between button types and integers.
-    // public enum TypeOfBuild {Sawmill = 1, Quarry = 2, Marketplace = 3, Dock = 4, HunterHut = 5};
+    // public enum TypeOfBuild {CityCenter = 1, Farm = 2, LumberJackhutt = 3, Mine = 4, HunterHut = 5};
 
     enum TypeOfResource {Food, Stone, Wood};
 
+    [SerializeField] private BuildingPokedex buildingsInfo = default;
+
     [SerializeField] private GameObject InfoRessourcesLayout = default;
-    [SerializeField] private GameObject sawmillButton = default;
-    [SerializeField] private GameObject quarryButton = default;
-    [SerializeField] private GameObject marketplaceButton = default;
-    [SerializeField] private GameObject dockButton = default;
-    [SerializeField] private GameObject hunterHutButton = default;
+    [SerializeField] private GameObject cityCenterButton = default;
+    [SerializeField] private GameObject farmButton = default;
+    [SerializeField] private GameObject lumberJackhuttButton = default;
+    [SerializeField] private GameObject mineButton = default;
+    // [SerializeField] private GameObject hunterHutButton = default;
 
     private int selectedButton = 0; // No button selected by default
 
@@ -44,7 +46,8 @@ public class BuildMenuController : MonoBehaviour
     private void DoActionForSelectedButton()
     {
         // TODO: Add junction with action on map space and so on.
-        Debug.Log("DoAction");
+        // Whick function(s) a need to use to build something
+        Debug.Log("DoAction : BuildMenuController");
     }
 
     private void ClearPreviousSelectedButton()
@@ -55,20 +58,20 @@ public class BuildMenuController : MonoBehaviour
             case 0:
                 break;
             case 1:
-                sawmillButton.GetComponent<BuildButtonController>().ClearSelectedState();
+                cityCenterButton.GetComponent<BuildButtonController>().ClearSelectedState();
                 break;
             case 2:
-                quarryButton.GetComponent<BuildButtonController>().ClearSelectedState();
+                farmButton.GetComponent<BuildButtonController>().ClearSelectedState();
                 break;
             case 3:
-                marketplaceButton.GetComponent<BuildButtonController>().ClearSelectedState();
+                lumberJackhuttButton.GetComponent<BuildButtonController>().ClearSelectedState();
                 break;
             case 4:
-                dockButton.GetComponent<BuildButtonController>().ClearSelectedState();
+                mineButton.GetComponent<BuildButtonController>().ClearSelectedState();
                 break;
-            case 5:
-                hunterHutButton.GetComponent<BuildButtonController>().ClearSelectedState();
-                break;
+            // case 5:
+            //     hunterHutButton.GetComponent<BuildButtonController>().ClearSelectedState();
+            //     break;
             default:
                 Debug.LogError("Unexpected state in ClearPreviousSelectedButton: selectedButton = " + selectedButton, gameObject);
                 break;
@@ -77,32 +80,32 @@ public class BuildMenuController : MonoBehaviour
 
     private void SetButtonAsSelected()
     {
-        // TODO: Add junction with SciptableObject with action info
+        // TODO: (Optional) Improve the way to get information from ScriptableObject buildingInfo
 
         switch (selectedButton)
         {
             case 0:
                 break;
             case 1:
-                InfoRessourcesLayout.GetComponent<InfoRessourcesViewer>().ShowInfo(new List<int>{0,0,100});
-                sawmillButton.GetComponent<BuildButtonController>().SetSelectedState();
+                InfoRessourcesLayout.GetComponent<InfoRessourcesViewer>().ShowNegativeInfo(buildingsInfo.buildings[0].cost);
+                cityCenterButton.GetComponent<BuildButtonController>().SetSelectedState();
                 break;
             case 2:
-                InfoRessourcesLayout.GetComponent<InfoRessourcesViewer>().ShowInfo(new List<int>{200,0,0});
-                quarryButton.GetComponent<BuildButtonController>().SetSelectedState();
+                InfoRessourcesLayout.GetComponent<InfoRessourcesViewer>().ShowNegativeInfo(buildingsInfo.buildings[1].cost);
+                farmButton.GetComponent<BuildButtonController>().SetSelectedState();
                 break;
             case 3:
-                InfoRessourcesLayout.GetComponent<InfoRessourcesViewer>().ShowInfo(new List<int>{-300,300,0});
-                marketplaceButton.GetComponent<BuildButtonController>().SetSelectedState();
+                InfoRessourcesLayout.GetComponent<InfoRessourcesViewer>().ShowNegativeInfo(buildingsInfo.buildings[2].cost);
+                lumberJackhuttButton.GetComponent<BuildButtonController>().SetSelectedState();
                 break;
             case 4:
-                InfoRessourcesLayout.GetComponent<InfoRessourcesViewer>().ShowInfo(new List<int>{0,-400,400});
-                dockButton.GetComponent<BuildButtonController>().SetSelectedState();
+                InfoRessourcesLayout.GetComponent<InfoRessourcesViewer>().ShowNegativeInfo(buildingsInfo.buildings[3].cost);
+                mineButton.GetComponent<BuildButtonController>().SetSelectedState();
                 break;
-            case 5:
-                InfoRessourcesLayout.GetComponent<InfoRessourcesViewer>().ShowInfo(new List<int>{500,0,-500});
-                hunterHutButton.GetComponent<BuildButtonController>().SetSelectedState();
-                break;
+            // case 5:
+            //     InfoRessourcesLayout.GetComponent<InfoRessourcesViewer>().ShowInfo(new List<int>{500,0,-500});
+            //     hunterHutButton.GetComponent<BuildButtonController>().SetSelectedState();
+            //     break;
             default:
                 Debug.LogError("Unexpected state in SetButtonAsSelected: selectedButton = " + selectedButton, gameObject);
                 break;
