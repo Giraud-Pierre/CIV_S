@@ -152,7 +152,7 @@ public class MouseController : MonoBehaviour
                         if(hex.GetBuilding() == null)
                         {
                             //TODO : Open menu to create a building
-                            //GameObject building = Instantiate(hexMapContinent.GetMineGO(), hexGO.transform);
+                            //than use the function build of HexMap
                         }
                     }
                 }

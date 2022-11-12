@@ -21,7 +21,7 @@ public class Building
 
     public int quantityRessourceEachTurn;
     public Hex hex; //Case du bâtiment
-    public List<Unit> queue = new List<Unit>(); //Liste des unités pour le centre ville
+    public Queue<Unit> queue = new Queue<Unit>(); //Liste des unités pour le centre ville
 
     //Constructeur
     public Building(int buildingType, BuildingPokedex pokedex, Hex newHex)
@@ -33,7 +33,9 @@ public class Building
         this.turnsRemainingUntilBuildIsComplete = this.turnsToBuild;
         this.isBuilt = false;
         this.hex = newHex;
+        
 
+        
         quantityRessourceEachTurn = pokedex.buildings[type].quantityRessourceEachTurn;
         hex = newHex;
     }
@@ -51,8 +53,8 @@ public class Building
 			{
 				if(queue != null && queue.Count > 0)
 				{
-					hexmap.SpawnUnitAt(queue[0], hexmap.worker, hex.Q, hex.R);
-					queue.RemoveAt(0);
+					hexmap.SpawnUnitAt(queue.Peek(), hexmap.worker, hex.Q, hex.R);
+                    queue.Dequeue();
 				}
 			}
 		}
