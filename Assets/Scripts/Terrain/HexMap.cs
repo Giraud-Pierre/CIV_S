@@ -10,6 +10,12 @@ public class HexMap : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //Ressources de base
+        ressources = new List<int>();
+        ressources.Add(100);
+        ressources.Add(200);
+        ressources.Add(200);
+
         GenerateMap();
     }
 
@@ -31,7 +37,7 @@ public class HexMap : MonoBehaviour
             {
                 foreach(Building building in buildings)
                 {
-                    building.DoTurn();
+                    building.DoTurn(this);
                 }
             }
         }
@@ -47,21 +53,17 @@ public class HexMap : MonoBehaviour
     [SerializeField] GameObject ForestPrefab;
     [SerializeField] GameObject JunglePrefab;
 
-    [SerializeField] GameObject Farm;
-    [SerializeField] GameObject TownCenter;
-    [SerializeField] GameObject Mine;
-    [SerializeField] GameObject LumberCamp;
-
-
     [SerializeField] Material MatOcean;
     [SerializeField] Material MatPlains;
     [SerializeField] Material MatMountains;
     [SerializeField] Material MatGrassLands;
     [SerializeField] Material MatDesert;
 
+    [SerializeField] BuildingPokedex buildingPokedex;
+
     [SerializeField] GameObject mouseController;
 
-    public GameObject UnitDwarfPrefab;
+    public GameObject worker;
 
     protected float HeightMountain = 0.85f;
     protected float HeightHill = 0.6f;
@@ -79,40 +81,21 @@ public class HexMap : MonoBehaviour
     public int numberColumns = 60; 
     private GameObject hexGO;
 
+
+    //***************Dictionnaires et Données du jeu******************
     private Hex[,] hexes;
     private Dictionary<Hex, GameObject> hexToGameObjectMap;
 
-    private Dictionary<GameObject, Hex> gameObjectToHexMap;
-
     private HashSet<Unit> units;
     private Dictionary<Unit, GameObject> unitToGameObjectMap;
-
-    private Dictionary<GameObject, Unit> gameObjectToUnitMap;
 
     private HashSet<Building> buildings;
     private Dictionary<Building, GameObject> buildingToGameObjectMap;
 
     private Node[,] pathfindingGraph;
 
-    public GameObject GetFarmGO()
-    {
-        return Farm;
-    }
-
-    public GameObject GetMineGO()
-    {
-        return Mine;
-    }
-
-    public GameObject GetTownCenterGO()
-    {
-        return TownCenter;
-    }
-
-    public GameObject GetLumberCampGO()
-    {
-        return LumberCamp;
-    }
+    private List<int> ressources;
+    //****************************************************************
 
     public Hex getHexeAt(int x, int y)
     {
@@ -167,16 +150,6 @@ public class HexMap : MonoBehaviour
         return hexToGameObjectMap.ContainsKey(hex) ? hexToGameObjectMap[hex] : null;
     }
 
-    public Hex GetHexFromDictionnary(GameObject gameObject)
-    {
-        return gameObjectToHexMap.ContainsKey(gameObject) ? gameObjectToHexMap[gameObject] : null;
-    }
-
-    public Unit GetUnitFromDictionnary(GameObject gameObject)
-    {
-        return gameObjectToUnitMap.ContainsKey(gameObject) ? gameObjectToUnitMap[gameObject] : null;
-    }
-
     public Vector3 GetHexPosition(int q, int r)
     {
         Hex h = hexes[q, r];
@@ -191,7 +164,6 @@ public class HexMap : MonoBehaviour
     {
         hexes = new Hex[numberColumns, numberRows];
         hexToGameObjectMap = new Dictionary<Hex, GameObject>();
-        gameObjectToHexMap = new Dictionary<GameObject, Hex>();
         for (int column = 0; column< numberColumns;column++)
         {
             for (int row =0; row<numberRows; row++ )
@@ -210,7 +182,6 @@ public class HexMap : MonoBehaviour
                 hexComponenent.hex = h;
                 hexComponenent.hexMap = this;
                 hexToGameObjectMap[h] = hexGO;
-                gameObjectToHexMap[hexGO] = h;
 
                 hexGO.GetComponentInChildren<TextMesh>().text = string.Format("{0},{1}", column, row);
                 MeshRenderer mr = hexGO.GetComponentInChildren<MeshRenderer>();
@@ -378,25 +349,39 @@ public class HexMap : MonoBehaviour
         {
             units = new HashSet<Unit>();
             unitToGameObjectMap = new Dictionary<Unit, GameObject>();
-            gameObjectToUnitMap = new Dictionary<GameObject, Unit>();
         }
 
+        if (ressources[0] > 50) //Coût de l'unité.
+        {
+            Hex myHex = hexes[q, r];
+            GameObject myHexGO = hexToGameObjectMap[myHex];
+            unit.SetHex(myHex);
+            unit.SetHexPath(new Hex[0]);
+            GameObject unitGO = Instantiate(prefab, myHexGO.transform.position, Quaternion.identity, myHexGO.transform);
 
-        Hex myHex = hexes[q, r];
-        GameObject myHexGO = hexToGameObjectMap[myHex];
-        unit.SetHex(myHex);
-        unit.SetHexPath(new Hex[0]);
-        GameObject unitGO = Instantiate(prefab, myHexGO.transform.position, Quaternion.identity, myHexGO.transform);
+            UnitView unitView = unitGO.GetComponent<UnitView>();
+            unit.OnUnitMoved += unitView.OnUnitMoved;
+            unitView.unit = unit;
+            unitView.hexMap = this;
+            unitView.hex = myHex;
 
-        UnitView unitView = unitGO.GetComponent<UnitView>();
-        unit.OnUnitMoved += unitView.OnUnitMoved;
-        unitView.unit = unit;
-        unitView.hexMap = this;
-        unitView.hex = myHex;
+            units.Add(unit);
+            unitToGameObjectMap[unit] = unitGO;
 
-        units.Add(unit);
-        unitToGameObjectMap[unit] = unitGO;
-        gameObjectToUnitMap[unitGO] = unit;
+            ressources[0] -= 50;
+        }
+
+        
+    }
+
+    public void AddRessource(int ressourceType, int quantity)
+    {
+        ressources[ressourceType] += quantity;
+    }
+
+    public List<int> GetRessource()
+    {
+        return ressources;
     }
 
 }

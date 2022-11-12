@@ -15,11 +15,15 @@ public class Building
     public Boolean isBuilt;
 
     //Contenu dans BuildingPokedex.buildings[buildingType] avec dans l'ordre nourriture, bois, pierre.
+
     public int[] cost = new int[3]; 
 
+
+    public int quantityRessourceEachTurn;
     public Hex hex; //Case du bâtiment
     public List<Unit> queue = new List<Unit>(); //Liste des unités pour le centre ville
 
+    //Constructeur
     public Building(int buildingType, BuildingPokedex pokedex, Hex newHex)
     {
         this.type = buildingType;
@@ -29,34 +33,29 @@ public class Building
         this.turnsRemainingUntilBuildIsComplete = this.turnsToBuild;
         this.isBuilt = false;
         this.hex = newHex;
-    }
 
-    public void DoTurn()
+        quantityRessourceEachTurn = pokedex.buildings[type].quantityRessourceEachTurn;
+        hex = newHex;
+    }
+    
+    public void DoTurn(HexMap hexmap)
     {
         if(this.isBuilt)
         {
-            switch (type)
-            {
-                case 0:
-                    //TODO :if there are units waiting to be created, create a unit
-                    //doturn for citycenter
-                    break;
-                case 1:
-                    //TODO :  give 20 of food
-                    //doturn for farm
-                    break;
-                case 2:
-                    //TODO : give 20 of wood
-                    //doturn for lumber camp
-                    break;
-                case 3:
-                    //TODO :  give 20 of stone
-                    //do turn for mine
-                    break;
-
-            }
-        }
-
+            
+			if(type != 0) //Si ce n'est pas un centre ville, alors c'est un bâtiment de ressource.
+			{
+				hexmap.AddRessource(type - 1, quantityRessourceEachTurn);
+			}
+			else
+			{
+				if(queue != null && queue.Count > 0)
+				{
+					hexmap.SpawnUnitAt(queue[0], hexmap.worker, hex.Q, hex.R);
+					queue.RemoveAt(0);
+				}
+			}
+		}
         else
         {
             turnsRemainingUntilBuildIsComplete--;
