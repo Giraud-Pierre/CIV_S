@@ -593,6 +593,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: c11fa297dd331de418654209c490f7e6,
         type: 3}
+    - target: {fileID: 8265185357055007107, guid: 48ba4d8472438f14abe03958793c148f,
+        type: 3}
+      propertyPath: m_text
+      value: 200
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 48ba4d8472438f14abe03958793c148f, type: 3}
 --- !u!224 &61159715 stripped
@@ -3089,6 +3094,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hexTile: {fileID: 1904931013106162695, guid: 5775311797cc42d478404acff2408f7b, type: 3}
+  Canvas: {fileID: 0}
   MeshWater: {fileID: 4300000, guid: e4f4e2ebd7661f74aa2a54440b0fe279, type: 3}
   MeshFlat: {fileID: 4300000, guid: e4f4e2ebd7661f74aa2a54440b0fe279, type: 3}
   MeshHill: {fileID: 4300000, guid: 91f4311fd10b4fd4aaeb00b581fd24e8, type: 3}
@@ -4325,6 +4331,11 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 21300000, guid: 14a2710916f32c9479082b1bc6a5cb5b,
         type: 3}
+    - target: {fileID: 8265185357055007107, guid: 48ba4d8472438f14abe03958793c148f,
+        type: 3}
+      propertyPath: m_text
+      value: 200
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 48ba4d8472438f14abe03958793c148f, type: 3}
 --- !u!224 &1433540728 stripped

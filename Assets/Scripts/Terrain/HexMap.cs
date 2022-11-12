@@ -40,6 +40,7 @@ public class HexMap : MonoBehaviour
     }
 
     [SerializeField] GameObject hexTile;
+    [SerializeField] GameObject Canvas;
 
     [SerializeField] Mesh MeshWater;
     [SerializeField] Mesh MeshFlat;
@@ -79,7 +80,7 @@ public class HexMap : MonoBehaviour
     private GameObject hexGO;
 
 
-    //***************Dictionnaires et Données du jeu******************
+    //***************Dictionnaires et Donnï¿½es du jeu******************
     private Hex[,] hexes;
     private Dictionary<Hex, GameObject> hexToGameObjectMap;
 
@@ -172,7 +173,7 @@ public class HexMap : MonoBehaviour
                 h.Moisture = 0f;
                 hexes[column, row] = h;
 
-                
+
 
                 hexGO = (GameObject)Instantiate(hexTile, pos, Quaternion.identity, this.transform);
                 HexComponent hexComponenent = hexGO.GetComponent<HexComponent>();
@@ -351,7 +352,7 @@ public class HexMap : MonoBehaviour
         if (
                 ressources[0] > unitPokedex.units[unitType].Cost[0] && 
                 ressources[1] > unitPokedex.units[unitType].Cost[1] &&
-                ressources[2] > unitPokedex.units[unitType].Cost[2]) //Coût de l'unité.
+                ressources[2] > unitPokedex.units[unitType].Cost[2]) //Coï¿½t de l'unitï¿½.
         {
             Hex myHex = hexes[q, r];
             GameObject myHexGO = hexToGameObjectMap[myHex];
@@ -380,6 +381,7 @@ public class HexMap : MonoBehaviour
     public void AddRessource(int ressourceType, int quantity)
     {
         ressources[ressourceType] += quantity;
+        Canvas.GetComponent<GameMenuController>().UpdateResources(ressources);
     }
 
     public List<int> GetRessource()

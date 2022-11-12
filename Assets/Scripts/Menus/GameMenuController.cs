@@ -26,9 +26,9 @@ public class GameMenuController : MonoBehaviour
         GetTutorial("bienvenue");
     }
 
-    public void UpdateRessources()
+    public void UpdateResources(List<int> resources)
     {
-        resourcesLayout.GetComponent<ResourcesLayoutController>().UpdateRessourcesLayout();
+        resourcesLayout.GetComponent<ResourcesLayoutController>().UpdateResourcesLayout(resources);
     }
 
     public void GetDefaultMenu()

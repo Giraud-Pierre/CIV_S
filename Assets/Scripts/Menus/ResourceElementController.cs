@@ -1,14 +1,15 @@
 using UnityEngine;
+using TMPro;
 
 public class ResourceElementController : MonoBehaviour
 {
-    enum TypeOfResource {Food, Stone, Wood};
+    // enum TypeOfResource {Food, Stone, Wood};
 
-    [SerializeField] private TypeOfResource typeOfResource;
+    // [SerializeField] private TypeOfResource typeOfResource;
+    [SerializeField] private TMP_Text textcomponent = default;
 
-    public void UpdateElement()
+    public void UpdateElement(int number)
     {
-        // TODO: Add junction with where is store the number of resource of each typeOfResource
-        Debug.LogError("Missing Feature: UpdateElement on ResourceElementController");
+        textcomponent.text = number.ToString();
     }
 }
