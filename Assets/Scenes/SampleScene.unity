@@ -399,8 +399,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f194b6a997832b449740911ec59a97c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cursor: {fileID: 0}
-  cursorClicked: {fileID: 0}
+  cursor: {fileID: 2800000, guid: 41e2f2500202792459ee472b8e7236f0, type: 3}
+  cursorClicked: {fileID: 2800000, guid: e474253b2ab218e4eb5f70e5ad15c1fa, type: 3}
 --- !u!4 &676941982
 Transform:
   m_ObjectHideFlags: 0
@@ -524,8 +524,7 @@ MonoBehaviour:
   MatGrassLands: {fileID: 2100000, guid: 94b503c3adf49d446aa39379e4abd1e1, type: 2}
   MatDesert: {fileID: 2100000, guid: d118f8f1499f3244fa306668405f0749, type: 2}
   mouseController: {fileID: 676941980}
-  UnitDwarfPrefab: {fileID: 6970339664708074965, guid: 849feb53e5d05f64697cc89ab15e4ee4,
-    type: 3}
+  UnitDwarfPrefab: {fileID: 171706, guid: 1993ef37b5f480b4a92115ca0117fdce, type: 3}
   allowWrapEastWest: 1
   allowWrapNorthSouth: 0
   numberRows: 30
