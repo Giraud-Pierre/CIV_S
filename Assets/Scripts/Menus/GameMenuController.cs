@@ -3,14 +3,16 @@ using UnityEngine;
 
 public class GameMenuController : MonoBehaviour
 {
-    [SerializeField] private GameObject ResourcesLayout;
-    [SerializeField] private GameObject DefaultBottomBar;
-    [SerializeField] private GameObject ActionMenuOnEmptySpace;
-    [SerializeField] private GameObject ActionMenuOnBuildSpace;
-    [SerializeField] private GameObject BuildMenu;
-    [SerializeField] private GameObject TutorialMenu;
+    [SerializeField] private GameObject resourcesLayout;
+    [SerializeField] private GameObject defaultBottomBar;
+    [SerializeField] private GameObject actionMenuOnEmptySpace;
+    [SerializeField] private GameObject actionMenuOnBuildSpace;
+    [SerializeField] private GameObject actionMenuOnCityCenter;
+    [SerializeField] private GameObject buildMenu;
+    [SerializeField] private GameObject tutorialMenu;
 
-    private bool EmptySpace;
+    private bool emptySpace;
+    private bool isCityCenter;
 
     // TODO: Remove this debug feature
     // ! Remove only when all other features on Canvas (and his children) are implement
@@ -21,15 +23,16 @@ public class GameMenuController : MonoBehaviour
 
     public void UpdateRessources()
     {
-        ResourcesLayout.GetComponent<ResourcesLayoutController>().UpdateRessourcesLayout();
+        resourcesLayout.GetComponent<ResourcesLayoutController>().UpdateRessourcesLayout();
     }
 
     public void GetDefaultMenu()
     {
-        DefaultBottomBar.SetActive(false);
-        ActionMenuOnBuildSpace.SetActive(false);
-        ActionMenuOnEmptySpace.SetActive(false);
-        BuildMenu.SetActive(true);
+        defaultBottomBar.SetActive(true);
+        actionMenuOnBuildSpace.SetActive(false);
+        actionMenuOnEmptySpace.SetActive(false);
+        actionMenuOnCityCenter.SetActive(false);
+        buildMenu.SetActive(false);
     }
 
     public void GetActionMenu()
@@ -37,22 +40,30 @@ public class GameMenuController : MonoBehaviour
         // TODO: Add junction with map spaces
         // Need to get the state of the space where the player is.
 
-        if (EmptySpace)
+        if (emptySpace)
         {
             GetActionMenuOnEmptySpace();
         }
         else
         {
-            GetActionMenuOnBuildSpace();
+            if (isCityCenter)
+            {
+                GetActionMenuOnCityCenter();
+            }
+            else
+            {
+                GetActionMenuOnBuildSpace();
+            }
         }
     }
 
     public void GetBuildMenu()
     {
-        DefaultBottomBar.SetActive(false);
-        ActionMenuOnBuildSpace.SetActive(false);
-        ActionMenuOnEmptySpace.SetActive(false);
-        BuildMenu.SetActive(true);
+        defaultBottomBar.SetActive(false);
+        actionMenuOnBuildSpace.SetActive(false);
+        actionMenuOnEmptySpace.SetActive(false);
+        actionMenuOnCityCenter.SetActive(false);
+        buildMenu.SetActive(true);
     }
 
     public void GetTutorial(List<string> Text)
@@ -63,17 +74,28 @@ public class GameMenuController : MonoBehaviour
 
     private void GetActionMenuOnEmptySpace()
     {
-        DefaultBottomBar.SetActive(false);
-        ActionMenuOnBuildSpace.SetActive(false);
-        ActionMenuOnEmptySpace.SetActive(true);
-        BuildMenu.SetActive(false);
+        defaultBottomBar.SetActive(false);
+        actionMenuOnBuildSpace.SetActive(false);
+        actionMenuOnEmptySpace.SetActive(true);
+        actionMenuOnCityCenter.SetActive(false);
+        buildMenu.SetActive(false);
     }
 
     private void GetActionMenuOnBuildSpace()
     {
-        DefaultBottomBar.SetActive(false);
-        ActionMenuOnBuildSpace.SetActive(true);
-        ActionMenuOnEmptySpace.SetActive(false);
-        BuildMenu.SetActive(false);
+        defaultBottomBar.SetActive(false);
+        actionMenuOnBuildSpace.SetActive(true);
+        actionMenuOnEmptySpace.SetActive(false);
+        actionMenuOnCityCenter.SetActive(false);
+        buildMenu.SetActive(false);
+    }
+
+    private void GetActionMenuOnCityCenter()
+    {
+        defaultBottomBar.SetActive(false);
+        actionMenuOnBuildSpace.SetActive(false);
+        actionMenuOnEmptySpace.SetActive(false);
+        actionMenuOnCityCenter.SetActive(true);
+        buildMenu.SetActive(false);
     }
 }
