@@ -7998,6 +7998,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 685776b14ed8ffc4abf8b14b9d2df132, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  buildingsInfo: {fileID: 11400000, guid: bce5ca87f75de8b47b57e0e0af022f90, type: 2}
   InfoRessourcesLayout: {fileID: 1890185825}
   cityCenterButton: {fileID: 735018010}
   farmButton: {fileID: 386588080}
