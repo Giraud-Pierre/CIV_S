@@ -46,7 +46,8 @@ public class BuildMenuController : MonoBehaviour
     private void DoActionForSelectedButton()
     {
         // TODO: Add junction with action on map space and so on.
-        Debug.Log("DoAction");
+        // Whick function(s) a need to use to build something
+        Debug.Log("DoAction : BuildMenuController");
     }
 
     private void ClearPreviousSelectedButton()
