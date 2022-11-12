@@ -12,9 +12,9 @@ public class HexMap : MonoBehaviour
     {
         //Ressources de base
         ressources = new List<int>();
-        ressources.Add(100);
-        ressources.Add(200);
-        ressources.Add(200);
+        ressources.Add(300);
+        ressources.Add(300);
+        ressources.Add(300);
 
         GenerateMap();
     }
@@ -24,7 +24,6 @@ public class HexMap : MonoBehaviour
         //TESTING : Press spacebar to advance to next turn
         if(Input.GetKeyDown(KeyCode.Space))
         {
-
             mouseController.GetComponent<MouseController>().UnselectAtEndTurn();
             if (units != null)
             {
@@ -388,6 +387,7 @@ public class HexMap : MonoBehaviour
         {
             units = new HashSet<Unit>();
             unitToGameObjectMap = new Dictionary<Unit, GameObject>();
+            gameObjectToUnitMap = new Dictionary<GameObject, Unit>();
         }
 
         if (ressources[0] >= 50) //Coût de l'unité.
