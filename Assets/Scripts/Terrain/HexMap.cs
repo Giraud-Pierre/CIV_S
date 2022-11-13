@@ -20,21 +20,7 @@ public class HexMap : MonoBehaviour
         //TESTING : Press spacebar to advance to next turn
         if(Input.GetKeyDown(KeyCode.Space))
         {
-            mouseController.GetComponent<MouseController>().UnselectAtEndTurn();
-            if (units != null)
-            {
-                foreach(Unit unit in units)
-                {
-                    unit.DoTurn();
-                }
-            }
-            if(buildings != null)
-            {
-                foreach(Building building in buildings)
-                {
-                    building.DoTurn(this);
-                }
-            }
+            DoTurn();
         }
     }
 
@@ -460,6 +446,25 @@ public class HexMap : MonoBehaviour
     public List<int> GetRessource()
     {
         return ressources;
+    }
+
+    public void DoTurn()
+    {
+        mouseController.GetComponent<MouseController>().UnselectAtEndTurn();
+        if (units != null)
+        {
+            foreach(Unit unit in units)
+            {
+                unit.DoTurn();
+            }
+        }
+        if(buildings != null)
+        {
+            foreach(Building building in buildings)
+            {
+                building.DoTurn(this);
+            }
+        }
     }
 
 }

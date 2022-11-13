@@ -6989,9 +6989,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1012762317}
-        m_TargetAssemblyTypeName: GameMenuController, Assembly-CSharp
-        m_MethodName: MissingAction
+      - m_Target: {fileID: 989302910}
+        m_TargetAssemblyTypeName: HexMap, Assembly-CSharp
+        m_MethodName: DoTurn
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
