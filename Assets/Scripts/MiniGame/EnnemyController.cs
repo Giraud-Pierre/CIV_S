@@ -7,20 +7,17 @@ using static UnityEngine.EventSystems.EventTrigger;
 
 public class EnnemyController : MonoBehaviour
 {
-    [SerializeField] int health = 3; //on peut modifier les points de vie de l'ennemi ici
-    [SerializeField] float MovementSpeed = 1f; //on peut modifier la vitesse de déplacement de l'ennemi ici
-    [SerializeField] int ennemySpeed = 2;
-    [SerializeField] int frequency = 2;
-    [SerializeField] float magnitude = 0.1f;
-    [SerializeField] GameObject prefabEnemy;
-    private int playerDamage;
+    [SerializeField] private int health = 3; //on peut modifier les points de vie de l'ennemi ici
+    [SerializeField] private float MovementSpeed = 0.5f; //on peut modifier la vitesse de dÃ©placement de l'ennemi ici
+    [SerializeField] int frequency = 2;     //GÃ¨re le mouvement en sinusoide de l'ennemi
+    [SerializeField] float magnitude = 0.03f;
 
+    private Transform player;   //recueille le transform du joueur pour orienter le dÃ©placement de l'ennemi
+    private float realMovementSpeed; //recalcule la vitesse de dÃ©placement de l'ennemi en prenant en compte d'autre facteur
+    DataForMiniGame dataForMiniGame;
+    private int damageSuffered;
 
-
-    private Transform player;   //recueille le transform du joueur pour orienter le déplacement de l'ennemi
-    private float realMovementSpeed; //recalcule la vitesse de déplacement de l'ennemi en prenant en compte d'autre facteur
-
-    public void check_out_limits()//Détruit l'ennemi s'il est tombé du terrain
+    public void check_out_limits()//DÃ©truit l'ennemi s'il est tombÃ© du terrain
     {
         if (transform.position.y <= -1)
         {
@@ -28,20 +25,23 @@ public class EnnemyController : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision collision) //gère la collision des ennemis avec les balles
+    private void OnCollisionEnter(Collision collision) //gÃ¨re la collision des ennemis avec les balles
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Bullet"))
         {
+            Debug.Log("bullet hit: " + health);
             //fait reculer l'ennemi
             //gameObject.GetComponent<Rigidbody>().AddForce(-15f * transform.forward, ForceMode.Impulse);
 
-            //détruit la balle
+            //dÃ©truit la balle
             Destroy(collision.gameObject);
 
             //diminue la vie de l'ennemi
-            health -= playerDamage;
-            if (health <= 0) //Détruit l'ennemi s'il est à cours de point de vie
+            health-= damageSuffered;
+            
+            if (health <= 0) //DÃ©truit l'ennemi s'il est Ã  cours de point de vie
             {
+                dataForMiniGame.isWin = true;
                 Destroy(gameObject);
                 SceneManager.LoadScene(1);
             }
@@ -50,8 +50,11 @@ public class EnnemyController : MonoBehaviour
 
     private void MoveTowardPlayer() //permet de bouger l'ennemi vers le joueur
     {
-        transform.LookAt(player); //permet à l'ennemi de regarder le joueur
-        transform.position +=  new Vector3(Mathf.Sin(Time.time * frequency) * magnitude, 0, -ennemySpeed * Time.deltaTime); //fait avancer l'ennemi
+        transform.LookAt(player); //permet Ã  l'ennemi de regarder le joueur
+
+        Vector3 deltaPosition = transform.forward * realMovementSpeed + new Vector3(Mathf.Sin(Time.time * frequency) * magnitude, 0, 0);
+        transform.position += deltaPosition; //fait avancer l'ennemi
+        //transform.position += new Vector3(Mathf.Sin(Time.time * frequency) * magnitude, 0, -MovementSpeed * Time.deltaTime);
     }
 
 
@@ -59,7 +62,11 @@ public class EnnemyController : MonoBehaviour
     {
         GameObject enemy = Instantiate(prefabEnemy, new Vector3(-34f, 4.12f, 55.02f), Quaternion.identity);
         player = GameObject.Find("Player").transform; //va rechercher le PlayerBody du joueur
-        playerDamage = GameObject.Find("Player").GetComponent<PlayerController>().getDamage();
+
+        dataForMiniGame = player.gameObject.GetComponent<PlayerController>().getDataForMiniGame();
+        health = dataForMiniGame.hitPointEnemy;
+        damageSuffered = dataForMiniGame.damageCharacter;
+
     }
 
 

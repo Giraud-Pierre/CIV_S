@@ -231,4 +231,9 @@ public class MouseController : MonoBehaviour
             selectedGameObject = null;
         }
     }
+
+    public CursorControls GetControls()
+    {
+        return controls;
+    }
 }

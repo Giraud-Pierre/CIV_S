@@ -23,6 +23,7 @@ public class HexMap : MonoBehaviour
 
     [SerializeField] BuildingPokedex buildingPokedex;
     [SerializeField] UnitPokedex unitPokedex;
+    [SerializeField] DataForMiniGame dataForMiniGame;
 
     [SerializeField] GameObject mouseController;
 
@@ -84,7 +85,16 @@ public class HexMap : MonoBehaviour
         }
         else
         {
-            DestroyObject(gameObject);
+            DataForMiniGame data = hexMapInstance.dataForMiniGame;
+            if (data.isWin)
+            {
+                data.ennemy.InflictDamage(100);
+            }
+            else
+            {
+                data.character.InflictDamage(data.damageEnnemy);
+            }
+            Destroy(gameObject);
         }
 
 
@@ -510,14 +520,12 @@ public class HexMap : MonoBehaviour
 
         if (units != null)
         {
-            Debug.Log(units.Count);
             foreach (Unit unit in units)
             {
                 unit.DoTurn();
             }
             foreach (Unit unit in units)
             {
-                Debug.Log("unity check Destroy");
                 if (unit.GetHitPoint() < 0)
                 {
                     Debug.Log("Le {0} est mort");
@@ -606,5 +614,15 @@ public class HexMap : MonoBehaviour
 
         return result;
     }
+    
+    //Function for mini-game ******************************
+    public DataForMiniGame GetDataForMiniGame()
+    {
+        return dataForMiniGame;
+    }
 
+    public void DisableMouseController()
+    {
+        mouseController.GetComponent<MouseController>().GetControls().Disable();
+    }
 }

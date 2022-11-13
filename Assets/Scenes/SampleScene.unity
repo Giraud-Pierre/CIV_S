@@ -3757,6 +3757,7 @@ MonoBehaviour:
   MatDesert: {fileID: 2100000, guid: d118f8f1499f3244fa306668405f0749, type: 2}
   buildingPokedex: {fileID: 11400000, guid: bcc83e46707bb21428d1f1c4cfb0b851, type: 2}
   unitPokedex: {fileID: 11400000, guid: 8f255f0825c390749bdecc9844eb10f1, type: 2}
+  dataForMiniGame: {fileID: 11400000, guid: 64218331838c71e4d8971818b07d4040, type: 2}
   mouseController: {fileID: 676941980}
   worker: {fileID: 171706, guid: 1993ef37b5f480b4a92115ca0117fdce, type: 3}
   allowWrapEastWest: 1

@@ -1,6 +1,5 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -82,7 +81,6 @@ public class Unit
             }
             else
             {
-                SceneManager.LoadSceneAsync(2);
                 while (movementRemaining > 0 && hexPath.Count != 0)
                 {
 
@@ -92,6 +90,19 @@ public class Unit
 
                     if(newHex.getUnits() != null && newHex.getUnits().Length > 0 && newHex.getUnits()[0].unitType == 2)
                     {
+                        DataForMiniGame data = hex.hexMap.GetDataForMiniGame();
+
+                        Debug.Log(newHex.getUnits()[0].strength);
+                        Debug.Log("damage character" + data.damageCharacter);
+                        data.damageCharacter = Mathf.RoundToInt((strength / (float)newHex.getUnits()[0].strength) * 33f);
+                        data.damageEnnemy = Mathf.RoundToInt(((float)newHex.getUnits()[0].strength / strength) * 33f);
+                        data.hitPointCharacter = GetHitPoint();
+                        data.hitPointEnemy = newHex.getUnits()[0].GetHitPoint();
+                        data.ennemyPrefab = hex.hexMap.GetPrefabUnit(newHex.getUnits()[0].unitType);
+                        data.character = this;
+                        data.ennemy = newHex.getUnits()[0];
+                        hex.hexMap.DisableMouseController();
+
                         //Change Scene
                         SceneManager.LoadScene(2, LoadSceneMode.Additive);
                         //Dégat perso : units.strengh/newHex.get
@@ -149,7 +160,7 @@ public class Unit
                     Hex checkedHex;
                     do
                     {
-                        int randomNumber = Random.Range(0, neighbourHexes.Count - 1);
+                        int randomNumber = UnityEngine.Random.Range(0, neighbourHexes.Count - 1);
                         checkedHex = neighbourHexes[randomNumber];
                         neighbourHexes.Remove(checkedHex);
 
