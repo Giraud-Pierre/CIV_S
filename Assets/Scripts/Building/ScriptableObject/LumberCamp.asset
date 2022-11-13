@@ -10,8 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b3d6b97f8ed3e3442a82b5a5688d3f73, type: 3}
-  m_Name: LumberJackhutt
+  m_Name: LumberCamp
   m_EditorClassIdentifier: 
-  name: Cabane de bucheron
-  cost: 000000002800000000000000
-  quantityRessourceEachTurn: 10
+  name: "Camp de b\xFBcherons"
+  cost: 000000005000000014000000
+  turnsToBuild: 2
+  quantityRessourceEachTurn: 20

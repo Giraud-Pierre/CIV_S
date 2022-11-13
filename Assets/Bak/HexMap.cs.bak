@@ -83,6 +83,7 @@ public class HexMap : MonoBehaviour
     //***************Dictionnaires et Donnï¿½es du jeu******************
     private Hex[,] hexes;
     private Dictionary<Hex, GameObject> hexToGameObjectMap;
+    private Dictionary<GameObject, Hex> gameObjectToHexMap;
 
     private HashSet<Unit> units;
     private Dictionary<Unit, GameObject> unitToGameObjectMap;
@@ -171,6 +172,13 @@ public class HexMap : MonoBehaviour
     public GameObject GetHexeGameobjectFromDictionnary(Hex hex)
     {
         return hexToGameObjectMap.ContainsKey(hex) ? hexToGameObjectMap[hex] : null;
+    }
+
+    
+
+    public Hex GetHexFromDictionnary(GameObject gameObject)
+    {
+        return gameObjectToHexMap.ContainsKey(gameObject) ? gameObjectToHexMap[gameObject] : null;
     }
 
     public Unit GetUnitFromDictionnary(GameObject gameObject)
@@ -380,10 +388,14 @@ public class HexMap : MonoBehaviour
             gameObjectToUnitMap = new Dictionary<GameObject, Unit>();
         }
 
+<<<<<<< HEAD
         if (
                 ressources[0] > unitPokedex.units[unitType].Cost[0] && 
                 ressources[1] > unitPokedex.units[unitType].Cost[1] &&
                 ressources[2] > unitPokedex.units[unitType].Cost[2]) //Cout de l'unitÃ©.
+=======
+        if (ressources[0] >= 50) //Coût de l'unité.
+>>>>>>> buildings
         {
             Hex myHex = hexes[q, r];
             GameObject myHexGO = hexToGameObjectMap[myHex];
@@ -437,12 +449,8 @@ public class HexMap : MonoBehaviour
                 ressources[1] -= woodCost;
                 ressources[2] -= stoneCost;
                 GameObject hexGO = GetHexeGameobjectFromDictionnary(hex);
-                Vector3 p = hexGO.transform.position;
-                if (hex.Elevation >= HeightHill)
-                    {
-                        p.y += 0.246f;
-                    }
-                GameObject buildingGO = Instantiate(prefabBuildings[typeOfBuilding], p, Quaternion.identity, hexGO.transform);
+
+                GameObject buildingGO = Instantiate(prefabBuildings[typeOfBuilding], hexGO.transform.position, Quaternion.identity, hexGO.transform);
                 Building building = new Building(typeOfBuilding, buildingPokedex, hex);
                 buildings.Add(building);
                 buildingToGameObjectMap[building] = buildingGO;

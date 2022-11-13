@@ -62,6 +62,10 @@ public class Hex
         return hexMap.GetHexPosition(this);
     }
 
+    public uint getTypeOfField()
+    {
+        return this.typeOfField;
+    }
     public Vector3 PositionFromCamera(Vector3 cameraPosition, float numberRows, float numberColumns)
     {
         float mapHeight = numberRows * HexVerticalSpacing();
@@ -193,69 +197,58 @@ public class Hex
         this.typeOfField = newField;
     }
 
-    public bool CanBuildFarm()
-    {
-        if(buildingInHex != null)
-        {
-            return false;
-        }
-        else if(typeOfField == 1) // Plain/Grassland
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }  
-    }
-
-    public bool CanBuildMine(Hex[] neighbours)
+    public bool CanBuild(int typeOfBuilding, Hex[] neighbours = null)
     {
         if (buildingInHex != null)
         {
             return false;
         }
-        else if (typeOfField == 1 || typeOfField == 2) // Plain or desert
+
+        else if(typeOfField == 0)//Water
         {
-            foreach (Hex neighbour in neighbours)
+            return false;
+        }
+
+        else if(typeOfBuilding == 0 && (typeOfField == 1|| typeOfField == 2)) //Town center
+        {
+            return true;
+        }
+
+        else if(typeOfBuilding == 1 && typeOfField == 1)
+        {
+            return true;
+        }
+
+        else if(typeOfBuilding == 2 && typeOfField == 4)//LumberCamp
+        {
+            return true;
+        }
+
+        else if (typeOfBuilding == 3 && neighbours != null)//Mine
+        {
+            if (typeOfField == 1 || typeOfField == 2) // Plain or desert
             {
-                if(neighbour.typeOfField == 3) // Mountain
+                foreach (Hex neighbour in neighbours)
                 {
-                    return true;
+                    if (neighbour.typeOfField == 3) // Mountain
+                    {
+                        return true;
+                    }
                 }
             }
         }
+
         return false;
     }
 
-    public bool CanBuildLumberCamp()
+    public void addBuilding(Building building)
     {
-        if (buildingInHex != null)
-        {
-            return false;
-        }
-        else if (typeOfField == 4) // Forest
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+        buildingInHex = building;
     }
 
-    public bool CanBuildHouse()
+    public Building GetBuilding()
     {
-        if (buildingInHex != null)
-        {
-            return false;
-        }
-        else if (typeOfField == 1) // Forest
-        {
-            return true;
-        }
-
-        return false;
+        return buildingInHex;
     }
 
 }

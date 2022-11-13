@@ -12,7 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b3d6b97f8ed3e3442a82b5a5688d3f73, type: 3}
   m_Name: Mine
   m_EditorClassIdentifier: 
+<<<<<<< HEAD
   name: Mine
+  cost: 000000003200000032000000
+=======
+  name: MIne
   cost: 000000001400000050000000
   turnsToBuild: 2
+>>>>>>> buildings
   quantityRessourceEachTurn: 20

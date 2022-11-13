@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: Farm
   m_EditorClassIdentifier: 
   name: Ferme
-  cost: 000000001900000000000000
-  quantityRessourceEachTurn: 10
+  cost: 000000003200000032000000
+  turnsToBuild: 2
+  quantityRessourceEachTurn: 20
