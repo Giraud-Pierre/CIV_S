@@ -140,21 +140,19 @@ public class MouseController : MonoBehaviour
                         // if there is a building, show what it does
                         // if it's the town center : display a button to add an unit in production and the list of production
 
-                        
-                        Hex hex = hexMapContinent.GetHexFromDictionnary(selectedGameObject);
-                        if(hex.GetBuilding() != null)
+
+                        Hex hex = selectedGameObject.GetComponent<HexComponent>().hex;
+                        if (hex.GetBuilding() != null)
                         {
                             //TODO:Show details of building
-                            GameObject building = Instantiate(hexMapContinent.GetMineGO(), selectedGameObject.transform);
                             
-                            Debug.Log("test");
                         }
                     }
 
                     //If selected object is an unit
                     else if (selectedGameObject.GetComponent<UnitView>() != null)
                     {
-                        Hex hex = hexMapContinent.GetUnitFromDictionnary(selectedGameObject).getHex();
+                        Hex hex = selectedGameObject.GetComponent<UnitView>().hex;
                         GameObject hexGO = hexMapContinent.GetHexeGameobjectFromDictionnary(hex);
                         if(hex.GetBuilding() == null)
                         {
