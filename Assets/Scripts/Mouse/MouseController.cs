@@ -205,7 +205,8 @@ public class MouseController : MonoBehaviour
                             {
                                 // Open menu to create a building
                                 // than use the function build of HexMap
-                                canvas.GetComponent<GameMenuController>().GetBuildMenu();
+                                bool[] buildingAvailable = hex.GetBuildingAvailable( hex.hexMap.getHexesWithinRangeOf(hex, 1));
+                                canvas.GetComponent<GameMenuController>().GetBuildMenu(buildingAvailable);
                             }
                         }
                     }

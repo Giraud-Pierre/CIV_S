@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BuildMenuController : MonoBehaviour
 {
@@ -21,11 +22,17 @@ public class BuildMenuController : MonoBehaviour
     [SerializeField] private GameObject mineButton = default;
     // [SerializeField] private GameObject hunterHutButton = default;
 
+    private bool[] buttonAvailable;
     private int selectedButton = 0; // No button selected by default
 
 
-    private void OnEnable()
+    public void GetBuildOptions(bool[] buildingAvailable)
     {
+        buttonAvailable = buildingAvailable;
+        ChangeStateOfButtons();
+
+        gameObject.SetActive(true);
+
         ClearPreviousSelectedButton();
         selectedButton = 0;
     }
@@ -51,6 +58,14 @@ public class BuildMenuController : MonoBehaviour
         hexMap.GetComponent<HexMap_Continent>().build(selectedButton - 1);
         selectedButton = 0;
         canvas.GetComponent<GameMenuController>().GetDefaultMenu();
+    }
+
+    private void ChangeStateOfButtons()
+    {
+        cityCenterButton.SetActive(buttonAvailable[0]);
+        farmButton.SetActive(buttonAvailable[1]);
+        lumberJackhuttButton.SetActive(buttonAvailable[2]);
+        mineButton.SetActive(buttonAvailable[3]);
     }
 
     private void ClearPreviousSelectedButton()

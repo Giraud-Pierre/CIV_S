@@ -56,14 +56,14 @@ public class GameMenuController : MonoBehaviour
         }
     }
 
-    public void GetBuildMenu()
+    public void GetBuildMenu(bool[] buildingAvailable)
     {
         infoPanel.SetActive(false);
         defaultBottomBar.SetActive(false);
         actionMenuOnBuildSpace.SetActive(false);
         // actionMenuOnEmptySpace.SetActive(false);
         actionMenuOnCityCenter.SetActive(false);
-        buildMenu.SetActive(true);
+        buildMenu.GetComponent<BuildMenuController>().GetBuildOptions(buildingAvailable);
     }
 
     public void GetTutorial(string titleOftheTutorial)
