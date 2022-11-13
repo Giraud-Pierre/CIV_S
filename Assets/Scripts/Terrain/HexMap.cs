@@ -352,7 +352,7 @@ public class HexMap : MonoBehaviour
         if (
                 ressources[0] > unitPokedex.units[unitType].Cost[0] && 
                 ressources[1] > unitPokedex.units[unitType].Cost[1] &&
-                ressources[2] > unitPokedex.units[unitType].Cost[2]) //Co�t de l'unit�.
+                ressources[2] > unitPokedex.units[unitType].Cost[2]) //Cout de l'unité.
         {
             Hex myHex = hexes[q, r];
             GameObject myHexGO = hexToGameObjectMap[myHex];
