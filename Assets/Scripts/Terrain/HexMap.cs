@@ -1,4 +1,6 @@
+using Mono.Cecil;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class HexMap : MonoBehaviour
@@ -366,7 +368,10 @@ public class HexMap : MonoBehaviour
             Hex myHex = hexes[q, r];
             GameObject myHexGO = hexToGameObjectMap[myHex];
 
-            Unit unit = new Unit(unitPokedex, unitType, myHex);
+            Unit unit;
+
+            unit = new Unit(unitPokedex, unitType, myHex);
+            
 
             GameObject unitGO = Instantiate(prefab, myHexGO.transform.position, Quaternion.identity, myHexGO.transform);
 
@@ -375,6 +380,8 @@ public class HexMap : MonoBehaviour
             unitView.unit = unit;
             unitView.hexMap = this;
             unitView.hex = myHex;
+
+            myHex.AddUnit(unit);
 
             units.Add(unit);
             unitToGameObjectMap[unit] = unitGO;
@@ -411,7 +418,6 @@ public class HexMap : MonoBehaviour
             int woodCost = buildingPokedex.buildings[typeOfBuilding].cost[1];
             int stoneCost = buildingPokedex.buildings[typeOfBuilding].cost[2];
 
-            Debug.Log(foodCost + " / " + woodCost + " / " + stoneCost);
             if (ressources[0] >=  foodCost && ressources[1] >= woodCost && ressources[2] >= stoneCost)
             {
                 AddRessource(0,-1 * foodCost);
@@ -480,6 +486,12 @@ public class HexMap : MonoBehaviour
                 building.DoTurn(this);
             }
         }
+        if(numberOfTurn % 10 == 0)
+        {
+            List<int> targetPosition = LoofForValidPositionForEnnemy(units.First().hex);
+
+            SpawnUnitAt(2, targetPosition[0], targetPosition[1]);
+        }
     }
 
     public void ChangeSelectedObject(GameObject selectedObject)
@@ -490,6 +502,62 @@ public class HexMap : MonoBehaviour
     public int GetNumberOfTurn()
     {
         return numberOfTurn;
+    }
+
+    public GameObject GetGameobjectFromUnit( Unit unit)
+    {
+        return unitToGameObjectMap[unit];
+    }
+
+
+    private List<int> LoofForValidPositionForEnnemy(Hex centerHex)
+    {
+        //Cherche une case valide pour faire spawner les ennemis.
+        //Une vase valide est walkable et possède au moins 3 cases voisines
+        //qui sont aussi walkable (pour éviter de spawner dans une île)
+        int row;
+        int col;
+        Hex hex;
+        Hex[] neighbourHex;
+        int numberOfWalkableNeighbours;
+        bool validPosition = false;
+        do
+        {
+            //Choisi une case au hasard
+            do
+            {
+                col = centerHex.Q + Random.Range(-5, 5);
+                row = centerHex.R + Random.Range(-5, 5);
+            } while (col > numberColumns || col < 0 || row > numberRows || row < 0);
+            hex = getHexeAt(col,  row);
+
+            if (hex != null && hex.iswalkable) //Vérifie si la case choisie au hasard est walkable
+            {
+                //On récupère les cases voisines
+                numberOfWalkableNeighbours = 0;
+                neighbourHex = getHexesWithinRangeOf(hex, 1);
+                //On regarde combien de cases voisines sont walkable
+                foreach (Hex currentHex in neighbourHex)
+                {
+                    if (currentHex != null && currentHex.iswalkable)
+                    {
+                        numberOfWalkableNeighbours += 1;
+                    }
+                }
+                if (numberOfWalkableNeighbours > 2)
+                {
+                    //S'il y a au moins 3 voisins walkable, on a une position valide
+                    validPosition = true;
+                }
+            }
+
+        } while (!validPosition);
+
+        List<int> result = new List<int>();
+        result.Add(col);
+        result.Add(row);
+
+        return result;
     }
 
 }

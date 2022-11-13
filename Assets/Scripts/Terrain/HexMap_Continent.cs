@@ -123,7 +123,7 @@ public class HexMap_Continent : HexMap
                 //On regarde combien de cases voisines sont walkable
                 foreach (Hex currentHex in neighbourHex)
                 {
-                    if (currentHex.iswalkable)
+                    if (currentHex != null && currentHex.iswalkable)
                     {
                         numberOfWalkableNeighbours += 1;
                     }

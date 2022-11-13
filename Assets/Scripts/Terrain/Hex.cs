@@ -178,7 +178,14 @@ public class Hex
 
     public Unit[] getUnits()
     {
-        return units.ToArray();
+        if (units == null)
+        {
+            return null;
+        }
+        else
+        {
+            return units.ToArray();
+        }
     }
 
     public int BaseMovementCost()

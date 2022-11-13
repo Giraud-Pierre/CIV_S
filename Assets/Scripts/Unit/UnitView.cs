@@ -137,7 +137,7 @@ public class UnitView : MonoBehaviour,IClick
         //*****************TODO: else if(gameobject.tag == "Ennemy") { DoAttack() }
     }
 
-    private List<HexMap.Node> DijkstraPathfinding(HexMap.Node[,] pathFindingGraph, Hex unitHex, Hex targetHex)
+    public List<HexMap.Node> DijkstraPathfinding(HexMap.Node[,] pathFindingGraph, Hex unitHex, Hex targetHex)
     {
         /*Renvoie une liste des noeuds à parcourrir pour arriver à la destination le plus vite possible à partir du
         pathfindingGraph (array de listes chainées décrivant les voisins de chaque noeuds), l'hexagone sur lequel est
