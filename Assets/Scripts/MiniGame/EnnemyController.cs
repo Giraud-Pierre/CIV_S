@@ -28,6 +28,7 @@ public class EnnemyController : MonoBehaviour
     private void OnCollisionEnter(Collision collision) //gère la collision des ennemis avec les balles
     {
         Debug.Log("CollisionEnnemy");
+        Debug.Log(collision.gameObject.layer);
         if (collision.gameObject.layer == LayerMask.NameToLayer("Bullet"))
         {
             Debug.Log("bullet hit: " + health);

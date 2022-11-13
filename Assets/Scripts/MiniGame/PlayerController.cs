@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -52,6 +53,7 @@ public class PlayerController : MonoBehaviour
         //TODO:End the game and unit lose PV
         Destroy(collision.gameObject);
         dataForMiniGame.isWin = false;
+        SceneManager.LoadScene(1);
         Debug.Log("You lost");
     }
 
