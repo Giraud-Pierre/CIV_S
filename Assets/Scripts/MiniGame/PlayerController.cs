@@ -26,9 +26,10 @@ public class PlayerController : MonoBehaviour
         prefabTarget = dataForMiniGame.ennemyPrefab;
         GameObject enemy = Instantiate(prefabTarget, new Vector3(-34f, 3.6f, 55.02f), Quaternion.identity);
         enemy.layer = 7;
-        enemy.GetComponent<BoxCollider>().isTrigger = true;
         enemy.AddComponent<Rigidbody>();
         enemy.GetComponent<Rigidbody>().useGravity = false;
+        enemy.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezePositionY;
+        enemy.GetComponent<Rigidbody>().mass = 8;
         enemy.AddComponent<EnnemyController>();
     }
 
