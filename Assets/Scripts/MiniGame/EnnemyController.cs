@@ -60,7 +60,6 @@ public class EnnemyController : MonoBehaviour
 
     void Start()
     {
-        GameObject enemy = Instantiate(prefabEnemy, new Vector3(-34f, 4.12f, 55.02f), Quaternion.identity);
         player = GameObject.Find("Player").transform; //va rechercher le PlayerBody du joueur
 
         dataForMiniGame = player.gameObject.GetComponent<PlayerController>().getDataForMiniGame();
