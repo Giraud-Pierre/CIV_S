@@ -7,14 +7,14 @@ public class InfoRessourcesViewer : MonoBehaviour
     [SerializeField] private GameObject infoStoneElement = default;
     [SerializeField] private GameObject infoWoodElement = default;
 
-    public void ShowInfo(List<int> resourcesNeeded)
+    public void ShowInfo(int[] resourcesNeeded)
     {
         infoFoodElement.gameObject.GetComponent<InfoElementController>().SetNumber(resourcesNeeded[0]);
         infoStoneElement.gameObject.GetComponent<InfoElementController>().SetNumber(resourcesNeeded[1]);
         infoWoodElement.gameObject.GetComponent<InfoElementController>().SetNumber(resourcesNeeded[2]);
     }
 
-    public void ShowNegativeInfo(List<int> resourcesNeeded)
+    public void ShowNegativeInfo(int[] resourcesNeeded)
     {
         infoFoodElement.gameObject.GetComponent<InfoElementController>().SetNumber(resourcesNeeded[0] * -1);
         infoStoneElement.gameObject.GetComponent<InfoElementController>().SetNumber(resourcesNeeded[1] * -1);

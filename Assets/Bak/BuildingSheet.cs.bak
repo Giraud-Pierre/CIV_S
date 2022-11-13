@@ -1,0 +1,16 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+[CreateAssetMenu]
+public class BuildingSheet : ScriptableObject
+{
+    public new string name;
+<<<<<<< HEAD:Assets/Scripts/Building/ScriptableObject/BuildingSheet.cs
+    public List<int> cost = new List<int>();
+=======
+    public int[] cost = new int[3];
+    public int turnsToBuild;
+>>>>>>> buildings:Assets/Scripts/Building/BuildingSheet.cs
+    public int quantityRessourceEachTurn;
+}
