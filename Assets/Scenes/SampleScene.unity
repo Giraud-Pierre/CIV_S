@@ -426,7 +426,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 6886815168945129238}
+      objectReference: {fileID: 989302910}
     - target: {fileID: 6290798265942636274, guid: 83feec7cf7c7e0e42b4fef30fdb9f01d,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
@@ -435,17 +435,17 @@ PrefabInstance:
     - target: {fileID: 6290798265942636274, guid: 83feec7cf7c7e0e42b4fef30fdb9f01d,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnClickOnButton
+      value: build
       objectReference: {fileID: 0}
     - target: {fileID: 6290798265942636274, guid: 83feec7cf7c7e0e42b4fef30fdb9f01d,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: BuildMenuController, Assembly-CSharp
+      value: HexMap, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6290798265942636274, guid: 83feec7cf7c7e0e42b4fef30fdb9f01d,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 6290798265942636274, guid: 83feec7cf7c7e0e42b4fef30fdb9f01d,
         type: 3}
@@ -2221,7 +2221,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 6886815168945129238}
+      objectReference: {fileID: 989302910}
     - target: {fileID: 6290798265942636274, guid: 83feec7cf7c7e0e42b4fef30fdb9f01d,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
@@ -2230,17 +2230,17 @@ PrefabInstance:
     - target: {fileID: 6290798265942636274, guid: 83feec7cf7c7e0e42b4fef30fdb9f01d,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnClickOnButton
+      value: build
       objectReference: {fileID: 0}
     - target: {fileID: 6290798265942636274, guid: 83feec7cf7c7e0e42b4fef30fdb9f01d,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: BuildMenuController, Assembly-CSharp
+      value: HexMap, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6290798265942636274, guid: 83feec7cf7c7e0e42b4fef30fdb9f01d,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6290798265942636274, guid: 83feec7cf7c7e0e42b4fef30fdb9f01d,
         type: 3}
@@ -2452,6 +2452,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cursor: {fileID: 2800000, guid: 41e2f2500202792459ee472b8e7236f0, type: 3}
   cursorClicked: {fileID: 2800000, guid: e474253b2ab218e4eb5f70e5ad15c1fa, type: 3}
+  canvas: {fileID: 1012762310}
 --- !u!4 &676941982
 Transform:
   m_ObjectHideFlags: 0
@@ -3178,7 +3179,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hexTile: {fileID: 1904931013106162695, guid: 5775311797cc42d478404acff2408f7b, type: 3}
-  Canvas: {fileID: 0}
+  Canvas: {fileID: 1012762310}
   MeshWater: {fileID: 4300000, guid: e4f4e2ebd7661f74aa2a54440b0fe279, type: 3}
   MeshFlat: {fileID: 4300000, guid: e4f4e2ebd7661f74aa2a54440b0fe279, type: 3}
   MeshHill: {fileID: 4300000, guid: 91f4311fd10b4fd4aaeb00b581fd24e8, type: 3}
@@ -3195,7 +3196,7 @@ MonoBehaviour:
   MatMountains: {fileID: 2100000, guid: 67e527211e3f76d4890a6abda2f5fe26, type: 2}
   MatGrassLands: {fileID: 2100000, guid: 94b503c3adf49d446aa39379e4abd1e1, type: 2}
   MatDesert: {fileID: 2100000, guid: d118f8f1499f3244fa306668405f0749, type: 2}
-  buildingPokedex: {fileID: 11400000, guid: bce5ca87f75de8b47b57e0e0af022f90, type: 2}
+  buildingPokedex: {fileID: 11400000, guid: bcc83e46707bb21428d1f1c4cfb0b851, type: 2}
   unitPokedex: {fileID: 11400000, guid: 8f255f0825c390749bdecc9844eb10f1, type: 2}
   mouseController: {fileID: 676941980}
   worker: {fileID: 171706, guid: 1993ef37b5f480b4a92115ca0117fdce, type: 3}
@@ -5693,7 +5694,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 6886815168945129238}
+      objectReference: {fileID: 989302910}
     - target: {fileID: 6290798265942636274, guid: 83feec7cf7c7e0e42b4fef30fdb9f01d,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
@@ -5702,17 +5703,17 @@ PrefabInstance:
     - target: {fileID: 6290798265942636274, guid: 83feec7cf7c7e0e42b4fef30fdb9f01d,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnClickOnButton
+      value: build
       objectReference: {fileID: 0}
     - target: {fileID: 6290798265942636274, guid: 83feec7cf7c7e0e42b4fef30fdb9f01d,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: BuildMenuController, Assembly-CSharp
+      value: HexMap, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6290798265942636274, guid: 83feec7cf7c7e0e42b4fef30fdb9f01d,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6290798265942636274, guid: 83feec7cf7c7e0e42b4fef30fdb9f01d,
         type: 3}
@@ -8085,7 +8086,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 685776b14ed8ffc4abf8b14b9d2df132, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buildingsInfo: {fileID: 11400000, guid: bce5ca87f75de8b47b57e0e0af022f90, type: 2}
+  buildingsInfo: {fileID: 11400000, guid: bcc83e46707bb21428d1f1c4cfb0b851, type: 2}
   InfoRessourcesLayout: {fileID: 1890185825}
   cityCenterButton: {fileID: 735018010}
   farmButton: {fileID: 386588080}
@@ -8251,7 +8252,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 6886815168945129238}
+      objectReference: {fileID: 989302910}
     - target: {fileID: 6290798265942636274, guid: 83feec7cf7c7e0e42b4fef30fdb9f01d,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
@@ -8260,17 +8261,17 @@ PrefabInstance:
     - target: {fileID: 6290798265942636274, guid: 83feec7cf7c7e0e42b4fef30fdb9f01d,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnClickOnButton
+      value: build
       objectReference: {fileID: 0}
     - target: {fileID: 6290798265942636274, guid: 83feec7cf7c7e0e42b4fef30fdb9f01d,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: BuildMenuController, Assembly-CSharp
+      value: HexMap, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6290798265942636274, guid: 83feec7cf7c7e0e42b4fef30fdb9f01d,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_IntArgument
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6290798265942636274, guid: 83feec7cf7c7e0e42b4fef30fdb9f01d,
         type: 3}

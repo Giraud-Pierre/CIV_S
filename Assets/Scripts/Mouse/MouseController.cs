@@ -8,6 +8,7 @@ public class MouseController : MonoBehaviour
 
     [SerializeField] Texture2D cursor;
     [SerializeField] Texture2D cursorClicked;
+    [SerializeField] GameObject canvas;
 
     private Camera mainCamera;
     private CursorControls controls;
@@ -66,7 +67,7 @@ public class MouseController : MonoBehaviour
         controls.Mouse.rightClick.started += _ => StartRightClick(); //Lors de l'appui sur le clic droit
         controls.Mouse.rightClick.performed += _ => EndRightClick(); //Lors du relachement du clic gauche
 
-        UILayer = LayerMask.NameToLayer("UI"); //Rechecher le numéro de la layer UI
+        UILayer = LayerMask.NameToLayer("UI"); //Rechecher le numï¿½ro de la layer UI
 
         CurrenRightClickAction = DoNothing;
     }
@@ -159,7 +160,7 @@ public class MouseController : MonoBehaviour
         bool isUI = IsPointerOverUIElement();
         if (isUI)
         {
-            DoNothing(); //Si on clique sur un UI, alors on n'a pas cliqué sur le jeu
+            DoNothing(); //Si on clique sur un UI, alors on n'a pas cliquï¿½ sur le jeu
         }
         else
         {
@@ -181,7 +182,7 @@ public class MouseController : MonoBehaviour
                         //If selected object is a tile
                         if (selectedGameObject.GetComponent<HexComponent>() != null)
                         {
-                            //TODO: Display interface for construction if tile empty
+                            // Display interface for construction if tile empty
                             // details of the tile (name, costOfMovement ...)
                             // if there is a building, show what it does
                             // if it's the town center : display a button to add an unit in production and the list of production
@@ -190,8 +191,8 @@ public class MouseController : MonoBehaviour
                             Hex hex = selectedGameObject.GetComponent<HexComponent>().hex;
                             if (hex.GetBuilding() != null)
                             {
-                                //TODO:Show details of building
-
+                                // Show details of building
+                                canvas.GetComponent<GameMenuController>().GetMenuOnBuildSpace(hex.GetBuilding());
                             }
                         }
 
@@ -202,8 +203,9 @@ public class MouseController : MonoBehaviour
                             GameObject hexGO = hexMapContinent.GetHexeGameobjectFromDictionnary(hex);
                             if (hex.GetBuilding() == null)
                             {
-                                //TODO : Open menu to create a building
-                                //than use the function build of HexMap
+                                // Open menu to create a building
+                                // than use the function build of HexMap
+                                canvas.GetComponent<GameMenuController>().GetBuildMenu();
                             }
                         }
                     }
@@ -211,6 +213,7 @@ public class MouseController : MonoBehaviour
                     {
                         selectedGameObject.GetComponent<IClick>().OnLeftClickOnOtherAction();
                         selectedGameObject = null;
+                        canvas.GetComponent<GameMenuController>().GetDefaultMenu();
                     }
                 }
             }
