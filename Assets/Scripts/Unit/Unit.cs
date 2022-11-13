@@ -86,16 +86,24 @@ public class Unit
                     Hex newHex = hexPath.Dequeue();
                     movementRemaining -= MovementCostToEnterHex(newHex);
 
-                    if (movementRemaining >= 0)
+                    if(newHex.getUnits() != null && newHex.getUnits().Length > 0 && newHex.getUnits()[0].unitType == 2)
                     {
-                        //Move to the new Hex
-                        SetHex(newHex);
+                        //Change Scene
                     }
                     else
                     {
-                        //If remaining movement insufficent, do not move and requeue the movement for next turn
-                        hexPath.Enqueue(newHex);
+                        if (movementRemaining >= 0)
+                        {
+                            //Move to the new Hex
+                            SetHex(newHex);
+                        }
+                        else
+                        {
+                            //If remaining movement insufficent, do not move and requeue the movement for next turn
+                            hexPath.Enqueue(newHex);
+                        }
                     }
+                    
                 }
                 movementRemaining = movement;
             }
