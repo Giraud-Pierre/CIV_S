@@ -24,12 +24,24 @@ public class CameraControlle : MonoBehaviour
     {
         //Code to click and drag camera 
         // WASD 
-   
-        Vector3 translate = new Vector3(
+
+        Vector3 translate;
+        if((this.transform.position.z + Input.GetAxis("Vertical") > 37.5f || this.transform.position.z + Input.GetAxis("Vertical") < -7) && Input.GetAxis("Vertical") != 0)
+        {
+            translate = new Vector3(
+            Input.GetAxis("Horizontal"),
+            0,
+            0
+            );
+        }
+        else
+        {
+            translate = new Vector3(
             Input.GetAxis("Horizontal"),
             0,
             Input.GetAxis("Vertical")
             );
+        }
         this.transform.Translate(translate * cameraSpeed * Time.deltaTime, Space.World);
 
         // ZOOM in and out

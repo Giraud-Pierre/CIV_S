@@ -55,6 +55,15 @@ public class MouseController : MonoBehaviour
         if (movement != Vector3.zero)
         {
             movement.z = movement.y;
+            if (mainCamera.transform.position.z+movement.z > 37.5f)
+            {
+                movement.z = 37.5f - mainCamera.transform.position.z;
+            }
+            else if (mainCamera.transform.position.z + movement.z < -7)
+            {
+                movement.z = -7 -  mainCamera.transform.position.z;
+            }
+            
             movement.y = 0;
             //Left button is being held down and the mouse move, that's the camera drag !
             mainCamera.transform.Translate(movement*cameraSpeed*Time.deltaTime, Space.World);
