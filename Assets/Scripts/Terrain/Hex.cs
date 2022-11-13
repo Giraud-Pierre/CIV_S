@@ -258,4 +258,15 @@ public class Hex
         return buildingInHex;
     }
 
+    public bool[] GetBuildingAvailable(Hex[] neighbours = null)
+    {
+        bool[] buildingAvailableArray = new bool[4];
+
+        for (int i = 0; i < 4; i++)
+        {
+            buildingAvailableArray[i] = CanBuild(i, neighbours);
+        }
+
+        return buildingAvailableArray;
+    }
 }

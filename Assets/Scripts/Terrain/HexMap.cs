@@ -6,7 +6,7 @@ using UnityEngine;
 public class HexMap : MonoBehaviour
 {
     [SerializeField] GameObject hexTile;
-    [SerializeField] GameObject Canvas;
+    [SerializeField] GameObject canvas;
 
     [SerializeField] Mesh MeshWater;
     [SerializeField] Mesh MeshFlat;
@@ -477,7 +477,7 @@ public class HexMap : MonoBehaviour
     public void AddRessource(int ressourceType, int quantity)
     {
         ressources[ressourceType] += quantity;
-        Canvas.GetComponent<GameMenuController>().UpdateResources(ressources);
+        canvas.GetComponent<GameMenuController>().UpdateResources(ressources);
     }
 
     public List<int> GetRessource()
@@ -490,6 +490,9 @@ public class HexMap : MonoBehaviour
         mouseController.GetComponent<MouseController>().UnselectAtEndTurn();
         selectedGameObject = null;
         numberOfTurn += 1;
+        canvas.GetComponent<GameMenuController>().UpdateNumberOfTurn(numberOfTurn);
+        canvas.GetComponent<GameMenuController>().GetDefaultMenu();
+
         if (units != null)
         {
             foreach(Unit unit in units)

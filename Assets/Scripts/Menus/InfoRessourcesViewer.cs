@@ -10,15 +10,15 @@ public class InfoRessourcesViewer : MonoBehaviour
     public void ShowInfo(int[] resourcesNeeded)
     {
         infoFoodElement.gameObject.GetComponent<InfoElementController>().SetNumber(resourcesNeeded[0]);
-        infoStoneElement.gameObject.GetComponent<InfoElementController>().SetNumber(resourcesNeeded[1]);
-        infoWoodElement.gameObject.GetComponent<InfoElementController>().SetNumber(resourcesNeeded[2]);
+        infoStoneElement.gameObject.GetComponent<InfoElementController>().SetNumber(resourcesNeeded[2]);
+        infoWoodElement.gameObject.GetComponent<InfoElementController>().SetNumber(resourcesNeeded[1]);
     }
 
     public void ShowNegativeInfo(int[] resourcesNeeded)
     {
         infoFoodElement.gameObject.GetComponent<InfoElementController>().SetNumber(resourcesNeeded[0] * -1);
-        infoStoneElement.gameObject.GetComponent<InfoElementController>().SetNumber(resourcesNeeded[1] * -1);
-        infoWoodElement.gameObject.GetComponent<InfoElementController>().SetNumber(resourcesNeeded[2] * -1);
+        infoStoneElement.gameObject.GetComponent<InfoElementController>().SetNumber(resourcesNeeded[2] * -1);
+        infoWoodElement.gameObject.GetComponent<InfoElementController>().SetNumber(resourcesNeeded[1] * -1);
     }
 
     public void HideInfo()

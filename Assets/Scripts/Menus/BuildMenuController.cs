@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BuildMenuController : MonoBehaviour
 {
@@ -9,20 +10,29 @@ public class BuildMenuController : MonoBehaviour
 
     enum TypeOfResource {Food, Stone, Wood};
 
+    [SerializeField] private HexMap hexMap = default;
     [SerializeField] private BuildingPokedex buildingsInfo = default;
 
-    [SerializeField] private GameObject InfoRessourcesLayout = default;
+    [SerializeField] private GameObject canvas = default;
+
+    [SerializeField] private GameObject infoRessourcesLayout = default;
     [SerializeField] private GameObject cityCenterButton = default;
     [SerializeField] private GameObject farmButton = default;
     [SerializeField] private GameObject lumberJackhuttButton = default;
     [SerializeField] private GameObject mineButton = default;
     // [SerializeField] private GameObject hunterHutButton = default;
 
+    private bool[] buttonAvailable;
     private int selectedButton = 0; // No button selected by default
 
 
-    private void OnEnable()
+    public void GetBuildOptions(bool[] buildingAvailable)
     {
+        buttonAvailable = buildingAvailable;
+        ChangeStateOfButtons();
+
+        gameObject.SetActive(true);
+
         ClearPreviousSelectedButton();
         selectedButton = 0;
     }
@@ -45,14 +55,22 @@ public class BuildMenuController : MonoBehaviour
 
     private void DoActionForSelectedButton()
     {
-        // TODO: Add junction with action on map space and so on.
-        // Whick function(s) a need to use to build something
-        Debug.Log("DoAction : BuildMenuController");
+        hexMap.GetComponent<HexMap_Continent>().build(selectedButton - 1);
+        selectedButton = 0;
+        canvas.GetComponent<GameMenuController>().GetDefaultMenu();
+    }
+
+    private void ChangeStateOfButtons()
+    {
+        cityCenterButton.SetActive(buttonAvailable[0]);
+        farmButton.SetActive(buttonAvailable[1]);
+        lumberJackhuttButton.SetActive(buttonAvailable[2]);
+        mineButton.SetActive(buttonAvailable[3]);
     }
 
     private void ClearPreviousSelectedButton()
     {
-        InfoRessourcesLayout.GetComponent<InfoRessourcesViewer>().HideInfo();
+        infoRessourcesLayout.GetComponent<InfoRessourcesViewer>().HideInfo();
         switch (selectedButton)
         {
             case 0:
@@ -87,23 +105,23 @@ public class BuildMenuController : MonoBehaviour
             case 0:
                 break;
             case 1:
-                InfoRessourcesLayout.GetComponent<InfoRessourcesViewer>().ShowNegativeInfo(buildingsInfo.buildings[0].cost);
+                infoRessourcesLayout.GetComponent<InfoRessourcesViewer>().ShowNegativeInfo(buildingsInfo.buildings[0].cost);
                 cityCenterButton.GetComponent<BuildButtonController>().SetSelectedState();
                 break;
             case 2:
-                InfoRessourcesLayout.GetComponent<InfoRessourcesViewer>().ShowNegativeInfo(buildingsInfo.buildings[1].cost);
+                infoRessourcesLayout.GetComponent<InfoRessourcesViewer>().ShowNegativeInfo(buildingsInfo.buildings[1].cost);
                 farmButton.GetComponent<BuildButtonController>().SetSelectedState();
                 break;
             case 3:
-                InfoRessourcesLayout.GetComponent<InfoRessourcesViewer>().ShowNegativeInfo(buildingsInfo.buildings[2].cost);
+                infoRessourcesLayout.GetComponent<InfoRessourcesViewer>().ShowNegativeInfo(buildingsInfo.buildings[2].cost);
                 lumberJackhuttButton.GetComponent<BuildButtonController>().SetSelectedState();
                 break;
             case 4:
-                InfoRessourcesLayout.GetComponent<InfoRessourcesViewer>().ShowNegativeInfo(buildingsInfo.buildings[3].cost);
+                infoRessourcesLayout.GetComponent<InfoRessourcesViewer>().ShowNegativeInfo(buildingsInfo.buildings[3].cost);
                 mineButton.GetComponent<BuildButtonController>().SetSelectedState();
                 break;
             // case 5:
-            //     InfoRessourcesLayout.GetComponent<InfoRessourcesViewer>().ShowInfo(new List<int>{500,0,-500});
+            //     infoRessourcesLayout.GetComponent<InfoRessourcesViewer>().ShowInfo(new List<int>{500,0,-500});
             //     hunterHutButton.GetComponent<BuildButtonController>().SetSelectedState();
             //     break;
             default:
