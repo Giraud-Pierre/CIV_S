@@ -491,6 +491,7 @@ public class HexMap : MonoBehaviour
         selectedGameObject = null;
         numberOfTurn += 1;
         canvas.GetComponent<GameMenuController>().UpdateNumberOfTurn(numberOfTurn);
+        canvas.GetComponent<GameMenuController>().GetDefaultMenu();
 
         if (units != null)
         {
