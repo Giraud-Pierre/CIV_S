@@ -16,11 +16,12 @@ public class PlayerController : MonoBehaviour
     private Camera camera;
     [SerializeField] GameObject prefabTarget;
     GameObject bullet;
+    private int damage;
 
     void Start()
     {
         camera = Camera.main;
-        GameObject enemy = Instantiate(prefabTarget, new Vector3(-34f, 4.12f, 55.02f), Quaternion.identity);
+        
     }
 
     // Update is called once per frame
@@ -57,5 +58,10 @@ public class PlayerController : MonoBehaviour
 
         //J'applique une force initiale à la balle, AddForce prend en paramètre la direction de la force et son intensité
         bulletRigidbody.AddForce(camera.transform.forward * 1000f);
+    }
+
+    public int getDamage()
+    {
+        return this.damage;
     }
 }

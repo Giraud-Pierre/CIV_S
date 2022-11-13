@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Unit
 {
@@ -71,6 +72,7 @@ public class Unit
 
     public void DoTurn()
     {
+
         if(unitType == 0 || unitType == 1) //Si l'unité est un ennemi
         {
             //On vérifie qu'il y a une queue de mouvement
@@ -80,8 +82,10 @@ public class Unit
             }
             else
             {
+                SceneManager.LoadSceneAsync(2);
                 while (movementRemaining > 0 && hexPath.Count != 0)
                 {
+
                     //Grab the first hex from our queue
                     Hex newHex = hexPath.Dequeue();
                     movementRemaining -= MovementCostToEnterHex(newHex);
@@ -89,6 +93,8 @@ public class Unit
                     if(newHex.getUnits() != null && newHex.getUnits().Length > 0 && newHex.getUnits()[0].unitType == 2)
                     {
                         //Change Scene
+                        SceneManager.LoadScene(2, LoadSceneMode.Additive);
+                        //Dégat perso : units.strengh/newHex.get
                     }
                     else
                     {

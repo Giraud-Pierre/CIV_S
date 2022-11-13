@@ -2,13 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using static UnityEngine.EventSystems.EventTrigger;
 
 public class EnnemyController : MonoBehaviour
 {
-    [SerializeField] private int health = 3; //on peut modifier les points de vie de l'ennemi ici
-    [SerializeField] private float MovementSpeed = 1f; //on peut modifier la vitesse de déplacement de l'ennemi ici
-    private int sens = 1;
+    [SerializeField] int health = 3; //on peut modifier les points de vie de l'ennemi ici
+    [SerializeField] float MovementSpeed = 1f; //on peut modifier la vitesse de déplacement de l'ennemi ici
+    [SerializeField] int ennemySpeed = 2;
+    [SerializeField] int frequency = 2;
+    [SerializeField] float magnitude = 0.1f;
+    [SerializeField] GameObject prefabEnemy;
+    private int playerDamage;
+
+
 
     private Transform player;   //recueille le transform du joueur pour orienter le déplacement de l'ennemi
     private float realMovementSpeed; //recalcule la vitesse de déplacement de l'ennemi en prenant en compte d'autre facteur
@@ -23,21 +30,20 @@ public class EnnemyController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision) //gère la collision des ennemis avec les balles
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Entity") && collision.gameObject.tag == "bullet")
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Bullet"))
         {
             //fait reculer l'ennemi
-            gameObject.GetComponent<Rigidbody>().AddForce(-15f * transform.forward, ForceMode.Impulse);
+            //gameObject.GetComponent<Rigidbody>().AddForce(-15f * transform.forward, ForceMode.Impulse);
 
             //détruit la balle
             Destroy(collision.gameObject);
 
-            sens *= -1;
-
             //diminue la vie de l'ennemi
-            health--;
+            health -= playerDamage;
             if (health <= 0) //Détruit l'ennemi s'il est à cours de point de vie
             {
                 Destroy(gameObject);
+                SceneManager.LoadScene(1);
             }
         }
     }
@@ -45,22 +51,20 @@ public class EnnemyController : MonoBehaviour
     private void MoveTowardPlayer() //permet de bouger l'ennemi vers le joueur
     {
         transform.LookAt(player); //permet à l'ennemi de regarder le joueur
-        transform.position += sens * transform.forward * realMovementSpeed; //fait avancer l'ennemi
+        transform.position +=  new Vector3(Mathf.Sin(Time.time * frequency) * magnitude, 0, -ennemySpeed * Time.deltaTime); //fait avancer l'ennemi
     }
 
 
     void Start()
     {
+        GameObject enemy = Instantiate(prefabEnemy, new Vector3(-34f, 4.12f, 55.02f), Quaternion.identity);
         player = GameObject.Find("Player").transform; //va rechercher le PlayerBody du joueur
+        playerDamage = GameObject.Find("Player").GetComponent<PlayerController>().getDamage();
     }
 
 
     void Update()
     {
-        //calcule la vitesse de déplacement réelle de l'ennemi en prenant en compte les fps du joueurs
-        //et en appliquant un facteur (comme pour la MovementSpeed dans le script PlayerController)
-        //(il va un peu moins que 2 fois moins vite que le joueur pour qui le facteur est 15f)
-        realMovementSpeed = MovementSpeed * Time.deltaTime * 7f;
 
         MoveTowardPlayer();
         check_out_limits();

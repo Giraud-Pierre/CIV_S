@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9560b80c0ef3a7d4b8f26126013c37a7, type: 3}
   m_Name: Bear
   m_EditorClassIdentifier: 
-  name: 
-  strength: 0
-  movement: 0
-  Cost: 
-  Prefab: {fileID: 0}
+  name: Ours
+  strength: 15
+  movement: 2
+  Cost: 000000000000000000000000
+  Prefab: {fileID: 171706, guid: 1993ef37b5f480b4a92115ca0117fdce, type: 3}

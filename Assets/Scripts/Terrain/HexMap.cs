@@ -55,7 +55,7 @@ public class HexMap : MonoBehaviour
     private Dictionary<Building, GameObject> buildingToGameObjectMap;
 
 
-    
+    private static HexMap hexMapInstance;
 
     private Node[,] pathfindingGraph;
 
@@ -66,17 +66,32 @@ public class HexMap : MonoBehaviour
     //****************************************************************
 
     // Start is called before the first frame update
+    void Awake()
+    {
+        DontDestroyOnLoad(this);
+        if(hexMapInstance == null)
+        {
+            //Ressources de base
+            ressources = new List<int>();
+            ressources.Add(300);
+            ressources.Add(300);
+            ressources.Add(300);
+
+            numberOfTurn = 1;
+
+            GenerateMap();
+            hexMapInstance = this;
+        }
+        else
+        {
+            DestroyObject(gameObject);
+        }
+
+
+    }
     void Start()
     {
-        //Ressources de base
-        ressources = new List<int>();
-        ressources.Add(300);
-        ressources.Add(300);
-        ressources.Add(300);
 
-        numberOfTurn = 1;
-
-        GenerateMap();
     }
 
     void Update()
