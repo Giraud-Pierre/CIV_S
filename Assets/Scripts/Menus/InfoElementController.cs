@@ -14,7 +14,7 @@ public class InfoElementController : MonoBehaviour
     {
         if ( number == 0 )
         {
-            return;
+            gameObject.SetActive(false);
         }
         else if ( number > 0 )
         {
