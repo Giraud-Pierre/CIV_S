@@ -23,6 +23,8 @@ public class Building
     public Hex hex; //Case du bâtiment
     public Queue<int> queue = new Queue<int>(); //Liste des unités pour le centre ville
 
+    private HexMap hexMap;
+
     //Constructeur
     public Building(int buildingType, BuildingPokedex pokedex, Hex newHex)
     {
@@ -33,6 +35,8 @@ public class Building
         this.turnsRemainingUntilBuildIsComplete = this.turnsToBuild;
         this.isBuilt = false;
         this.hex = newHex;
+
+        hexMap = newHex.hexMap; 
         
 
         
@@ -64,6 +68,7 @@ public class Building
             if(turnsRemainingUntilBuildIsComplete == 0)
             {
                 this.isBuilt = true;
+                hexmap.buildComplete(this);
             }
         }
 

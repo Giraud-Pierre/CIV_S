@@ -423,38 +423,44 @@ public class HexMap : MonoBehaviour
                 AddRessource(0,-1 * foodCost);
                 AddRessource(1, -1 * woodCost);
                 AddRessource(2, -1 * stoneCost);
-                GameObject hexGO = GetHexeGameobjectFromDictionnary(hex);
-                Vector3 p = hexGO.transform.position;
-                Quaternion rotation = Quaternion.Euler(new Vector3(0, 210, 0));
-                if (hex.Elevation >= HeightHill)
-                    {
-                        p.y += 0.246f;
-                    }
-
-                if(hex.getTypeOfField() == 4)
-                {
-                    p.x -= 0.048f;
-                    p.z -= 0.425f;
-                }
-
-                if(typeOfBuilding == 0)
-                {
-                    rotation = Quaternion.Euler(new Vector3(0, 90, 0));
-                }
-                else if(typeOfBuilding == 1)
-                {
-                    rotation = Quaternion.Euler(new Vector3(0, 160, 0));
-                }
-
-
-                GameObject buildingGO = Instantiate(GetPrefabBuilding(typeOfBuilding), p, rotation, hexGO.transform);
+                
                 Building building = new Building(typeOfBuilding, buildingPokedex, hex);
                 buildings.Add(building);
                 hex.addBuilding(building);
-                buildingToGameObjectMap[building] = buildingGO;
             }
         }
         
+    }
+
+    public void buildComplete(Building build)
+    {
+        Hex hex = build.hex;
+        int typeOfBuilding = build.type;
+
+        GameObject hexGO = GetHexeGameobjectFromDictionnary(hex);
+        Vector3 p = hexGO.transform.position;
+        Quaternion rotation = Quaternion.Euler(new Vector3(0, 210, 0));
+        if (hex.Elevation >= HeightHill)
+        {
+            p.y += 0.246f;
+        }
+
+        if (hex.getTypeOfField() == 4)
+        {
+            p.x -= 0.048f;
+            p.z -= 0.425f;
+        }
+
+        if (typeOfBuilding == 0)
+        {
+            rotation = Quaternion.Euler(new Vector3(0, 90, 0));
+        }
+        else if (typeOfBuilding == 1)
+        {
+            rotation = Quaternion.Euler(new Vector3(0, 160, 0));
+        }
+        GameObject buildingGO = Instantiate(GetPrefabBuilding(build.type), p, rotation, hexGO.transform);
+        buildingToGameObjectMap[build] = buildingGO;
     }
 
     public void AddRessource(int ressourceType, int quantity)
