@@ -495,10 +495,21 @@ public class HexMap : MonoBehaviour
 
         if (units != null)
         {
-            foreach(Unit unit in units)
+            Debug.Log(units.Count);
+            foreach (Unit unit in units)
             {
                 unit.DoTurn();
             }
+            foreach (Unit unit in units)
+            {
+                Debug.Log("unity check Destroy");
+                if (unit.GetHitPoint() < 0)
+                {
+                    Debug.Log("Le {0} est mort");
+                    DestroyUnit(unit);
+                }
+            }
+            
         }
         if(buildings != null)
         {

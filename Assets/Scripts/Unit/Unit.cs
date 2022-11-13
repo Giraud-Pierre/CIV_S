@@ -106,11 +106,6 @@ public class Unit
             if (adjacentCharacter != null)
             {
                 int remainingHealth = adjacentCharacter.InflictDamage(10 * strength / adjacentCharacter.strength);
-                if(remainingHealth > 0)
-                {
-                    Debug.Log("Le personnage est mort");
-                    hex.hexMap.DestroyUnit(adjacentCharacter);
-                }
             }
             else
             {
