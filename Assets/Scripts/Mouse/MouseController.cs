@@ -17,7 +17,7 @@ public class MouseController : MonoBehaviour
     RightClickAction CurrenRightClickAction;
 
     Vector3 lastMousePosition; //From Input.mousePosition
-    float cameraSpeed = 10f;
+    float cameraSpeed = 5f;
 
     int UILayer;
 
@@ -159,7 +159,6 @@ public class MouseController : MonoBehaviour
         bool isUI = IsPointerOverUIElement();
         if (isUI)
         {
-            Debug.Log("UI");
             DoNothing(); //Si on clique sur un UI, alors on n'a pas cliqué sur le jeu
         }
         else
