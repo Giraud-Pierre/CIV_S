@@ -14,22 +14,12 @@ public class targetsController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        Timer = appearanceFrequency;
+        Instantiate(prefabTarget, new Vector3(-35.47f, 4.12f, 55.02f), Quaternion.identity);
     }
 
     // Update is called once per frame
     void Update()
     {
-        Timer -= Time.deltaTime;
-        if (Timer <= 0f)
-        {
-            randomX = Random.Range(-20, 20);
-            randomY = Random.Range(5, 20);
-            randomZ = Random.Range(-20, 20);
-            rotation = Quaternion.Euler(Random.Range(0, 90), Random.Range(0, 360), 0);
-            Instantiate(prefabTarget, new Vector3(randomX, randomY, randomZ), rotation);
-            //Debug.Log("instantiate");
-            Timer = appearanceFrequency;
-        }
+
     }
 }
