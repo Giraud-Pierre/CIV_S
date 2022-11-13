@@ -175,6 +175,9 @@ public class MouseController : MonoBehaviour
                         selectedGameObject.GetComponent<IClick>().OnLeftClickAction();
 
                         HexMap_Continent hexMapContinent = GameObject.Find("HexMap").GetComponent<HexMap_Continent>();
+
+                        hexMapContinent.ChangeSelectedObject(selectedGameObject);
+
                         //If selected object is a tile
                         if (selectedGameObject.GetComponent<HexComponent>() != null)
                         {
