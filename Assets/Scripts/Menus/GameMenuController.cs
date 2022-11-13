@@ -28,6 +28,11 @@ public class GameMenuController : MonoBehaviour
         resourcesLayout.GetComponent<ResourcesLayoutController>().UpdateResourcesLayout(resources);
     }
 
+    public void UpdateNumberOfTurn(int numberOfTurn)
+    {
+        defaultBottomBar.GetComponent<DefaultMenuController>().UpdateNumberOfTurn(numberOfTurn);
+    }
+
     public void GetDefaultMenu()
     {
         defaultBottomBar.SetActive(true);
