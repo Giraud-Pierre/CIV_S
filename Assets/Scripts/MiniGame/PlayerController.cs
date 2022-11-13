@@ -14,11 +14,13 @@ public class PlayerController : MonoBehaviour
     private float xRotation;
     private float yRotation;
     private Camera camera;
+    [SerializeField] GameObject prefabTarget;
     GameObject bullet;
 
     void Start()
     {
         camera = Camera.main;
+        Instantiate(prefabTarget, new Vector3(-34f, 4.12f, 55.02f), Quaternion.identity);
     }
 
     // Update is called once per frame
@@ -39,6 +41,7 @@ public class PlayerController : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         //TODO:End the game and unit lose PV
+            Destroy(collision.gameObject); 
             Debug.Log("You lost");
     }
 

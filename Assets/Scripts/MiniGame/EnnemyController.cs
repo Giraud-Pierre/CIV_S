@@ -4,17 +4,17 @@ using UnityEngine;
 
 public class EnnemyController : MonoBehaviour
 {
-    [SerializeField] GameObject prefabTarget;
+    
     private GameObject enemyGO;
-    [SerializeField] float enemySpeed = 1.5f;
-    [SerializeField] float frequency = 1.0f;
-    [SerializeField] float magnitude = 0.5f;
+    [SerializeField] float enemySpeed = 2f;
+    [SerializeField] float frequency = 1.5f;
+    [SerializeField] float magnitude = 0.1f;
     private int knockback = 5;
     private Quaternion rotation;
     // Start is called before the first frame update
     void Start()
     {
-        enemyGO = Instantiate(prefabTarget, new Vector3(-34f, 4.12f, 55.02f), Quaternion.identity);
+        enemyGO = this.gameObject;
     }
 
     // Update is called once per frame
@@ -23,7 +23,7 @@ public class EnnemyController : MonoBehaviour
         enemyGO.transform.position += new Vector3(Mathf.Sin(Time.time * frequency) * magnitude, 0, -enemySpeed * Time.deltaTime);
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void CollisionEnterTrigger(Collider other)
     {
         //TODO:End the game and unit lose PV and knockback
         if(other.gameObject.layer == LayerMask.NameToLayer("Bullet"))
