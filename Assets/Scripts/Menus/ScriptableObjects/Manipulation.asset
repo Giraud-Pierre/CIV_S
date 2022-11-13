@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a3f882d2fca49a4a8e2df5048579110, type: 3}
+  m_Name: Manipulation
+  m_EditorClassIdentifier: 
+  title: Manipulation
+  tutorialText:
+  - "Pour vous d\xE9placer, vous pouvez utiliser les touches de votre clavier (fl\xE8che
+    haut, droite, bas, gauche ou les touches z, q, s, d) ou directement en gardant
+    le clic droit de votre souris puis en glissant sur la carte."
+  - "Un clic gauche sur une case permet d'afficher les informations de la case.\n(Sans
+    b\xE2timent, rien ne s\u2019affiche)\r\nUn clic gauche sur un personnage permet
+    de le s\xE9lectionner et de construire un b\xE2timent sur la case. Ainsi, un
+    simple clic droit permet de cr\xE9er un chemin de d\xE9placement vers cette case.
+    Vous pouvez supprimer le chemin d\xE9fini en faisant un clic droit sur le personnage."

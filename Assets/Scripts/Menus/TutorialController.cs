@@ -41,7 +41,20 @@ public class TutorialController : MonoBehaviour
 
     public void CloseTutorial()
     {
-        gameObject.SetActive(false);
+        if (allTutorials.tutorialsThatHaveBeenSeen[1] == false)
+        {
+            NewTutorial("Règle du jeu");
+            allTutorials.tutorialsThatHaveBeenSeen[1] = true;
+        }
+        else if (allTutorials.tutorialsThatHaveBeenSeen[2] == false)
+        {
+            NewTutorial("Manipulation");
+            allTutorials.tutorialsThatHaveBeenSeen[2] = true;
+        }
+        else
+        {
+            gameObject.SetActive(false);
+        }
     }
 
     private List<string> GetTextOfTutorial(string title)
