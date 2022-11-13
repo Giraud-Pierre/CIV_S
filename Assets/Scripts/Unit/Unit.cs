@@ -96,8 +96,6 @@ public class Unit
             }
             movementRemaining = movement;
         }
-        
-
     }
 
     public int MovementCostToEnterHex(Hex hex)
@@ -107,66 +105,15 @@ public class Unit
         return hex.BaseMovementCost();
     }
 
-    public float AggregateTurnToEnterHex(Hex hex, float turnsToDate)
+    public int GetHitPoint()
     {
-        //The issue at hand is that if you are trying to enter a tile
-        // with a movement cost greater than your current remaining movement
-        // points, this will either result in a cheaper-than expected
-        // turn cost (Civ5) or a more-expensive-than expected turn cost (Civ6)
-        float baseTurnstoEnterHex = MovementCostToEnterHex(hex) / movement; // Example : entering a forest is "1" turn
-        float turnsRemaining = movementRemaining / movement; // Example if we are at 1/2 move, than we have 0.5 turn left
-        
-        float turnsToDateWhole = Mathf.Floor(turnsToDate); // Example 4.33 becomes 4
-        float turnsToDateFraction = turnsToDate - turnsToDateWhole; //Example : 4.33 becomes 0.33
+        return hitPoint;
+    }
 
-        if(turnsToDateFraction < 0.01f ||turnsToDateFraction > 0.99f)
-        {
-            Debug.LogError("Looks like we've got floating-point drift");
-
-            if(turnsToDateFraction < 0.01f)
-            {
-                turnsToDateFraction = 0;
-            }
-
-            if(turnsToDateFraction > 0.99f)
-            {
-                turnsToDateWhole += 1;
-                turnsToDateFraction = 0; 
-            }
-        }
-
-        float turnsUsedAfterThisMove = turnsToDateFraction + baseTurnstoEnterHex; // Example : 0.33 + 1 (to enter the forest)
-
-        if(turnsUsedAfterThisMove > 1)
-        {
-            //We have the situation where we don't actually have enough movement to complete this move
-            //What are we going to do ?
-            if(MOVEMENT_RULES_LIKE_CIV6)
-            {
-                //We aren't allowed to enter the tile this move. That means we have to ...
-                // Sit idle for the remainder of this turn
-                if(turnsToDateFraction == 0)
-                {
-                    //We have full movement, but this isn't enough to enter the tile
-                    // Example : we have a max move of 2 but the tile costs 3 to enter
-                    // we are good to go
-                }
-
-                else
-                {
-                    //We are not on a fresh turn but we nee to
-                    // SIT IDLE FOR THE REMAINDER OF THIS TURN
-                    turnsToDateWhole += 1;
-                    turnsToDateFraction = 0;
-
-                }
-                //So now we know for a fact that we are starting the move into difficult terrain on a fresh turn
-
-            }
-        
-        //Return the total tun cost of turnsToDate + turns for this move
-        }
-        return 0.2f;
+    public int InflictDamage( int damage)
+    {
+        hitPoint -= damage;
+        return hitPoint;
     }
 
 }
