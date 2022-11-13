@@ -157,6 +157,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   levelToLoad: SampleScene
   settingsWindow: {fileID: 1244396502}
+  allTutorials: {fileID: 11400000, guid: ed7e1c212e1e67f4184ecf9e0bd1cf73, type: 2}
 --- !u!114 &417753798
 MonoBehaviour:
   m_ObjectHideFlags: 0

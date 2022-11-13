@@ -11,6 +11,7 @@ public class GameMenuController : MonoBehaviour
     [SerializeField] private GameObject actionMenuOnCityCenter;
     [SerializeField] private GameObject buildMenu;
     [SerializeField] private GameObject tutorialMenu;
+    [SerializeField] private TutorialsList allTutorials = default;
 
     public void Awake()
     {
@@ -26,7 +27,11 @@ public class GameMenuController : MonoBehaviour
 
     private void Start()
     {
-        GetTutorial("bienvenue");
+        if (allTutorials.tutorialsThatHaveBeenSeen[0] == false)
+        {
+            GetTutorial("bienvenue");
+            allTutorials.tutorialsThatHaveBeenSeen[0] = true;
+        }
     }
 
     public void UpdateResources(List<int> resources)

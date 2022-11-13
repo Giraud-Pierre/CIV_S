@@ -10,8 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9a3f882d2fca49a4a8e2df5048579110, type: 3}
-  m_Name: Welcome
+  m_Name: RegleDuJeu
   m_EditorClassIdentifier: 
-  title: bienvenue
+  title: "R\xE8gle du jeu"
   tutorialText:
-  - "Toute l\u2019\xE9quipe vous souhaite l\xE0 bienvenue sur notre petit jeu."
+  - "Ce jeu se joue en tour par tour. \r\nVous ne pouvez construire des b\xE2timents
+    que sur les cases o\xF9 votre personnage se trouve.\r\nUn personnage ne peut
+    se d\xE9placer que de 2 cases par tour."

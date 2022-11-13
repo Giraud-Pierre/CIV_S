@@ -14,3 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tutorialList:
   - {fileID: 11400000, guid: d1f16ea55dd5a4542af7676c35dad79f, type: 2}
+  - {fileID: 11400000, guid: e154d4be6a3641149a46f8568a70c75d, type: 2}
+  - {fileID: 11400000, guid: d9cc2263b8abedc409504ee20cf38e1b, type: 2}
+  tutorialsThatHaveBeenSeen: 000000
