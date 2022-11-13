@@ -9,4 +9,5 @@ public class BuildingSheet : ScriptableObject
     public int[] cost = new int[3];
     public int turnsToBuild;
     public int quantityRessourceEachTurn;
+    public GameObject prefab;
 }
