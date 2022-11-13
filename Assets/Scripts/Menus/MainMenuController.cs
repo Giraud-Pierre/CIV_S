@@ -6,6 +6,8 @@ public class MainMenuController : MonoBehaviour
     [SerializeField] private string levelToLoad;
     [SerializeField] private GameObject settingsWindow;
 
+    
+
     public void StartGame()
     {
         SceneManager.LoadScene(levelToLoad);

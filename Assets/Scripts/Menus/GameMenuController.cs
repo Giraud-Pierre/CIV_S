@@ -12,6 +12,11 @@ public class GameMenuController : MonoBehaviour
     [SerializeField] private GameObject buildMenu;
     [SerializeField] private GameObject tutorialMenu;
 
+    public void Awake()
+    {
+        DontDestroyOnLoad(gameObject);
+    }
+
     // TODO: Remove this debug feature
     // ! Remove only when all other features on Canvas (and his children) are implement
     public void MissingAction()
