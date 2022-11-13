@@ -62,6 +62,10 @@ public class Hex
         return hexMap.GetHexPosition(this);
     }
 
+    public uint getTypeOfField()
+    {
+        return this.typeOfField;
+    }
     public Vector3 PositionFromCamera(Vector3 cameraPosition, float numberRows, float numberColumns)
     {
         float mapHeight = numberRows * HexVerticalSpacing();

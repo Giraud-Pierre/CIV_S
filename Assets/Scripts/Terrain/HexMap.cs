@@ -437,8 +437,12 @@ public class HexMap : MonoBehaviour
                 ressources[1] -= woodCost;
                 ressources[2] -= stoneCost;
                 GameObject hexGO = GetHexeGameobjectFromDictionnary(hex);
-
-                GameObject buildingGO = Instantiate(prefabBuildings[typeOfBuilding], hexGO.transform.position, Quaternion.identity, hexGO.transform);
+                Vector3 p = hexGO.transform.position;
+                if (hex.Elevation >= HeightHill)
+                    {
+                        p.y += 0.246f;
+                    }
+                GameObject buildingGO = Instantiate(prefabBuildings[typeOfBuilding], p, Quaternion.identity, hexGO.transform);
                 Building building = new Building(typeOfBuilding, buildingPokedex, hex);
                 buildings.Add(building);
                 buildingToGameObjectMap[building] = buildingGO;
