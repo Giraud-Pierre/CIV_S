@@ -60,6 +60,7 @@ public class HexMap : MonoBehaviour
     private List<int> ressources;
     private GameObject hexGO;
     private GameObject selectedGameObject;
+    private int numberOfTurn;
     //****************************************************************
 
     // Start is called before the first frame update
@@ -70,6 +71,8 @@ public class HexMap : MonoBehaviour
         ressources.Add(300);
         ressources.Add(300);
         ressources.Add(300);
+
+        numberOfTurn = 1;
 
         GenerateMap();
     }
@@ -377,9 +380,9 @@ public class HexMap : MonoBehaviour
             unitToGameObjectMap[unit] = unitGO;
             gameObjectToUnitMap[unitGO] = unit;
 
-            ressources[0] -= unitPokedex.units[unitType].Cost[0];
-            ressources[1] -= unitPokedex.units[unitType].Cost[1];
-            ressources[2] -= unitPokedex.units[unitType].Cost[2];
+            AddRessource(0, -1 * unitPokedex.units[unitType].Cost[0]);
+            AddRessource(1, -1 * unitPokedex.units[unitType].Cost[1]);
+            AddRessource(2, -1 * unitPokedex.units[unitType].Cost[2]);
         }
 
         
@@ -407,11 +410,13 @@ public class HexMap : MonoBehaviour
             int foodCost = buildingPokedex.buildings[typeOfBuilding].cost[0];
             int woodCost = buildingPokedex.buildings[typeOfBuilding].cost[1];
             int stoneCost = buildingPokedex.buildings[typeOfBuilding].cost[2];
+
+            Debug.Log(foodCost + " / " + woodCost + " / " + stoneCost);
             if (ressources[0] >=  foodCost && ressources[1] >= woodCost && ressources[2] >= stoneCost)
             {
-                ressources[0] -= foodCost;
-                ressources[1] -= woodCost;
-                ressources[2] -= stoneCost;
+                AddRessource(0,-1 * foodCost);
+                AddRessource(1, -1 * woodCost);
+                AddRessource(2, -1 * stoneCost);
                 GameObject hexGO = GetHexeGameobjectFromDictionnary(hex);
                 Vector3 p = hexGO.transform.position;
                 if (hex.Elevation >= HeightHill)
@@ -442,6 +447,7 @@ public class HexMap : MonoBehaviour
     public void DoTurn()
     {
         mouseController.GetComponent<MouseController>().UnselectAtEndTurn();
+        numberOfTurn += 1;
         if (units != null)
         {
             foreach(Unit unit in units)
@@ -461,6 +467,11 @@ public class HexMap : MonoBehaviour
     public void ChangeSelectedObject(GameObject selectedObject)
     {
         selectedGameObject = selectedObject;
+    }
+
+    public int GetNumberOfTurn()
+    {
+        return numberOfTurn;
     }
 
 }
