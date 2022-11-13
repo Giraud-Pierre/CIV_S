@@ -12,6 +12,9 @@ public class EnnemyController : MonoBehaviour
     [SerializeField] int ennemySpeed = 2;
     [SerializeField] int frequency = 2;
     [SerializeField] float magnitude = 0.1f;
+    [SerializeField] GameObject prefabEnemy;
+    private int playerDamage;
+
 
 
     private Transform player;   //recueille le transform du joueur pour orienter le déplacement de l'ennemi
@@ -36,7 +39,7 @@ public class EnnemyController : MonoBehaviour
             Destroy(collision.gameObject);
 
             //diminue la vie de l'ennemi
-            health--;
+            health -= playerDamage;
             if (health <= 0) //Détruit l'ennemi s'il est à cours de point de vie
             {
                 Destroy(gameObject);
@@ -54,7 +57,9 @@ public class EnnemyController : MonoBehaviour
 
     void Start()
     {
+        GameObject enemy = Instantiate(prefabEnemy, new Vector3(-34f, 4.12f, 55.02f), Quaternion.identity);
         player = GameObject.Find("Player").transform; //va rechercher le PlayerBody du joueur
+        playerDamage = GameObject.Find("Player").GetComponent<PlayerController>().getDamage();
     }
 
 
