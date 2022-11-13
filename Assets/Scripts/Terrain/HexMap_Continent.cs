@@ -76,7 +76,8 @@ public class HexMap_Continent : HexMap
 
         GeneratePathfindingGraph(); //Génère le graphe des voisins pour le pathfinding (voir HexMap.cs)
 
-        SpawnUnitAt(0, worker, 35, 16);
+        List<int> positionSpawnUnit = LoofForValidPosition();
+        SpawnUnitAt(0, worker, positionSpawnUnit[0], positionSpawnUnit[1]);
     }
 
     private void elevateArea(int q, int r, int range, float centerHeight = 0.8f)
@@ -94,5 +95,52 @@ public class HexMap_Continent : HexMap
             }*/
             h.Elevation = centerHeight * Mathf.Lerp(1f, 0.25f, Mathf.Pow(Hex.Distance(centerHex, h)/range,2f));
         }
+    }
+
+    private List<int> LoofForValidPosition()
+    {
+        //Cherche une case valide pour faire spawner la première unité.
+        //Une vase valide est walkable et possède au moins 3 cases voisines
+        //qui sont aussi walkable (pour éviter de spawner dans une île)
+        int row;
+        int col;
+        Hex hex;
+        Hex[] neighbourHex;
+        int numberOfWalkableNeighbours;
+        bool validPosition = false;
+        do
+        {
+            //Choisi une case au hasard
+            col = Random.Range(0, numberColumns);
+            row = Random.Range(0, numberRows);
+            hex = getHexeAt(col, row);
+
+            if (hex.iswalkable) //Vérifie si la case choisie au hasard est walkable
+            {
+                //On récupère les cases voisines
+                numberOfWalkableNeighbours = 0;
+                neighbourHex = getHexesWithinRangeOf(hex, 1);
+                //On regarde combien de cases voisines sont walkable
+                foreach (Hex currentHex in neighbourHex)
+                {
+                    if (currentHex.iswalkable)
+                    {
+                        numberOfWalkableNeighbours += 1;
+                    }
+                }
+                if (numberOfWalkableNeighbours > 2) 
+                {
+                    //S'il y a au moins 3 voisins walkable, on a une position valide
+                    validPosition = true;
+                }
+            }
+
+        } while (!validPosition);
+
+        List<int> result = new List<int>();
+        result.Add(col);
+        result.Add(row);
+
+        return result;
     }
 }

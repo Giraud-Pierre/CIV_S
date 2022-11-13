@@ -3,27 +3,6 @@ using UnityEngine;
 
 public class HexMap : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        //Ressources de base
-        ressources = new List<int>();
-        ressources.Add(300);
-        ressources.Add(300);
-        ressources.Add(300);
-
-        GenerateMap();
-    }
-
-    void Update()
-    {
-        //TESTING : Press spacebar to advance to next turn
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            DoTurn();
-        }
-    }
-
     [SerializeField] GameObject hexTile;
     [SerializeField] GameObject Canvas;
 
@@ -63,10 +42,8 @@ public class HexMap : MonoBehaviour
 
     public int numberRows = 30;
     public int numberColumns = 60; 
-    private GameObject hexGO;
 
-
-    //***************Dictionnaires et Donn�es du jeu******************
+    //***************Dictionnaires et Donnees du jeu******************
     private Hex[,] hexes;
     private Dictionary<Hex, GameObject> hexToGameObjectMap;
 
@@ -83,8 +60,30 @@ public class HexMap : MonoBehaviour
     private Node[,] pathfindingGraph;
 
     private List<int> ressources;
+    private GameObject hexGO;
+    private GameObject selectedGameObject;
     //****************************************************************
 
+    // Start is called before the first frame update
+    void Start()
+    {
+        //Ressources de base
+        ressources = new List<int>();
+        ressources.Add(300);
+        ressources.Add(300);
+        ressources.Add(300);
+
+        GenerateMap();
+    }
+
+    void Update()
+    {
+        //TESTING : Press spacebar to advance to next turn
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            DoTurn();
+        }
+    }
 
     public GameObject GetFarmGO()
     {
@@ -396,8 +395,9 @@ public class HexMap : MonoBehaviour
         
     }
 
-    public void build(int typeOfBuilding, Hex hex)
+    public void build(int typeOfBuilding)
     {
+        Hex hex = selectedGameObject.GetComponent<HexComponent>().hex;
         if(buildings == null)
         {
             buildings = new HashSet<Building>();
@@ -465,6 +465,11 @@ public class HexMap : MonoBehaviour
                 building.DoTurn(this);
             }
         }
+    }
+
+    public void ChangeSelectedObject(GameObject selectedObject)
+    {
+        selectedGameObject = selectedObject;
     }
 
 }
