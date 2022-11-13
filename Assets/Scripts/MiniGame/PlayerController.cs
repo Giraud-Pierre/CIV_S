@@ -25,7 +25,7 @@ public class PlayerController : MonoBehaviour
         prefabTarget = dataForMiniGame.ennemyPrefab;
         GameObject enemy = Instantiate(prefabTarget, new Vector3(-34f, 4.12f, 55.02f), Quaternion.identity);
         enemy.layer = 7;
-        enemy.AddComponent<Rigidbody>();
+        //enemy.AddComponent<Rigidbody>();
         enemy.AddComponent<EnnemyController>();
     }
 

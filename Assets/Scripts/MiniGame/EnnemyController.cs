@@ -8,7 +8,7 @@ using static UnityEngine.EventSystems.EventTrigger;
 public class EnnemyController : MonoBehaviour
 {
     [SerializeField] private int health = 3; //on peut modifier les points de vie de l'ennemi ici
-    [SerializeField] private float MovementSpeed = 0.5f; //on peut modifier la vitesse de déplacement de l'ennemi ici
+    [SerializeField] private float MovementSpeed = 10f; //on peut modifier la vitesse de déplacement de l'ennemi ici
     [SerializeField] int frequency = 2;     //Gère le mouvement en sinusoide de l'ennemi
     [SerializeField] float magnitude = 0.03f;
 
@@ -73,7 +73,7 @@ public class EnnemyController : MonoBehaviour
     {
 
         MoveTowardPlayer();
-        check_out_limits();
+        //check_out_limits();
     }
 
 }
