@@ -17,7 +17,7 @@ public class MouseController : MonoBehaviour
     RightClickAction CurrenRightClickAction;
 
     Vector3 lastMousePosition; //From Input.mousePosition
-    float cameraSpeed = 5f;
+    float cameraSpeed = 2f;
 
     int UILayer;
 

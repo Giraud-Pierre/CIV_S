@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class HexMap_Continent : HexMap
 {
@@ -14,8 +16,8 @@ public class HexMap_Continent : HexMap
         for(int c = 0; c < numContinents; c++)
         {
             //Make some kind of raised area
+            Random.InitState(DateTime.Now.Second + DateTime.Now.Millisecond);
             int numSplats = Random.Range(4, 8);
-            Random.InitState(0);
             for (int i = 0; i < numSplats; i++)
             {
                 int range = Random.Range(5, 8);
