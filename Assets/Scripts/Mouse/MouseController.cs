@@ -121,6 +121,38 @@ public class MouseController : MonoBehaviour
                 {
                     selectedGameObject = hit.collider.gameObject;
                     selectedGameObject.GetComponent<IClick>().OnLeftClickAction();
+
+                    HexMap_Continent hexMapContinent = GameObject.Find("HexMap").GetComponent<HexMap_Continent>();
+                    //If selected object is a tile
+                    if (selectedGameObject.GetComponent<HexComponent>() != null)
+                    {
+                        //TODO: Display interface for construction if tile empty
+                        // details of the tile (name, costOfMovement ...)
+                        // if there is a building, show what it does
+                        // if it's the town center : display a button to add an unit in production and the list of production
+
+                        
+                        Hex hex = hexMapContinent.GetHexFromDictionnary(selectedGameObject);
+                        if(hex.GetBuilding() != null)
+                        {
+                            //TODO:Show details of building
+                            GameObject building = Instantiate(hexMapContinent.GetMineGO(), selectedGameObject.transform);
+                            
+                            Debug.Log("test");
+                        }
+                    }
+
+                    //If selected object is an unit
+                    else if (selectedGameObject.GetComponent<UnitView>() != null)
+                    {
+                        Hex hex = hexMapContinent.GetUnitFromDictionnary(selectedGameObject).getHex();
+                        GameObject hexGO = hexMapContinent.GetHexeGameobjectFromDictionnary(hex);
+                        if(hex.GetBuilding() == null)
+                        {
+                            //TODO : Open menu to create a building
+                            //than use the function build of HexMap
+                        }
+                    }
                 }
                 else
                 {

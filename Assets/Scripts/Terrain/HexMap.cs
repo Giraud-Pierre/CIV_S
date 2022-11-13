@@ -8,9 +8,9 @@ public class HexMap : MonoBehaviour
     {
         //Ressources de base
         ressources = new List<int>();
-        ressources.Add(100);
-        ressources.Add(200);
-        ressources.Add(200);
+        ressources.Add(300);
+        ressources.Add(300);
+        ressources.Add(300);
 
         GenerateMap();
     }
@@ -20,7 +20,6 @@ public class HexMap : MonoBehaviour
         //TESTING : Press spacebar to advance to next turn
         if(Input.GetKeyDown(KeyCode.Space))
         {
-
             mouseController.GetComponent<MouseController>().UnselectAtEndTurn();
             if (units != null)
             {
@@ -48,7 +47,8 @@ public class HexMap : MonoBehaviour
     [SerializeField] Mesh MeshMountain;
 
     [SerializeField] GameObject ForestPrefab;
-    [SerializeField] GameObject JunglePrefab;
+
+    [SerializeField] GameObject[] prefabBuildings = new GameObject[4];
 
     [SerializeField] Material MatOcean;
     [SerializeField] Material MatPlains;
@@ -83,17 +83,43 @@ public class HexMap : MonoBehaviour
     //***************Dictionnaires et Donn�es du jeu******************
     private Hex[,] hexes;
     private Dictionary<Hex, GameObject> hexToGameObjectMap;
+    private Dictionary<GameObject, Hex> gameObjectToHexMap;
 
     private HashSet<Unit> units;
     private Dictionary<Unit, GameObject> unitToGameObjectMap;
+    private Dictionary<GameObject, Unit> gameObjectToUnitMap;
 
     private HashSet<Building> buildings;
     private Dictionary<Building, GameObject> buildingToGameObjectMap;
+
+
+    
 
     private Node[,] pathfindingGraph;
 
     private List<int> ressources;
     //****************************************************************
+
+
+    public GameObject GetFarmGO()
+    {
+        return prefabBuildings[1];
+    }
+
+    public GameObject GetMineGO()
+    {
+        return prefabBuildings[3];
+    }
+
+    public GameObject GetTownCenterGO()
+    {
+        return prefabBuildings[0];
+    }
+
+    public GameObject GetLumberCampGO()
+    {
+        return prefabBuildings[2];
+    }
 
     public Hex getHexeAt(int x, int y)
     {
@@ -146,6 +172,18 @@ public class HexMap : MonoBehaviour
     public GameObject GetHexeGameobjectFromDictionnary(Hex hex)
     {
         return hexToGameObjectMap.ContainsKey(hex) ? hexToGameObjectMap[hex] : null;
+    }
+
+    
+
+    public Hex GetHexFromDictionnary(GameObject gameObject)
+    {
+        return gameObjectToHexMap.ContainsKey(gameObject) ? gameObjectToHexMap[gameObject] : null;
+    }
+
+    public Unit GetUnitFromDictionnary(GameObject gameObject)
+    {
+        return gameObjectToUnitMap.ContainsKey(gameObject) ? gameObjectToUnitMap[gameObject] : null;
     }
 
     public Vector3 GetHexPosition(int q, int r)
@@ -347,6 +385,7 @@ public class HexMap : MonoBehaviour
         {
             units = new HashSet<Unit>();
             unitToGameObjectMap = new Dictionary<Unit, GameObject>();
+            gameObjectToUnitMap = new Dictionary<GameObject, Unit>();
         }
 
         if (
@@ -369,12 +408,50 @@ public class HexMap : MonoBehaviour
 
             units.Add(unit);
             unitToGameObjectMap[unit] = unitGO;
+            gameObjectToUnitMap[unitGO] = unit;
 
             ressources[0] -= unitPokedex.units[unitType].Cost[0];
             ressources[1] -= unitPokedex.units[unitType].Cost[1];
             ressources[2] -= unitPokedex.units[unitType].Cost[2];
         }
 
+        
+    }
+
+    public void build(int typeOfBuilding, Hex hex)
+    {
+        if(buildings == null)
+        {
+            buildings = new HashSet<Building>();
+            buildingToGameObjectMap = new Dictionary<Building, GameObject>();
+        }
+        bool canBuildOnHex = false;
+        if(typeOfBuilding == 3)
+        {
+            canBuildOnHex = hex.CanBuild(typeOfBuilding, getHexesWithinRangeOf(hex, 1));
+        }
+        else
+        {
+            canBuildOnHex = hex.CanBuild(typeOfBuilding);
+        }
+        if(canBuildOnHex)
+        {
+            int foodCost = buildingPokedex.buildings[typeOfBuilding].cost[0];
+            int woodCost = buildingPokedex.buildings[typeOfBuilding].cost[1];
+            int stoneCost = buildingPokedex.buildings[typeOfBuilding].cost[2];
+            if (ressources[0] >=  foodCost && ressources[1] >= woodCost && ressources[2] >= stoneCost)
+            {
+                ressources[0] -= foodCost;
+                ressources[1] -= woodCost;
+                ressources[2] -= stoneCost;
+                GameObject hexGO = GetHexeGameobjectFromDictionnary(hex);
+
+                GameObject buildingGO = Instantiate(prefabBuildings[typeOfBuilding], hexGO.transform.position, Quaternion.identity, hexGO.transform);
+                Building building = new Building(typeOfBuilding, buildingPokedex, hex);
+                buildings.Add(building);
+                buildingToGameObjectMap[building] = buildingGO;
+            }
+        }
         
     }
 

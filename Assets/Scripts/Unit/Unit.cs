@@ -36,6 +36,10 @@ public class Unit
         SetHexPath(new Hex[0]);
     }
 
+    public Hex getHex()
+    {
+        return hex;
+    }
 
     public void SetHexPath(Hex[] hexPath)
     {
