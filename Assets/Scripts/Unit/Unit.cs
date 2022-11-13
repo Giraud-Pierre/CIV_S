@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Unit
@@ -70,34 +71,107 @@ public class Unit
 
     public void DoTurn()
     {
-        //Do queued move ?
-        if(hexPath == null || hexPath.Count ==0)
+        if(unitType == 0 || unitType == 1) //Si l'unité est un ennemi
         {
-            return;
-        }
-        else
-        {
-            while(movementRemaining > 0 && hexPath.Count != 0)
+            //On vérifie qu'il y a une queue de mouvement
+            if (hexPath == null || hexPath.Count == 0)
             {
-                //Grab the first hex from our queue
-                Hex newHex = hexPath.Dequeue();
-                movementRemaining -= MovementCostToEnterHex(newHex);
-
-                if(movementRemaining >= 0)
+                return;
+            }
+            else
+            {
+                while (movementRemaining > 0 && hexPath.Count != 0)
                 {
-                    //Move to the new Hex
-                    SetHex(newHex);
+                    //Grab the first hex from our queue
+                    Hex newHex = hexPath.Dequeue();
+                    movementRemaining -= MovementCostToEnterHex(newHex);
+
+                    if (movementRemaining >= 0)
+                    {
+                        //Move to the new Hex
+                        SetHex(newHex);
+                    }
+                    else
+                    {
+                        //If remaining movement insufficent, do not move and requeue the movement for next turn
+                        hexPath.Enqueue(newHex);
+                    }
+                }
+                movementRemaining = movement;
+            }
+        }
+        else //Si on est un ennemi
+        {
+            Unit adjacentCharacter = CheckIfPlayerIsAdjacent();
+            if (adjacentCharacter != null)
+            {
+                int remainingHealth = adjacentCharacter.InflictDamage(10 * strength / adjacentCharacter.strength);
+                if(remainingHealth > 0)
+                {
+                    Debug.Log("Le personnage est mort");
+                    hex.hexMap.DestroyUnit(adjacentCharacter);
+                }
+            }
+            else
+            {
+                Hex newHex;
+
+                Hex SeeCharacterHex = CheckIfPlayerIsNear();
+                
+                if (SeeCharacterHex != null)
+                {
+                    List<HexMap.Node> NodePath = SeeCharacterHex.
+                                                            hexMap.
+                                                            GetGameobjectFromUnit(this).
+                                                            GetComponent<UnitView>().
+                                                            DijkstraPathfinding(SeeCharacterHex.hexMap.GetPathFindingGraph(), hex, SeeCharacterHex);
+                    foreach (HexMap.Node node in NodePath)
+                    {
+                        if(node.hex.getUnits() == null || node.hex.getUnits().Length < 0)
+                        {
+                            AddToHexPath(node.hex);
+                        }
+                    }
                 }
                 else
                 {
-                    //If remaining movement insufficent, do not move and requeue the movement for next turn
-                    hexPath.Enqueue(newHex);
-                }
-            }
-            movementRemaining = movement;
-        }
-        
+                    List<Hex> neighbourHexes = new List<Hex>(hex.hexMap.getHexesWithinRangeOf(hex, 1));
 
+                    Hex checkedHex;
+                    do
+                    {
+                        int randomNumber = Random.Range(0, neighbourHexes.Count - 1);
+                        checkedHex = neighbourHexes[randomNumber];
+                        neighbourHexes.Remove(checkedHex);
+
+                    } while (!checkedHex.iswalkable && neighbourHexes.Count > 0);
+                    if (checkedHex.iswalkable)
+                    {
+                        AddToHexPath(checkedHex);
+                    }
+                }
+                while (movementRemaining > 0 && hexPath.Count > 0)
+                {
+                    newHex = hexPath.Dequeue();
+
+                    movementRemaining -= MovementCostToEnterHex(newHex);
+
+                    if (movementRemaining >= 0)
+                    {
+                        //Move to the new Hex
+                        SetHex(newHex);
+                    }
+                    else
+                    {
+                        //If remaining movement insufficent, do not move
+                        //Do nothing
+                    }
+                }
+                movementRemaining = movement;
+                hexPath.Clear();
+            }
+        }
+       
     }
 
     public int MovementCostToEnterHex(Hex hex)
@@ -107,66 +181,54 @@ public class Unit
         return hex.BaseMovementCost();
     }
 
-    public float AggregateTurnToEnterHex(Hex hex, float turnsToDate)
+    public int GetHitPoint()
     {
-        //The issue at hand is that if you are trying to enter a tile
-        // with a movement cost greater than your current remaining movement
-        // points, this will either result in a cheaper-than expected
-        // turn cost (Civ5) or a more-expensive-than expected turn cost (Civ6)
-        float baseTurnstoEnterHex = MovementCostToEnterHex(hex) / movement; // Example : entering a forest is "1" turn
-        float turnsRemaining = movementRemaining / movement; // Example if we are at 1/2 move, than we have 0.5 turn left
-        
-        float turnsToDateWhole = Mathf.Floor(turnsToDate); // Example 4.33 becomes 4
-        float turnsToDateFraction = turnsToDate - turnsToDateWhole; //Example : 4.33 becomes 0.33
+        return hitPoint;
+    }
 
-        if(turnsToDateFraction < 0.01f ||turnsToDateFraction > 0.99f)
+    public int InflictDamage( int damage)
+    {
+        hitPoint -= damage;
+        return hitPoint;
+    }
+
+
+    //Fonctions pour les Ennemis *********************************
+    public Unit CheckIfPlayerIsAdjacent()
+    {
+        Hex[] neighbourHex = hex.hexMap.getHexesWithinRangeOf(hex, 1);
+
+        foreach (Hex currentHex in neighbourHex)
         {
-            Debug.LogError("Looks like we've got floating-point drift");
-
-            if(turnsToDateFraction < 0.01f)
+            if (currentHex.getUnits() != null && currentHex.getUnits().Length > 0)
             {
-                turnsToDateFraction = 0;
-            }
-
-            if(turnsToDateFraction > 0.99f)
-            {
-                turnsToDateWhole += 1;
-                turnsToDateFraction = 0; 
-            }
-        }
-
-        float turnsUsedAfterThisMove = turnsToDateFraction + baseTurnstoEnterHex; // Example : 0.33 + 1 (to enter the forest)
-
-        if(turnsUsedAfterThisMove > 1)
-        {
-            //We have the situation where we don't actually have enough movement to complete this move
-            //What are we going to do ?
-            if(MOVEMENT_RULES_LIKE_CIV6)
-            {
-                //We aren't allowed to enter the tile this move. That means we have to ...
-                // Sit idle for the remainder of this turn
-                if(turnsToDateFraction == 0)
+                Unit unit = currentHex.getUnits()[0];
+                if (unit.unitType == 1 || unit.unitType == 0)
                 {
-                    //We have full movement, but this isn't enough to enter the tile
-                    // Example : we have a max move of 2 but the tile costs 3 to enter
-                    // we are good to go
+                    return unit;
                 }
 
-                else
-                {
-                    //We are not on a fresh turn but we nee to
-                    // SIT IDLE FOR THE REMAINDER OF THIS TURN
-                    turnsToDateWhole += 1;
-                    turnsToDateFraction = 0;
-
-                }
-                //So now we know for a fact that we are starting the move into difficult terrain on a fresh turn
-
             }
-        
-        //Return the total tun cost of turnsToDate + turns for this move
         }
-        return 0.2f;
+        return null;
+    }
+
+    public Hex CheckIfPlayerIsNear()
+    {
+        Hex[] visibleHex = hex.hexMap.getHexesWithinRangeOf(hex, 5);
+
+        foreach (Hex currentHex in visibleHex)
+        {
+            if (currentHex.getUnits() != null && currentHex.getUnits().Length > 0)
+            {
+                Unit unit = currentHex.getUnits()[0];
+                if (unit.unitType == 1 || unit.unitType == 0)
+                {
+                    return currentHex;
+                }
+            }
+        }
+        return null;
     }
 
 }

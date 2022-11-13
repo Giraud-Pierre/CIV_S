@@ -1,4 +1,6 @@
+using Mono.Cecil;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class HexMap : MonoBehaviour
@@ -366,7 +368,10 @@ public class HexMap : MonoBehaviour
             Hex myHex = hexes[q, r];
             GameObject myHexGO = hexToGameObjectMap[myHex];
 
-            Unit unit = new Unit(unitPokedex, unitType, myHex);
+            Unit unit;
+
+            unit = new Unit(unitPokedex, unitType, myHex);
+            
 
             GameObject unitGO = Instantiate(prefab, myHexGO.transform.position, Quaternion.identity, myHexGO.transform);
 
@@ -375,6 +380,8 @@ public class HexMap : MonoBehaviour
             unitView.unit = unit;
             unitView.hexMap = this;
             unitView.hex = myHex;
+
+            myHex.AddUnit(unit);
 
             units.Add(unit);
             unitToGameObjectMap[unit] = unitGO;
@@ -386,6 +393,17 @@ public class HexMap : MonoBehaviour
         }
 
         
+    }
+
+    public void DestroyUnit(Unit unit)
+    {
+        units.Remove(unit);
+        unit.hex.RemoveUnit(unit);
+        GameObject unitObject = unitToGameObjectMap[unit];
+        gameObjectToUnitMap.Remove(unitObject);
+        Destroy(unitObject);
+        unitToGameObjectMap.Remove(unit);
+
     }
 
     public void build(int typeOfBuilding)
@@ -411,26 +429,49 @@ public class HexMap : MonoBehaviour
             int woodCost = buildingPokedex.buildings[typeOfBuilding].cost[1];
             int stoneCost = buildingPokedex.buildings[typeOfBuilding].cost[2];
 
-            Debug.Log(foodCost + " / " + woodCost + " / " + stoneCost);
             if (ressources[0] >=  foodCost && ressources[1] >= woodCost && ressources[2] >= stoneCost)
             {
                 AddRessource(0,-1 * foodCost);
                 AddRessource(1, -1 * woodCost);
                 AddRessource(2, -1 * stoneCost);
-                GameObject hexGO = GetHexeGameobjectFromDictionnary(hex);
-                Vector3 p = hexGO.transform.position;
-                if (hex.Elevation >= HeightHill)
-                    {
-                        p.y += 0.246f;
-                    }
-                GameObject buildingGO = Instantiate(GetPrefabBuilding(typeOfBuilding), p, Quaternion.identity, hexGO.transform);
+                
                 Building building = new Building(typeOfBuilding, buildingPokedex, hex);
                 buildings.Add(building);
                 hex.addBuilding(building);
-                buildingToGameObjectMap[building] = buildingGO;
             }
         }
         
+    }
+
+    public void buildComplete(Building build)
+    {
+        Hex hex = build.hex;
+        int typeOfBuilding = build.type;
+
+        GameObject hexGO = GetHexeGameobjectFromDictionnary(hex);
+        Vector3 p = hexGO.transform.position;
+        Quaternion rotation = Quaternion.Euler(new Vector3(0, 210, 0));
+        if (hex.Elevation >= HeightHill)
+        {
+            p.y += 0.246f;
+        }
+
+        if (hex.getTypeOfField() == 4)
+        {
+            p.x -= 0.048f;
+            p.z -= 0.425f;
+        }
+
+        if (typeOfBuilding == 0)
+        {
+            rotation = Quaternion.Euler(new Vector3(0, 90, 0));
+        }
+        else if (typeOfBuilding == 1)
+        {
+            rotation = Quaternion.Euler(new Vector3(0, 160, 0));
+        }
+        GameObject buildingGO = Instantiate(GetPrefabBuilding(build.type), p, rotation, hexGO.transform);
+        buildingToGameObjectMap[build] = buildingGO;
     }
 
     public void AddRessource(int ressourceType, int quantity)
@@ -447,6 +488,7 @@ public class HexMap : MonoBehaviour
     public void DoTurn()
     {
         mouseController.GetComponent<MouseController>().UnselectAtEndTurn();
+        selectedGameObject = null;
         numberOfTurn += 1;
         canvas.GetComponent<GameMenuController>().UpdateNumberOfTurn(numberOfTurn);
 
@@ -464,6 +506,12 @@ public class HexMap : MonoBehaviour
                 building.DoTurn(this);
             }
         }
+        if(numberOfTurn % 10 == 0)
+        {
+            List<int> targetPosition = LoofForValidPositionForEnnemy(units.First().hex);
+
+            SpawnUnitAt(2, targetPosition[0], targetPosition[1]);
+        }
     }
 
     public void ChangeSelectedObject(GameObject selectedObject)
@@ -474,6 +522,62 @@ public class HexMap : MonoBehaviour
     public int GetNumberOfTurn()
     {
         return numberOfTurn;
+    }
+
+    public GameObject GetGameobjectFromUnit( Unit unit)
+    {
+        return unitToGameObjectMap[unit];
+    }
+
+
+    private List<int> LoofForValidPositionForEnnemy(Hex centerHex)
+    {
+        //Cherche une case valide pour faire spawner les ennemis.
+        //Une vase valide est walkable et possède au moins 3 cases voisines
+        //qui sont aussi walkable (pour éviter de spawner dans une île)
+        int row;
+        int col;
+        Hex hex;
+        Hex[] neighbourHex;
+        int numberOfWalkableNeighbours;
+        bool validPosition = false;
+        do
+        {
+            //Choisi une case au hasard
+            do
+            {
+                col = centerHex.Q + Random.Range(-5, 5);
+                row = centerHex.R + Random.Range(-5, 5);
+            } while (col > numberColumns || col < 0 || row > numberRows || row < 0);
+            hex = getHexeAt(col,  row);
+
+            if (hex != null && hex.iswalkable) //Vérifie si la case choisie au hasard est walkable
+            {
+                //On récupère les cases voisines
+                numberOfWalkableNeighbours = 0;
+                neighbourHex = getHexesWithinRangeOf(hex, 1);
+                //On regarde combien de cases voisines sont walkable
+                foreach (Hex currentHex in neighbourHex)
+                {
+                    if (currentHex != null && currentHex.iswalkable)
+                    {
+                        numberOfWalkableNeighbours += 1;
+                    }
+                }
+                if (numberOfWalkableNeighbours > 2)
+                {
+                    //S'il y a au moins 3 voisins walkable, on a une position valide
+                    validPosition = true;
+                }
+            }
+
+        } while (!validPosition);
+
+        List<int> result = new List<int>();
+        result.Add(col);
+        result.Add(row);
+
+        return result;
     }
 
 }
