@@ -8,7 +8,6 @@ public class InfoPanelController : MonoBehaviour
     [SerializeField] private GameObject infoResourcesComponent = default;
     [SerializeField] private GameObject descriptionLayout = default;
     [SerializeField] private GameObject inBuildLayout = default;
-    [SerializeField] private GameObject numberOfTurnText = default;
 
     private Building build;
 

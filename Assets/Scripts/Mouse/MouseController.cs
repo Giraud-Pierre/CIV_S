@@ -54,6 +54,7 @@ public class MouseController : MonoBehaviour
 
     private void Awake()
     {
+        DontDestroyOnLoad(gameObject);
         controls = new CursorControls();
         ChangeCursor(cursor);
         Cursor.lockState = CursorLockMode.Confined;
