@@ -92,6 +92,15 @@ public class MouseController : MonoBehaviour
         if (movement != Vector3.zero)
         {
             movement.z = movement.y;
+            if (mainCamera.transform.position.z+movement.z > 37.5f)
+            {
+                movement.z = 37.5f - mainCamera.transform.position.z;
+            }
+            else if (mainCamera.transform.position.z + movement.z < -7)
+            {
+                movement.z = -7 -  mainCamera.transform.position.z;
+            }
+            
             movement.y = 0;
             //Left button is being held down and the mouse move, that's the camera drag !
             mainCamera.transform.Translate(movement*cameraSpeed*Time.deltaTime, Space.World);
@@ -176,20 +185,18 @@ public class MouseController : MonoBehaviour
                             // if it's the town center : display a button to add an unit in production and the list of production
 
 
-                            Hex hex = hexMapContinent.GetHexFromDictionnary(selectedGameObject);
+                            Hex hex = selectedGameObject.GetComponent<HexComponent>().hex;
                             if (hex.GetBuilding() != null)
                             {
                                 //TODO:Show details of building
-                                GameObject building = Instantiate(hexMapContinent.GetMineGO(), selectedGameObject.transform);
 
-                                Debug.Log("test");
                             }
                         }
 
                         //If selected object is an unit
                         else if (selectedGameObject.GetComponent<UnitView>() != null)
                         {
-                            Hex hex = hexMapContinent.GetUnitFromDictionnary(selectedGameObject).getHex();
+                            Hex hex = selectedGameObject.GetComponent<UnitView>().hex;
                             GameObject hexGO = hexMapContinent.GetHexeGameobjectFromDictionnary(hex);
                             if (hex.GetBuilding() == null)
                             {

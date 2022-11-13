@@ -83,7 +83,6 @@ public class HexMap : MonoBehaviour
     //***************Dictionnaires et Donn�es du jeu******************
     private Hex[,] hexes;
     private Dictionary<Hex, GameObject> hexToGameObjectMap;
-    private Dictionary<GameObject, Hex> gameObjectToHexMap;
 
     private HashSet<Unit> units;
     private Dictionary<Unit, GameObject> unitToGameObjectMap;
@@ -172,13 +171,6 @@ public class HexMap : MonoBehaviour
     public GameObject GetHexeGameobjectFromDictionnary(Hex hex)
     {
         return hexToGameObjectMap.ContainsKey(hex) ? hexToGameObjectMap[hex] : null;
-    }
-
-    
-
-    public Hex GetHexFromDictionnary(GameObject gameObject)
-    {
-        return gameObjectToHexMap.ContainsKey(gameObject) ? gameObjectToHexMap[gameObject] : null;
     }
 
     public Unit GetUnitFromDictionnary(GameObject gameObject)
