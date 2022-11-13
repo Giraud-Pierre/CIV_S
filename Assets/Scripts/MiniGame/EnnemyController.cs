@@ -7,8 +7,11 @@ using static UnityEngine.EventSystems.EventTrigger;
 
 public class EnnemyController : MonoBehaviour
 {
-    [SerializeField] private int health = 3; //on peut modifier les points de vie de l'ennemi ici
-    [SerializeField] private float MovementSpeed = 1f; //on peut modifier la vitesse de déplacement de l'ennemi ici
+    [SerializeField] int health = 3; //on peut modifier les points de vie de l'ennemi ici
+    [SerializeField] float MovementSpeed = 1f; //on peut modifier la vitesse de déplacement de l'ennemi ici
+    [SerializeField] int ennemySpeed = 2;
+    [SerializeField] int frequency = 2;
+    [SerializeField] float magnitude = 0.1f;
 
 
     private Transform player;   //recueille le transform du joueur pour orienter le déplacement de l'ennemi
@@ -45,7 +48,7 @@ public class EnnemyController : MonoBehaviour
     private void MoveTowardPlayer() //permet de bouger l'ennemi vers le joueur
     {
         transform.LookAt(player); //permet à l'ennemi de regarder le joueur
-        transform.position +=  transform.forward * realMovementSpeed; //fait avancer l'ennemi
+        transform.position +=  new Vector3(Mathf.Sin(Time.time * frequency) * magnitude, 0, -ennemySpeed * Time.deltaTime); //fait avancer l'ennemi
     }
 
 
@@ -57,10 +60,6 @@ public class EnnemyController : MonoBehaviour
 
     void Update()
     {
-        //calcule la vitesse de déplacement réelle de l'ennemi en prenant en compte les fps du joueurs
-        //et en appliquant un facteur (comme pour la MovementSpeed dans le script PlayerController)
-        //(il va un peu moins que 2 fois moins vite que le joueur pour qui le facteur est 15f)
-        realMovementSpeed = MovementSpeed * Time.deltaTime * 7f;
 
         MoveTowardPlayer();
         check_out_limits();
