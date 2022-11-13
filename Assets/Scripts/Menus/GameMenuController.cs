@@ -11,9 +11,6 @@ public class GameMenuController : MonoBehaviour
     [SerializeField] private GameObject buildMenu;
     [SerializeField] private GameObject tutorialMenu;
 
-    private bool emptySpace;
-    private bool isCityCenter;
-
     // TODO: Remove this debug feature
     // ! Remove only when all other features on Canvas (and his children) are implement
     public void MissingAction()
@@ -40,25 +37,15 @@ public class GameMenuController : MonoBehaviour
         buildMenu.SetActive(false);
     }
 
-    public void GetActionMenu()
+    public void GetMenuOnBuildSpace(Building build)
     {
-        // TODO: Add junction with map spaces
-        // Need to get the state of the space where the player is.
-
-        if (emptySpace)
+        if (build.type == 0)
         {
-            GetBuildMenu();
+            GetActionMenuOnCityCenter(build);
         }
         else
         {
-            if (isCityCenter)
-            {
-                GetActionMenuOnCityCenter();
-            }
-            else
-            {
-                GetActionMenuOnBuildSpace();
-            }
+            GetInfoOnBuildSpace(build);
         }
     }
 
@@ -86,7 +73,7 @@ public class GameMenuController : MonoBehaviour
     //     buildMenu.SetActive(false);
     // }
 
-    private void GetActionMenuOnBuildSpace()
+    private void GetInfoOnBuildSpace(Building build)
     {
         defaultBottomBar.SetActive(false);
         actionMenuOnBuildSpace.SetActive(true);
@@ -95,7 +82,7 @@ public class GameMenuController : MonoBehaviour
         buildMenu.SetActive(false);
     }
 
-    private void GetActionMenuOnCityCenter()
+    private void GetActionMenuOnCityCenter(Building build)
     {
         defaultBottomBar.SetActive(false);
         actionMenuOnBuildSpace.SetActive(false);

@@ -387,7 +387,7 @@ public class HexMap : MonoBehaviour
 
     public void build(int typeOfBuilding)
     {
-        Hex hex = selectedGameObject.GetComponent<HexComponent>().hex;
+        Hex hex = selectedGameObject.GetComponent<UnitView>().hex;
         if(buildings == null)
         {
             buildings = new HashSet<Building>();
