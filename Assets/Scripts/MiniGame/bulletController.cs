@@ -15,7 +15,7 @@ public class bulletController : MonoBehaviour
         if(collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
         {
             //TODO : Enemy lose xPV
-            collision.gameObject.GetComponent<Rigidbody>().AddForce(-15f * transform.forward, ForceMode.Impulse);
+            
             Debug.Log("Ennemie touché");
         }
 

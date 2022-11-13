@@ -20,7 +20,8 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         camera = Camera.main;
-        Instantiate(prefabTarget, new Vector3(-34f, 4.12f, 55.02f), Quaternion.identity);
+        GameObject enemy = Instantiate(prefabTarget, new Vector3(-34f, 4.12f, 55.02f), Quaternion.identity);
+        enemy.GetComponent<EnnemyController>().SetPlayer(this.gameObject);
     }
 
     // Update is called once per frame
