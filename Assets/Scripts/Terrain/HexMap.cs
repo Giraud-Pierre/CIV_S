@@ -395,6 +395,17 @@ public class HexMap : MonoBehaviour
         
     }
 
+    public void DestroyUnit(Unit unit)
+    {
+        units.Remove(unit);
+        unit.hex.RemoveUnit(unit);
+        GameObject unitObject = unitToGameObjectMap[unit];
+        gameObjectToUnitMap.Remove(unitObject);
+        Destroy(unitObject);
+        unitToGameObjectMap.Remove(unit);
+
+    }
+
     public void build(int typeOfBuilding)
     {
         Hex hex = selectedGameObject.GetComponent<UnitView>().hex;
@@ -477,6 +488,7 @@ public class HexMap : MonoBehaviour
     public void DoTurn()
     {
         mouseController.GetComponent<MouseController>().UnselectAtEndTurn();
+        selectedGameObject = null;
         numberOfTurn += 1;
         if (units != null)
         {
