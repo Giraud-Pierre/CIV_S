@@ -28,6 +28,10 @@ public class TutorialController : MonoBehaviour
             currentTutorialIndex += 1;
             textArea.GetComponent<TextMeshProUGUI>().text  = currentTutorialText[currentTutorialIndex];
         }
+        else if (currentTutorialIndex + 1 == currentTutorialText.Count)
+        {
+            CloseTutorial();
+        }
     }
 
     public void previousDialogue()
