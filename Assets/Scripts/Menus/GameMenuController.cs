@@ -112,7 +112,7 @@ public class GameMenuController : MonoBehaviour
         defaultBottomBar.SetActive(false);
         actionMenuOnBuildSpace.SetActive(false);
         // actionMenuOnEmptySpace.SetActive(false);
-        actionMenuOnCityCenter.SetActive(true);
+        actionMenuOnCityCenter.GetComponent<MenuOnCityCenterController>().GetCreationOptions(build);
         buildMenu.SetActive(false);
     }
 }
