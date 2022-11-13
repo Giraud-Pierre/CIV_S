@@ -5,28 +5,22 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     // Start is called before the first frame update
-    [SerializeField] private Transform playerTransform;
     [SerializeField] private Transform cameraTransform;
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] float horizontalSensitivity = 3f;
     // vertical rotation speed
     [SerializeField] float verticalSensitivity = 3f;
-    [SerializeField] uint playerSpeed = 5;
     [SerializeField] private MeshRenderer meshRenderer;
     private float mouseX;
     private float mouseY;
     private float xRotation;
     private float yRotation;
-    private Vector2 input;
-    private Vector3 cameraForward;
-    private Vector3 cameraRight;
     private Camera camera;
     GameObject bullet;
 
     void Start()
     {
         camera = Camera.main;
-        meshRenderer.material.SetFloat("_Frequency", 1000f);//Nom du paramètre à trouver dans shader graph (pas le nom qu'on a donné au paramètre), reference name
     }
 
     // Update is called once per frame
@@ -41,15 +35,6 @@ public class PlayerController : MonoBehaviour
         {
             StartCoroutine(SpawnBullets());
         }*/
-
-        cameraForward = cameraTransform.forward;
-        cameraRight = cameraTransform.right;
-        //cameraForward.y = 0;
-        //cameraRight.y = 0;
-        cameraForward = cameraForward.normalized;
-        cameraRight = cameraRight.normalized;
-        input = new Vector2(Input.GetAxis("Horizontal"),Input.GetAxis("Vertical"));
-        playerTransform.position +=(cameraForward*input.y + cameraRight*input.x) * Time.deltaTime * playerSpeed;
 
         mouseX = Input.GetAxis("Mouse X") * horizontalSensitivity;
         mouseY = Input.GetAxis("Mouse Y") * verticalSensitivity;
