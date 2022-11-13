@@ -3894,6 +3894,7 @@ MonoBehaviour:
   actionMenuOnCityCenter: {fileID: 194897196}
   buildMenu: {fileID: 6886815168945129237}
   tutorialMenu: {fileID: 1070859500}
+  allTutorials: {fileID: 11400000, guid: ed7e1c212e1e67f4184ecf9e0bd1cf73, type: 2}
 --- !u!114 &1012762318
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4003,7 +4004,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1070859501
 RectTransform:
   m_ObjectHideFlags: 0

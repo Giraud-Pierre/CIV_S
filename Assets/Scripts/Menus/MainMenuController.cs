@@ -6,10 +6,11 @@ public class MainMenuController : MonoBehaviour
     [SerializeField] private string levelToLoad;
     [SerializeField] private GameObject settingsWindow;
 
-    
+    [SerializeField] private TutorialsList allTutorials = default;
 
     public void StartGame()
     {
+        allTutorials.tutorialsThatHaveBeenSeen = new bool[3]{false, false, false};
         SceneManager.LoadScene(levelToLoad);
     }
 
