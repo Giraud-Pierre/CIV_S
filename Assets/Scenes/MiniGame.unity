@@ -374,9 +374,9 @@ MonoBehaviour:
   bulletPrefab: {fileID: 7103079520039461200, guid: 0a8dad8d7b5ecac48a82f2ab4f98826c,
     type: 3}
   horizontalSensitivity: 5
+  camera: {fileID: 269233156}
   verticalSensitivity: 5
-  prefabTarget: {fileID: 6550993179618579217, guid: 4bd35f64f2925184daed27080328f11a,
-    type: 3}
+  dataForMiniGame: {fileID: 11400000, guid: 64218331838c71e4d8971818b07d4040, type: 2}
 --- !u!136 &540075749
 CapsuleCollider:
   m_ObjectHideFlags: 0

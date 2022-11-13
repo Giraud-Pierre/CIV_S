@@ -4,23 +4,27 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    // Start is called before the first frame update
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] float horizontalSensitivity = 3f;
+    [SerializeField] new Camera camera;
     // vertical rotation speed
     [SerializeField] float verticalSensitivity = 3f;
     private float mouseX;
     private float mouseY;
     private float xRotation;
     private float yRotation;
-    private Camera camera;
-    [SerializeField] GameObject prefabTarget;
+    
+
+    [SerializeField] DataForMiniGame dataForMiniGame;
+    GameObject prefabTarget;
     GameObject bullet;
 
     void Start()
     {
-        camera = Camera.main;
+        prefabTarget = dataForMiniGame.ennemyPrefab;
         GameObject enemy = Instantiate(prefabTarget, new Vector3(-34f, 4.12f, 55.02f), Quaternion.identity);
+        enemy.AddComponent<Rigidbody>();
+        enemy.AddComponent<EnnemyController>();
     }
 
     // Update is called once per frame
@@ -40,9 +44,11 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        Debug.Log("ennemy hit");
         //TODO:End the game and unit lose PV
-            Destroy(collision.gameObject); 
-            Debug.Log("You lost");
+        Destroy(collision.gameObject);
+        dataForMiniGame.isWin = false;
+        Debug.Log("You lost");
     }
 
     private void SpawnBullet()
@@ -57,5 +63,10 @@ public class PlayerController : MonoBehaviour
 
         //J'applique une force initiale à la balle, AddForce prend en paramètre la direction de la force et son intensité
         bulletRigidbody.AddForce(camera.transform.forward * 1000f);
+    }
+
+    public DataForMiniGame getDataForMiniGame()
+    {
+        return dataForMiniGame;
     }
 }
