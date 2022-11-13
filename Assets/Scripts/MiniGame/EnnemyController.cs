@@ -1,48 +1,69 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.EventSystems.EventTrigger;
 
 public class EnnemyController : MonoBehaviour
 {
-    
-    private GameObject enemyGO;
-    [SerializeField] float enemySpeed = 2f;
-    [SerializeField] float frequency = 1.5f;
-    [SerializeField] float magnitude = 0.1f;
-    [SerializeField] GameObject player;
-    private int knockback = 5;
-    private Quaternion rotation;
-    // Start is called before the first frame update
-    void Start()
-    {
-        enemyGO = this.gameObject;
-    }
+    [SerializeField] private int health = 3; //on peut modifier les points de vie de l'ennemi ici
+    [SerializeField] private float MovementSpeed = 1f; //on peut modifier la vitesse de déplacement de l'ennemi ici
+    private int sens = 1;
 
-    // Update is called once per frame
-    void Update()
+    private Transform player;   //recueille le transform du joueur pour orienter le déplacement de l'ennemi
+    private float realMovementSpeed; //recalcule la vitesse de déplacement de l'ennemi en prenant en compte d'autre facteur
+
+    public void check_out_limits()//Détruit l'ennemi s'il est tombé du terrain
     {
-        //enemyGO.transform.position += new Vector3(Mathf.Sin(Time.time * frequency) * magnitude, 0, -enemySpeed * Time.deltaTime);
-        MoveTowardPlayer();
-    }
-    private void OnCollisionEnter(Collision collision)
-    {
-        //TODO:End the game and unit lose PV and knockback
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Bullet"))
+        if (transform.position.y <= -1)
         {
-            //enemyGO.transform.position += new Vector3(0, 0, knockback);
-            this.gameObject.GetComponent<Rigidbody>().AddForce(-15f * transform.forward, ForceMode.Impulse);
-            Debug.Log("Enemy lose 1PV");
+            Destroy(gameObject);
         }
     }
 
-    private void MoveTowardPlayer()
+    private void OnCollisionEnter(Collision collision) //gère la collision des ennemis avec les balles
     {
-        transform.LookAt(player.transform);
-        transform.position += new Vector3(Mathf.Sin(Time.time * frequency) * magnitude, 0, -enemySpeed * Time.deltaTime);
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Entity") && collision.gameObject.tag == "bullet")
+        {
+            //fait reculer l'ennemi
+            gameObject.GetComponent<Rigidbody>().AddForce(-15f * transform.forward, ForceMode.Impulse);
+
+            //détruit la balle
+            Destroy(collision.gameObject);
+
+            sens *= -1;
+
+            //diminue la vie de l'ennemi
+            health--;
+            if (health <= 0) //Détruit l'ennemi s'il est à cours de point de vie
+            {
+                Destroy(gameObject);
+            }
+        }
     }
 
-    public void SetPlayer(GameObject player)
+    private void MoveTowardPlayer() //permet de bouger l'ennemi vers le joueur
     {
-        this.player = player;
+        transform.LookAt(player); //permet à l'ennemi de regarder le joueur
+        transform.position += sens * transform.forward * realMovementSpeed; //fait avancer l'ennemi
     }
+
+
+    void Start()
+    {
+        player = GameObject.Find("Player").transform; //va rechercher le PlayerBody du joueur
+    }
+
+
+    void Update()
+    {
+        //calcule la vitesse de déplacement réelle de l'ennemi en prenant en compte les fps du joueurs
+        //et en appliquant un facteur (comme pour la MovementSpeed dans le script PlayerController)
+        //(il va un peu moins que 2 fois moins vite que le joueur pour qui le facteur est 15f)
+        realMovementSpeed = MovementSpeed * Time.deltaTime * 7f;
+
+        MoveTowardPlayer();
+        check_out_limits();
+    }
+
 }
