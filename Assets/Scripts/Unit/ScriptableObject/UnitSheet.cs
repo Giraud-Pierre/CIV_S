@@ -10,4 +10,5 @@ public class UnitSheet : ScriptableObject
     public int strength;
     public int movement;
     public List<int> Cost;
+    public GameObject Prefab;
 }

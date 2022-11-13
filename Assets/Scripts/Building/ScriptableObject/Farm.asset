@@ -16,3 +16,4 @@ MonoBehaviour:
   cost: 000000003200000032000000
   turnsToBuild: 2
   quantityRessourceEachTurn: 20
+  prefab: {fileID: 133066, guid: 425a2375bbeaffd4aa8aefea2454c645, type: 3}

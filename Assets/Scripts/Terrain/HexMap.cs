@@ -3,41 +3,6 @@ using UnityEngine;
 
 public class HexMap : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        //Ressources de base
-        ressources = new List<int>();
-        ressources.Add(300);
-        ressources.Add(300);
-        ressources.Add(300);
-
-        GenerateMap();
-    }
-
-    void Update()
-    {
-        //TESTING : Press spacebar to advance to next turn
-        if(Input.GetKeyDown(KeyCode.Space))
-        {
-            mouseController.GetComponent<MouseController>().UnselectAtEndTurn();
-            if (units != null)
-            {
-                foreach(Unit unit in units)
-                {
-                    unit.DoTurn();
-                }
-            }
-            if(buildings != null)
-            {
-                foreach(Building building in buildings)
-                {
-                    building.DoTurn(this);
-                }
-            }
-        }
-    }
-
     [SerializeField] GameObject hexTile;
     [SerializeField] GameObject Canvas;
 
@@ -47,8 +12,6 @@ public class HexMap : MonoBehaviour
     [SerializeField] Mesh MeshMountain;
 
     [SerializeField] GameObject ForestPrefab;
-
-    [SerializeField] GameObject[] prefabBuildings = new GameObject[4];
 
     [SerializeField] Material MatOcean;
     [SerializeField] Material MatPlains;
@@ -77,10 +40,8 @@ public class HexMap : MonoBehaviour
 
     public int numberRows = 30;
     public int numberColumns = 60; 
-    private GameObject hexGO;
 
-
-    //***************Dictionnaires et Donn�es du jeu******************
+    //***************Dictionnaires et Donnees du jeu******************
     private Hex[,] hexes;
     private Dictionary<Hex, GameObject> hexToGameObjectMap;
 
@@ -97,28 +58,43 @@ public class HexMap : MonoBehaviour
     private Node[,] pathfindingGraph;
 
     private List<int> ressources;
+    private GameObject hexGO;
+    private GameObject selectedGameObject;
+    private int numberOfTurn;
     //****************************************************************
 
-
-    public GameObject GetFarmGO()
+    // Start is called before the first frame update
+    void Start()
     {
-        return prefabBuildings[1];
+        //Ressources de base
+        ressources = new List<int>();
+        ressources.Add(300);
+        ressources.Add(300);
+        ressources.Add(300);
+
+        numberOfTurn = 1;
+
+        GenerateMap();
     }
 
-    public GameObject GetMineGO()
+    void Update()
     {
-        return prefabBuildings[3];
+        //TESTING : Press spacebar to advance to next turn
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            DoTurn();
+        }
     }
 
-    public GameObject GetTownCenterGO()
+    public GameObject GetPrefabBuilding(int typeOfBuilding)
     {
-        return prefabBuildings[0];
+        return buildingPokedex.buildings[typeOfBuilding].prefab;
+    }
+    public GameObject GetPrefabUnit(int typeOfUnit)
+    {
+        return unitPokedex.units[typeOfUnit].Prefab;
     }
 
-    public GameObject GetLumberCampGO()
-    {
-        return prefabBuildings[2];
-    }
 
     public Hex getHexeAt(int x, int y)
     {
@@ -371,7 +347,7 @@ public class HexMap : MonoBehaviour
         return pathfindingGraph;
     }
 
-    public void SpawnUnitAt(int unitType, GameObject prefab, int q, int r)
+    public void SpawnUnitAt(int unitType, int q, int r)
     {
         if(units == null)
         {
@@ -379,6 +355,8 @@ public class HexMap : MonoBehaviour
             unitToGameObjectMap = new Dictionary<Unit, GameObject>();
             gameObjectToUnitMap = new Dictionary<GameObject, Unit>();
         }
+
+        GameObject prefab = GetPrefabUnit(unitType);
 
         if (
                 ressources[0] > unitPokedex.units[unitType].Cost[0] && 
@@ -402,16 +380,17 @@ public class HexMap : MonoBehaviour
             unitToGameObjectMap[unit] = unitGO;
             gameObjectToUnitMap[unitGO] = unit;
 
-            ressources[0] -= unitPokedex.units[unitType].Cost[0];
-            ressources[1] -= unitPokedex.units[unitType].Cost[1];
-            ressources[2] -= unitPokedex.units[unitType].Cost[2];
+            AddRessource(0, -1 * unitPokedex.units[unitType].Cost[0]);
+            AddRessource(1, -1 * unitPokedex.units[unitType].Cost[1]);
+            AddRessource(2, -1 * unitPokedex.units[unitType].Cost[2]);
         }
 
         
     }
 
-    public void build(int typeOfBuilding, Hex hex)
+    public void build(int typeOfBuilding)
     {
+        Hex hex = selectedGameObject.GetComponent<UnitView>().hex;
         if(buildings == null)
         {
             buildings = new HashSet<Building>();
@@ -431,20 +410,41 @@ public class HexMap : MonoBehaviour
             int foodCost = buildingPokedex.buildings[typeOfBuilding].cost[0];
             int woodCost = buildingPokedex.buildings[typeOfBuilding].cost[1];
             int stoneCost = buildingPokedex.buildings[typeOfBuilding].cost[2];
+
+            Debug.Log(foodCost + " / " + woodCost + " / " + stoneCost);
             if (ressources[0] >=  foodCost && ressources[1] >= woodCost && ressources[2] >= stoneCost)
             {
-                ressources[0] -= foodCost;
-                ressources[1] -= woodCost;
-                ressources[2] -= stoneCost;
+                AddRessource(0,-1 * foodCost);
+                AddRessource(1, -1 * woodCost);
+                AddRessource(2, -1 * stoneCost);
                 GameObject hexGO = GetHexeGameobjectFromDictionnary(hex);
                 Vector3 p = hexGO.transform.position;
+                Quaternion rotation = Quaternion.Euler(new Vector3(0, 210, 0));
                 if (hex.Elevation >= HeightHill)
                     {
                         p.y += 0.246f;
                     }
-                GameObject buildingGO = Instantiate(prefabBuildings[typeOfBuilding], p, Quaternion.identity, hexGO.transform);
+
+                if(hex.getTypeOfField() == 4)
+                {
+                    p.x -= 0.048f;
+                    p.z -= 0.425f;
+                }
+
+                if(typeOfBuilding == 0)
+                {
+                    rotation = Quaternion.Euler(new Vector3(0, 90, 0));
+                }
+                else if(typeOfBuilding == 1)
+                {
+                    rotation = Quaternion.Euler(new Vector3(0, 160, 0));
+                }
+
+
+                GameObject buildingGO = Instantiate(GetPrefabBuilding(typeOfBuilding), p, rotation, hexGO.transform);
                 Building building = new Building(typeOfBuilding, buildingPokedex, hex);
                 buildings.Add(building);
+                hex.addBuilding(building);
                 buildingToGameObjectMap[building] = buildingGO;
             }
         }
@@ -460,6 +460,36 @@ public class HexMap : MonoBehaviour
     public List<int> GetRessource()
     {
         return ressources;
+    }
+
+    public void DoTurn()
+    {
+        mouseController.GetComponent<MouseController>().UnselectAtEndTurn();
+        numberOfTurn += 1;
+        if (units != null)
+        {
+            foreach(Unit unit in units)
+            {
+                unit.DoTurn();
+            }
+        }
+        if(buildings != null)
+        {
+            foreach(Building building in buildings)
+            {
+                building.DoTurn(this);
+            }
+        }
+    }
+
+    public void ChangeSelectedObject(GameObject selectedObject)
+    {
+        selectedGameObject = selectedObject;
+    }
+
+    public int GetNumberOfTurn()
+    {
+        return numberOfTurn;
     }
 
 }
