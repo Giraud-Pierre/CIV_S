@@ -16,3 +16,4 @@ MonoBehaviour:
   strength: 2
   movement: 2
   Cost: 320000000000000000000000
+  Prefab: {fileID: 171706, guid: 1993ef37b5f480b4a92115ca0117fdce, type: 3}

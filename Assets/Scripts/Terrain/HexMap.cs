@@ -13,8 +13,6 @@ public class HexMap : MonoBehaviour
 
     [SerializeField] GameObject ForestPrefab;
 
-    [SerializeField] GameObject[] prefabBuildings = new GameObject[4];
-
     [SerializeField] Material MatOcean;
     [SerializeField] Material MatPlains;
     [SerializeField] Material MatMountains;
@@ -85,25 +83,15 @@ public class HexMap : MonoBehaviour
         }
     }
 
-    public GameObject GetFarmGO()
+    public GameObject GetPrefabBuilding(int typeOfBuilding)
     {
-        return prefabBuildings[1];
+        return buildingPokedex.buildings[typeOfBuilding].prefab;
+    }
+    public GameObject GetPrefabUnit(int typeOfUnit)
+    {
+        return unitPokedex.units[typeOfUnit].Prefab;
     }
 
-    public GameObject GetMineGO()
-    {
-        return prefabBuildings[3];
-    }
-
-    public GameObject GetTownCenterGO()
-    {
-        return prefabBuildings[0];
-    }
-
-    public GameObject GetLumberCampGO()
-    {
-        return prefabBuildings[2];
-    }
 
     public Hex getHexeAt(int x, int y)
     {
@@ -356,7 +344,7 @@ public class HexMap : MonoBehaviour
         return pathfindingGraph;
     }
 
-    public void SpawnUnitAt(int unitType, GameObject prefab, int q, int r)
+    public void SpawnUnitAt(int unitType, int q, int r)
     {
         if(units == null)
         {
@@ -364,6 +352,8 @@ public class HexMap : MonoBehaviour
             unitToGameObjectMap = new Dictionary<Unit, GameObject>();
             gameObjectToUnitMap = new Dictionary<GameObject, Unit>();
         }
+
+        GameObject prefab = GetPrefabUnit(unitType);
 
         if (
                 ressources[0] > unitPokedex.units[unitType].Cost[0] && 
@@ -428,9 +418,10 @@ public class HexMap : MonoBehaviour
                     {
                         p.y += 0.246f;
                     }
-                GameObject buildingGO = Instantiate(prefabBuildings[typeOfBuilding], p, Quaternion.identity, hexGO.transform);
+                GameObject buildingGO = Instantiate(GetPrefabBuilding(typeOfBuilding), p, Quaternion.identity, hexGO.transform);
                 Building building = new Building(typeOfBuilding, buildingPokedex, hex);
                 buildings.Add(building);
+                hex.addBuilding(building);
                 buildingToGameObjectMap[building] = buildingGO;
             }
         }
