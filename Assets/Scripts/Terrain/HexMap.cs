@@ -456,6 +456,8 @@ public class HexMap : MonoBehaviour
                 Building building = new Building(typeOfBuilding, buildingPokedex, hex);
                 buildings.Add(building);
                 hex.addBuilding(building);
+
+                selectedGameObject.GetComponent<UnitView>().GoMining();
             }
         }
         
@@ -515,7 +517,17 @@ public class HexMap : MonoBehaviour
         {
             foreach (Unit unit in units)
             {
-                unit.DoTurn();
+                GameObject unitObject = GetGameobjectFromUnit(unit);
+                if (unitObject.GetComponent<UnitView>().GetIsMining() > 0)
+                {
+                    unitObject.GetComponent<UnitView>().RemoveisMining();
+                }
+                else
+                {
+                    unit.DoTurn();
+
+                }
+                
             }
             foreach (Unit unit in units)
             {

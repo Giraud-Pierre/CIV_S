@@ -14,7 +14,7 @@ public class UnitView : MonoBehaviour,IClick
     [SerializeField] private RuntimeAnimatorController mining;
     [SerializeField] private GameObject sledgeHammer;
     [SerializeField] private GameObject selectedCylinder;
-    private bool isMining = false;
+    private int isMining = 0;
     private bool isMoving = false;
 
     Vector3 newPosition;
@@ -224,6 +224,26 @@ public class UnitView : MonoBehaviour,IClick
             }
             return path;
         }
+    }
+
+    public void GoMining()
+    {
+        isMining = 2;
+        animator.runtimeAnimatorController = mining;
+    }
+
+    public void RemoveisMining()
+    {
+        isMining--;
+        if(isMining == 0)
+        {
+            animator.runtimeAnimatorController = idle;
+        }
+    }
+
+    public int GetIsMining()
+    {
+        return isMining;
     }
 
     void Update()
