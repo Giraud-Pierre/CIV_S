@@ -27,14 +27,8 @@ public class EnnemyController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision) //gère la collision des ennemis avec les balles
     {
-        Debug.Log("CollisionEnnemy");
-        Debug.Log(collision.gameObject.layer);
         if (collision.gameObject.layer == LayerMask.NameToLayer("Bullet"))
         {
-            Debug.Log("bullet hit: " + health);
-            //fait reculer l'ennemi
-            //gameObject.GetComponent<Rigidbody>().AddForce(-15f * transform.forward, ForceMode.Impulse);
-
             //détruit la balle
             Destroy(collision.gameObject);
 
@@ -45,6 +39,7 @@ public class EnnemyController : MonoBehaviour
             {
                 dataForMiniGame.isWin = true;
                 Destroy(gameObject);
+                dataForMiniGame.hexmap.EndMinigame();
                 SceneManager.LoadScene(1);
             }
         }
@@ -56,7 +51,6 @@ public class EnnemyController : MonoBehaviour
 
         Vector3 deltaPosition = transform.forward * realMovementSpeed + new Vector3(Mathf.Sin(Time.time * frequency) * magnitude, 0, 0);
         transform.position += deltaPosition; //fait avancer l'ennemi
-        //transform.position += new Vector3(Mathf.Sin(Time.time * frequency) * magnitude, 0, -MovementSpeed * Time.deltaTime);
     }
 
 
@@ -75,7 +69,6 @@ public class EnnemyController : MonoBehaviour
     {
         realMovementSpeed = MovementSpeed * Time.deltaTime * 7f;
         MoveTowardPlayer();
-        //check_out_limits();
     }
 
 }

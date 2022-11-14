@@ -6,7 +6,6 @@ public class GameMenuController : MonoBehaviour
     [SerializeField] private GameObject infoPanel;
     [SerializeField] private GameObject resourcesLayout;
     [SerializeField] private GameObject defaultBottomBar;
-    // [SerializeField] private GameObject actionMenuOnEmptySpace;
     [SerializeField] private GameObject actionMenuOnBuildSpace;
     [SerializeField] private GameObject actionMenuOnCityCenter;
     [SerializeField] private GameObject buildMenu;
@@ -42,7 +41,6 @@ public class GameMenuController : MonoBehaviour
         infoPanel.SetActive(false);
         defaultBottomBar.SetActive(true);
         actionMenuOnBuildSpace.SetActive(false);
-        // actionMenuOnEmptySpace.SetActive(false);
         actionMenuOnCityCenter.SetActive(false);
         buildMenu.SetActive(false);
     }
@@ -64,7 +62,6 @@ public class GameMenuController : MonoBehaviour
         infoPanel.SetActive(false);
         defaultBottomBar.SetActive(false);
         actionMenuOnBuildSpace.SetActive(false);
-        // actionMenuOnEmptySpace.SetActive(false);
         actionMenuOnCityCenter.SetActive(false);
         buildMenu.GetComponent<BuildMenuController>().GetBuildOptions(buildingAvailable);
     }
@@ -79,22 +76,11 @@ public class GameMenuController : MonoBehaviour
         infoPanel.GetComponent<InfoPanelController>().GetInfo(build);
     }
 
-
-    // private void GetActionMenuOnEmptySpace()
-    // {
-    //     defaultBottomBar.SetActive(false);
-    //     actionMenuOnBuildSpace.SetActive(false);
-    //     actionMenuOnEmptySpace.SetActive(true);
-    //     actionMenuOnCityCenter.SetActive(false);
-    //     buildMenu.SetActive(false);
-    // }
-
     private void GetInfoOnBuildSpace(Building build)
     {
         GetInfoPanel(build);
         defaultBottomBar.SetActive(false);
         actionMenuOnBuildSpace.SetActive(true);
-        // actionMenuOnEmptySpace.SetActive(false);
         actionMenuOnCityCenter.SetActive(false);
         buildMenu.SetActive(false);
     }
@@ -104,7 +90,6 @@ public class GameMenuController : MonoBehaviour
         GetInfoPanel(build);
         defaultBottomBar.SetActive(false);
         actionMenuOnBuildSpace.SetActive(false);
-        // actionMenuOnEmptySpace.SetActive(false);
         actionMenuOnCityCenter.GetComponent<MenuOnCityCenterController>().GetCreationOptions(build);
         buildMenu.SetActive(false);
     }

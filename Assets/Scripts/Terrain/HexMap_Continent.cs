@@ -28,11 +28,7 @@ public class HexMap_Continent : HexMap
             }
         }
 
-        //elevateArea(21, 15, 6);
-        //elevateArea(16, 21, 6);
-        //elevateArea(24, 5, 6);
-
-        //Add lumpiness Perlin NOise?
+        //Add lumpiness Perlin NOise
         float noiseResolution = 0.01f;
         Vector2 noiseOffset = new Vector2(Random.Range(0f,1f), Random.Range(0f, 1f));
         float noiseScale = 1.5f;
@@ -49,9 +45,8 @@ public class HexMap_Continent : HexMap
 
         }
 
-        //Set mesh to mounter/hill/flat/water based on height
 
-        //Simulate rainfall/moisture (probably just Perlin it for now) and set plain/granssslands + forest
+        //Simulate rainfall/moisture and set plain/granssslands + forest
 
         noiseResolution = 0.05f;
         noiseOffset = new Vector2(Random.Range(0f, 1f), Random.Range(0f, 1f));
@@ -84,15 +79,9 @@ public class HexMap_Continent : HexMap
     {
         Hex centerHex = getHexeAt(q, r);
 
-        //centerHex.Elevation = 0.5f;
-
         Hex[] areaHexes = getHexesWithinRangeOf(centerHex, range);
         foreach(Hex h in areaHexes)
         {
-            /*if(h.Elevation < 0)
-            {
-                h.Elevation = 0;
-            }*/
             h.Elevation = centerHeight * Mathf.Lerp(1f, 0.25f, Mathf.Pow(Hex.Distance(centerHex, h)/range,2f));
         }
     }
