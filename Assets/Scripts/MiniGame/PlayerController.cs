@@ -49,12 +49,11 @@ public class PlayerController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("ennemy hit");
-        //TODO:End the game and unit lose PV
+        //End the game and unit lose PV
         Destroy(collision.gameObject);
         dataForMiniGame.isWin = false;
+        dataForMiniGame.hexmap.EndMinigame();
         SceneManager.LoadScene(1);
-        Debug.Log("You lost");
     }
 
     private void SpawnBullet()

@@ -60,7 +60,6 @@ public class CameraControlle : MonoBehaviour
             //Something moved the camera.
             oldPosition = this.transform.position;
 
-            //TODO : Probably HexMap will have a dictionary of all these later
             HexComponent[] hexes = GameObject.FindObjectsOfType<HexComponent>();
 
             foreach(HexComponent hex in hexes)
