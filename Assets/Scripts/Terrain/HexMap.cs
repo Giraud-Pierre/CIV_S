@@ -26,6 +26,7 @@ public class HexMap : MonoBehaviour
     [SerializeField] DataForMiniGame dataForMiniGame;
 
     [SerializeField] GameObject mouseController;
+    [SerializeField] GameObject audioController;
 
     public GameObject worker;
 
@@ -85,15 +86,7 @@ public class HexMap : MonoBehaviour
         }
         else
         {
-            DataForMiniGame data = hexMapInstance.dataForMiniGame;
-            if (data.isWin)
-            {
-                data.ennemy.InflictDamage(100);
-            }
-            else
-            {
-                data.character.InflictDamage(data.damageEnnemy);
-            }
+            Destroy(audioController);
             Destroy(gameObject);
         }
 
@@ -625,4 +618,18 @@ public class HexMap : MonoBehaviour
     {
         mouseController.GetComponent<MouseController>().GetControls().Disable();
     }
+
+    public void EndMinigame()
+    {
+        DataForMiniGame data = hexMapInstance.dataForMiniGame;
+        if (data.isWin)
+        {
+            data.ennemy.InflictDamage(100);
+        }
+        else
+        {
+            data.character.InflictDamage(data.damageEnnemy);
+        }
+    }
+
 }
