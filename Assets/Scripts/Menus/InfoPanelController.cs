@@ -25,7 +25,6 @@ public class InfoPanelController : MonoBehaviour
 
     private void ChangeName()
     {
-        Debug.Log(build.name);
         nameText.GetComponent<TextMeshProUGUI>().text = build.name;
     }
 
