@@ -8,6 +8,7 @@ public class InfoPanelController : MonoBehaviour
     [SerializeField] private GameObject infoResourcesComponent = default;
     [SerializeField] private GameObject descriptionLayout = default;
     [SerializeField] private GameObject inBuildLayout = default;
+    [SerializeField] private GameObject numberOfTurnBeforeConstruction = default;
 
     private Building build;
 
@@ -56,13 +57,13 @@ public class InfoPanelController : MonoBehaviour
 
     private void GetInBuildInfo()
     {
-        if (build.isBuilt == false)
+        if (build.isBuilt != false)
         {
             inBuildLayout.SetActive(false);
         }
         else
         {
-             nameText.GetComponent<TextMeshProUGUI>().text = build.turnsRemainingUntilBuildIsComplete.ToString();
+            numberOfTurnBeforeConstruction.GetComponent<TextMeshProUGUI>().text = build.turnsRemainingUntilBuildIsComplete.ToString();
 
             inBuildLayout.SetActive(true);
         }

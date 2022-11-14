@@ -17,13 +17,6 @@ public class GameMenuController : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    // TODO: Remove this debug feature
-    // ! Remove only when all other features on Canvas (and his children) are implement
-    public void MissingAction()
-    {
-        Debug.LogError("Missing Action : Button not assign");
-    }
-
     private void Start()
     {
         if (allTutorials.tutorialsThatHaveBeenSeen[0] == false)
