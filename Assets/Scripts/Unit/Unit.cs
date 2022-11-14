@@ -92,8 +92,7 @@ public class Unit
                     {
                         DataForMiniGame data = hex.hexMap.GetDataForMiniGame();
 
-                        Debug.Log(newHex.getUnits()[0].strength);
-                        Debug.Log("damage character" + data.damageCharacter);
+                        data.hexmap = hex.hexMap;
                         data.damageCharacter = Mathf.RoundToInt((strength / (float)newHex.getUnits()[0].strength) * 33f);
                         data.damageEnnemy = Mathf.RoundToInt(((float)newHex.getUnits()[0].strength / strength) * 33f);
                         data.hitPointCharacter = GetHitPoint();

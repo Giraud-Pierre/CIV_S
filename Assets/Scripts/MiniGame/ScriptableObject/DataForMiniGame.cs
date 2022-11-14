@@ -5,6 +5,8 @@ using UnityEngine;
 [CreateAssetMenu]
 public class DataForMiniGame : ScriptableObject
 {
+    public HexMap hexmap;
+
     public Unit character = null;
     public int damageCharacter = 0;
     public int hitPointCharacter = 0;

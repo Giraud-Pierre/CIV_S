@@ -19,7 +19,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] DataForMiniGame dataForMiniGame;
     GameObject prefabTarget;
     GameObject bullet;
-    private int damage;
 
     void Start()
     {
