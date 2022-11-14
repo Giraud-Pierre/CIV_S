@@ -22,6 +22,7 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
+        Cursor.lockState = CursorLockMode.Locked;
         prefabTarget = dataForMiniGame.ennemyPrefab;
         GameObject enemy = Instantiate(prefabTarget, new Vector3(-34f, 3.6f, 55.02f), Quaternion.identity);
         enemy.layer = 7;
@@ -52,6 +53,7 @@ public class PlayerController : MonoBehaviour
         //End the game and unit lose PV
         Destroy(collision.gameObject);
         dataForMiniGame.isWin = false;
+        Cursor.lockState = CursorLockMode.Confined;
         dataForMiniGame.hexmap.EndMinigame();
         SceneManager.LoadScene(1);
     }

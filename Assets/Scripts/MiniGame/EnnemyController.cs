@@ -39,6 +39,7 @@ public class EnnemyController : MonoBehaviour
             {
                 dataForMiniGame.isWin = true;
                 Destroy(gameObject);
+                Cursor.lockState = CursorLockMode.Confined;
                 dataForMiniGame.hexmap.EndMinigame();
                 SceneManager.LoadScene(1);
             }
