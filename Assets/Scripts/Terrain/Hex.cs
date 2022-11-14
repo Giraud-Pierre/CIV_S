@@ -53,8 +53,6 @@ public class Hex
             0,
             HexVerticalSpacing() * this.R
         );
-
-        //return new Vector3(HexHorizontalSpacing() * (this.Q + this.R/2f), 0, HexVerticalSpacing() * this.R);
     }
 
     public Vector3 PositionFromCamera()
@@ -77,10 +75,6 @@ public class Hex
             float howManyWidthsFromCamera = (position.x - cameraPosition.x) / mapWidth;
 
             //We want howManyWidthsFromCamera to be between -0.5 to 0.5
-            /*if(Mathf.Abs(howManyWidthsFromCamera) <= 0.5f)
-            {
-                return position;
-            }*/
 
             if (howManyWidthsFromCamera > 0)
             {
@@ -100,10 +94,6 @@ public class Hex
             float howManyWidthsFromCamera = (position.z - cameraPosition.z) / mapHeight;
 
             //We want howManyWidthsFromCamera to be between -0.5 to 0.5
-            /*if(Mathf.Abs(howManyWidthsFromCamera) <= 0.5f)
-            {
-                return position;
-            }*/
 
             if (howManyWidthsFromCamera > 0)
             {
@@ -190,7 +180,6 @@ public class Hex
 
     public int BaseMovementCost()
     {
-        //TODO : Factor in terrain type & features
         return 1;
     }
 

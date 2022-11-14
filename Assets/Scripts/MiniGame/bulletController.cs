@@ -12,22 +12,5 @@ public class bulletController : MonoBehaviour
             Destroy(this.gameObject);
         }
 
-        if(collision.gameObject.layer == LayerMask.NameToLayer("Enemy"))
-        {
-            //TODO : Enemy lose xPV
-            
-            Debug.Log("Ennemie touché");
-        }
-
-        /*if (collision.gameObject.layer == LayerMask.NameToLayer("Target"))
-        {
-            Destroy(collision.gameObject);
-            Destroy(this.gameObject);
-        }*/
     }
-
-   /* private void OnCollisionExit(Collision collision)
-    {
-        Debug.Log("Collision Exit!");
-    }*/
 }
