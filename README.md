@@ -5,7 +5,7 @@
 
 
 <div align="center">
-    <h1 style="margin: 1vh">CS Game</h1>
+    <h1 style="margin: 1vh">CivS</h1>
     <p> Un Civilisation Survival sur Unity </p>
 </div>
 
